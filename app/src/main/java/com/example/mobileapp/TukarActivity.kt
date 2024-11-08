@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -38,22 +39,23 @@ class TukarKuyPointActivity : ComponentActivity() {
 
 @Composable
 fun TukarKuyPointScreen() {
-    val context = LocalContext.current // Mendapatkan context
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFEFF7F6))
-            .verticalScroll(rememberScrollState()) // Enable vertical scrolling
+            .verticalScroll(rememberScrollState())
     ) {
         // Header with Kuy Point
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp) // Membuat header lebih tinggi
-                .padding(bottom = 16.dp),
+                .height(200.dp)
+                .padding(bottom = 8.dp),
             shape = RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFF55B3A4))
+            colors = CardDefaults.cardColors(containerColor = Color(0xFF55B3A4)),
+            elevation = CardDefaults.cardElevation(8.dp)
         ) {
             Column(
                 modifier = Modifier
@@ -94,7 +96,8 @@ fun TukarKuyPointScreen() {
                         .padding(horizontal = 16.dp)
                         .height(80.dp),
                     shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White) // Background putih
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    elevation = CardDefaults.cardElevation(4.dp)
                 ) {
                     Row(
                         modifier = Modifier
@@ -129,65 +132,75 @@ fun TukarKuyPointScreen() {
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-        // Transfer Illustration
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .padding(vertical = 8.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.bank),
-                    contentDescription = "Transfer Illustration",
-                    modifier = Modifier
-                        .height(150.dp)
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(8.dp))
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Tukar Kuy Point Kamu ke saldo Bank Anda",
-                    fontSize = 16.sp,
-                    color = Color.Gray,
-                    textAlign = TextAlign.Center
-                )
-            }
-        }
+        // Action Card for Bank
+        ActionCard(
+            imageResId = R.drawable.bank2,
+            description = "Tukar Kuy Point Kamu ke saldo Bank Anda",
+            onClick = { /* Action for Bank */ }
+        )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-        // Exchange Options with Full Image
-        ExchangeOptionCardFullImage(iconResId = R.drawable.dana)
-        ExchangeOptionCardFullImage(iconResId = R.drawable.ovo)
-        ExchangeOptionCardFullImage(iconResId = R.drawable.shope)
+        // Action Card for Dana
+        ActionCard(
+            imageResId = R.drawable.dana2,
+            description = "Tukar Kuy Point Kamu menjadi saldo Dana",
+            onClick = { /* Action for Dana */ }
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Action Card for OVO
+        ActionCard(
+            imageResId = R.drawable.ovo2,
+            description = "Tukar Kuy Point Kamu menjadi saldo OVO",
+            onClick = { /* Action for OVO */ }
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Action Card for ShopeePay
+        ActionCard(
+            imageResId = R.drawable.shopee2,
+            description = "Tukar Kuy Point Kamu menjadi saldo ShopeePay",
+            onClick = { /* Action for ShopeePay */ }
+        )
     }
 }
 
 @Composable
-fun ExchangeOptionCardFullImage(iconResId: Int) {
+fun ActionCard(imageResId: Int, description: String, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .aspectRatio(2.5f), // Set aspect ratio to make the card rectangular
+            .padding(horizontal = 16.dp, vertical = 4.dp)
+            .clickable { onClick() }, // Menjadikan Card dapat diklik
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(6.dp)
     ) {
-        Image(
-            painter = painterResource(id = iconResId),
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(16.dp))
-        )
+        Column(
+            modifier = Modifier.padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(id = imageResId),
+                contentDescription = "Illustration",
+                modifier = Modifier
+                    .height(150.dp)
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(8.dp))
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = description,
+                fontSize = 16.sp,
+                color = Color.Gray,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
 

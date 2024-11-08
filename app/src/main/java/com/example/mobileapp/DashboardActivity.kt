@@ -8,16 +8,19 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -29,6 +32,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mobileapp.ui.theme.MobileAPPTheme
+
+
+
 
 class DashboardActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +50,8 @@ class DashboardActivity : ComponentActivity() {
 @Composable
 fun DashboardScreen() {
     val context = LocalContext.current
+    var selectedScreen by remember { mutableStateOf("Beranda") }
+    val scrollState = rememberScrollState()
 
     Box(
         modifier = Modifier
@@ -55,6 +63,7 @@ fun DashboardScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(scrollState)
                 .padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -82,6 +91,10 @@ fun DashboardScreen() {
                     title = "Yuk Angkut!",
                     description = "Sampahmu akan dijemput",
                     backgroundColor = Color(0xFFC3EAE3),
+                    onClick = {
+                        val intent = Intent(context, AngkutActivity::class.java)
+                        context.startActivity(intent)
+                    },
                     modifier = Modifier.weight(1f)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -90,23 +103,30 @@ fun DashboardScreen() {
                     title = "Yuk Buang!",
                     description = "Buang sampahmu langsung",
                     backgroundColor = Color(0xFFFFF3E0),
+                    onClick = {
+
+                    },
                     modifier = Modifier.weight(1f)
                 )
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            RedeemPointsCard()
+            RedeemPointsCard(onClick = {
+                val intent = Intent(context, TukarKuyPointActivity::class.java)
+                context.startActivity(intent)
+            })
 
             Spacer(modifier = Modifier.height(24.dp))
-
-            BottomNavigationBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 8.dp)
-                    .align(Alignment.CenterHorizontally)
-            )
         }
+
+        // Menggunakan BottomNavigationBar yang telah diimpor
+        BottomNavigationBar(
+            selectedScreen = selectedScreen,
+            onItemSelected = { selectedScreen = it },
+            context = context, // Pastikan context dikirim ke sini
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
     }
 }
 
@@ -225,10 +245,11 @@ fun KuyPointCard(context: android.content.Context) {
 }
 
 @Composable
-fun ActionCard(iconRes: Int, title: String, description: String, backgroundColor: Color, modifier: Modifier = Modifier) {
+fun ActionCard(iconRes: Int, title: String, description: String, backgroundColor: Color, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
-            .padding(horizontal = 4.dp),
+            .padding(horizontal = 4.dp)
+            .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = backgroundColor),
         elevation = CardDefaults.cardElevation(4.dp)
@@ -261,17 +282,21 @@ fun ActionCard(iconRes: Int, title: String, description: String, backgroundColor
 }
 
 @Composable
-fun RedeemPointsCard() {
+fun RedeemPointsCard(onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp),
+            .padding(horizontal = 8.dp)
+            .height(200.dp)
+            .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
+                .fillMaxSize()
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(Color(0xFF00BFA5), Color(0xFFFFE082))
@@ -281,91 +306,23 @@ fun RedeemPointsCard() {
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.Start,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.gift),
                     contentDescription = "Gift Icon",
-                    modifier = Modifier.size(48.dp)
+                    modifier = Modifier.size(130.dp)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(16.dp))
                 Text(
                     text = "Ayo tukar KuyPoint kamu!",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
+                    fontSize = 20.sp,
                     color = Color.White
                 )
             }
         }
-    }
-}
-
-@Composable
-fun BottomNavigationBar(modifier: Modifier = Modifier) {
-    val selectedItem = remember { mutableStateOf("Beranda") }
-
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 1.dp)
-            .height(60.dp),
-        shape = RoundedCornerShape(30.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(6.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 12.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            BottomNavigationItem(
-                iconId = R.drawable.home,
-                label = "Beranda",
-                selected = selectedItem.value == "Beranda",
-                onClick = { selectedItem.value = "Beranda" }
-            )
-            BottomNavigationItem(
-                iconId = R.drawable.order,
-                label = "Order",
-                selected = selectedItem.value == "Order",
-                onClick = { selectedItem.value = "Order" }
-            )
-            BottomNavigationItem(
-                iconId = R.drawable.user,
-                label = "Profil",
-                selected = selectedItem.value == "Profil",
-                onClick = { selectedItem.value = "Profil" }
-            )
-        }
-    }
-}
-
-@Composable
-fun BottomNavigationItem(iconId: Int, label: String, selected: Boolean, onClick: () -> Unit) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .clip(RoundedCornerShape(20.dp))
-            .background(if (selected) Color(0xFF55B3A4) else Color.Transparent)
-            .clickable { onClick() }
-            .padding(horizontal = 16.dp, vertical = 6.dp)
-    ) {
-        Icon(
-            painter = painterResource(id = iconId),
-            contentDescription = label,
-            tint = if (selected) Color.White else Color.Black,
-            modifier = Modifier.size(20.dp)
-        )
-        Spacer(modifier = Modifier.height(2.dp))
-        Text(
-            text = label,
-            fontSize = 12.sp,
-            color = if (selected) Color.White else Color.Black
-        )
     }
 }
 

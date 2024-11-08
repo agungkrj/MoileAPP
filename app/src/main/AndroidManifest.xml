@@ -45,6 +45,22 @@
             android:exported="true"
             android:label="tukar" />
 
+        <activity
+            android:name=".AngkutActivity"
+            android:exported="true"
+            android:label="tukar" />
+
+        <activity
+            android:name=".JenisSampahActivity"
+            android:exported="true"
+            android:label="tukar" />
+
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="true"
+            android:label="tukar" />
+
+
 
     </application>
 
