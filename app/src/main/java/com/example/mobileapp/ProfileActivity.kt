@@ -46,7 +46,7 @@ fun ProfileScreen() {
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        
+
         Text(
             text = "Akun",
             fontSize = 20.sp,
