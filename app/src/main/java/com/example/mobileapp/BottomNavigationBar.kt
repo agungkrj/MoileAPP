@@ -29,16 +29,16 @@ fun BottomNavigationBar(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 0.dp)
+            .padding(horizontal = 20.dp, vertical = 8.dp) // Menyesuaikan padding luar
             .height(60.dp),
-        shape = RoundedCornerShape(30.dp),
+        shape = RoundedCornerShape(30.dp), // Membuat sudut melengkung
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(6.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 14.dp),
+                .padding(horizontal = 20.dp), // Membuat padding antar item lebih rapi
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -58,7 +58,8 @@ fun BottomNavigationBar(
                 selected = selectedScreen == "Order",
                 onClick = {
                     onItemSelected("Order")
-
+                    val intent = Intent(context, OrderActivity::class.java)
+                    context.startActivity(intent)
                 }
             )
             BottomNavigationItem(
@@ -81,16 +82,16 @@ fun BottomNavigationItem(iconId: Int, label: String, selected: Boolean, onClick:
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
-            .clip(RoundedCornerShape(50))
-            .background(if (selected) Color(0xFF55B3A4) else Color.Transparent)
+            .clip(RoundedCornerShape(50)) // Membuat background item melengkung
+            .background(if (selected) Color(0xFF55B3A4) else Color.Transparent) // Warna latar belakang untuk item yang dipilih
             .clickable { onClick() }
-            .padding(horizontal = if (selected) 36.dp else 12.dp, vertical = 2.dp)
+            .padding(horizontal = 24.dp, vertical = 8.dp) // Menambah padding agar lebih lebar
     ) {
         Icon(
             painter = painterResource(id = iconId),
             contentDescription = label,
             tint = if (selected) Color.White else Color.Black,
-            modifier = Modifier.size(20.dp)
+            modifier = Modifier.size(20.dp) // Ukuran ikon
         )
         Spacer(modifier = Modifier.height(2.dp))
         Text(

@@ -60,6 +60,11 @@
             android:exported="true"
             android:label="tukar" />
 
+        <activity
+            android:name=".OrderActivity"
+            android:exported="true"
+            android:label="Order" />
+
 
 
     </application>
