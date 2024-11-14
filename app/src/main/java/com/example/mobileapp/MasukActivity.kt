@@ -50,7 +50,7 @@ fun MasukScreen() {
 
     // Menunda animasi agar dimulai setelah komponen selesai diload
     LaunchedEffect(Unit) {
-        delay(500) // Delay 500 ms sebelum animasi mulai
+        delay(100) // Delay 500 ms sebelum animasi mulai
         isVisible = true
     }
 
@@ -81,7 +81,7 @@ fun MasukScreen() {
             Text(
                 text = "Masukkan email dan password yang telah kamu daftarkan sebelumnya!",
                 fontSize = 14.sp,
-                color = Color.Gray,
+                color = Color.Black,
                 textAlign = TextAlign.Start
             )
         }

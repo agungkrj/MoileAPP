@@ -75,7 +75,7 @@ fun TukarKuyPointScreen() {
                         Icon(
                             painter = painterResource(id = R.drawable.panah),
                             contentDescription = "Back",
-                            tint = Color.White
+                            tint = Color.Black
                         )
                     }
                     Spacer(modifier = Modifier.width(8.dp))
@@ -83,7 +83,7 @@ fun TukarKuyPointScreen() {
                         text = "Tukar Kuy Point",
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = Color.Black
                     )
                 }
 
@@ -118,14 +118,14 @@ fun TukarKuyPointScreen() {
                                 text = "Kuy Point",
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFF55B3A4)
+                                color = Color.Black
                             )
                         }
                         Text(
                             text = "15.000",
                             fontWeight = FontWeight.Bold,
                             fontSize = 28.sp,
-                            color = Color(0xFF55B3A4)
+                            color = Color(0xFFCC9B4B)
                         )
                     }
                 }
@@ -147,7 +147,10 @@ fun TukarKuyPointScreen() {
         ActionCard(
             imageResId = R.drawable.dana2,
             description = "Tukar Kuy Point Kamu menjadi saldo Dana",
-            onClick = { /* Action for Dana */ }
+            onClick = {
+                val intent = Intent(context, TukarDanaActivity::class.java)
+                context.startActivity(intent)
+            }
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -197,7 +200,7 @@ fun ActionCard(imageResId: Int, description: String, onClick: () -> Unit) {
             Text(
                 text = description,
                 fontSize = 16.sp,
-                color = Color.Gray,
+                color = Color.Black,
                 textAlign = TextAlign.Center
             )
         }

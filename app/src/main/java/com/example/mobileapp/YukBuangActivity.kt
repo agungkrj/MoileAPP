@@ -27,19 +27,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mobileapp.ui.theme.MobileAPPTheme
 
-class AngkutActivity : ComponentActivity() {
+class BuangActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MobileAPPTheme {
-                AngkutScreen()
+                BuangScreen()
             }
         }
     }
 }
 
 @Composable
-fun AngkutScreen() {
+fun BuangScreen() {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
@@ -52,7 +52,7 @@ fun AngkutScreen() {
             .background(Color.White)
             .verticalScroll(scrollState)
     ) {
-        AngkutHeaderSection()
+        BuangHeaderSection()
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -72,19 +72,29 @@ fun AngkutScreen() {
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            SampahOptions()
+            BuangSampahOptions()
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Informasi Penjemputan",
+                text = "Informasi Tempat Tinggal",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
+            BuangTempatTinggalForm()
 
-            PenjemputanForm()
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "Informasi Pengantaran",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            BuangPengantaranForm()
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -95,7 +105,7 @@ fun AngkutScreen() {
                 color = Color.Black,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            CustomTextField(label = "Masukkan pesan tambahan di sini", textState = additionalMessageState, isMultiline = true)
+            BuangCustomTextField(label = "Masukkan pesan tambahan di sini", textState = additionalMessageState, isMultiline = true)
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -107,7 +117,7 @@ fun AngkutScreen() {
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
-            FotoSampahSection()
+            BuangFotoSampahSection()
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -131,7 +141,7 @@ fun AngkutScreen() {
 }
 
 @Composable
-fun AngkutHeaderSection() {
+fun BuangHeaderSection() {
     val context = LocalContext.current
 
     Box(
@@ -164,13 +174,13 @@ fun AngkutHeaderSection() {
             Spacer(modifier = Modifier.width(8.dp))
             Column {
                 Text(
-                    text = "Yuk Angkut!",
+                    text = "Yuk Buang!",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
                 Text(
-                    text = "Pesan sekarang, sampah mu langsung diangkut!",
+                    text = "Kamu bisa antar sampah mu ke titik terdekat",
                     fontSize = 14.sp,
                     color = Color.White
                 )
@@ -180,7 +190,7 @@ fun AngkutHeaderSection() {
 }
 
 @Composable
-fun SampahOptions() {
+fun BuangSampahOptions() {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -188,101 +198,80 @@ fun SampahOptions() {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            KertasCard()
-            PlastikCard()
-            BotolKacaCard()
+            BuangKertasCard()
+            BuangPlastikCard()
+            BuangBotolKacaCard()
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            ElektronikCard()
-            BesiCard()
-            AluminiumCard()
+            BuangElektronikCard()
+            BuangBesiCard()
+            BuangAluminiumCard()
         }
     }
 }
 
 @Composable
-fun KertasCard() {
+fun BuangKertasCard() {
     val context = LocalContext.current
-    SampahActionCard(
-        name = "Kertas",
-        iconRes = R.drawable.kertas,
-        color = Color(0xFF4CAF50)
-    ) {
+    BuangSampahActionCard("Kertas", R.drawable.kertas, Color(0xFF4CAF50)) {
         val intent = Intent(context, JenisSampahActivity::class.java)
         context.startActivity(intent)
     }
 }
 
 @Composable
-fun PlastikCard() {
+fun BuangPlastikCard() {
     val context = LocalContext.current
-    SampahActionCard(
-        name = "Plastik",
-        iconRes = R.drawable.plastik,
-        color = Color(0xFFFF9800)
-    ) {
+    BuangSampahActionCard("Plastik", R.drawable.plastik, Color(0xFFFF9800)) {
         val intent = Intent(context, PlastikActivity::class.java)
         context.startActivity(intent)
+
     }
 }
 
 @Composable
-fun BotolKacaCard() {
+fun BuangBotolKacaCard() {
     val context = LocalContext.current
-    SampahActionCard(
-        name = "Botol Kaca",
-        iconRes = R.drawable.kaca,
-        color = Color(0xFF2196F3)
-    ) {
+    BuangSampahActionCard("Botol Kaca", R.drawable.kaca, Color(0xFF2196F3)) {
         val intent = Intent(context, BotolKacaActivity::class.java)
         context.startActivity(intent)
     }
 }
 
 @Composable
-fun ElektronikCard() {
+fun BuangElektronikCard() {
     val context = LocalContext.current
-    SampahActionCard(
-        name = "Elektronik",
-        iconRes = R.drawable.elektronik,
-        color = Color(0xFFF44336)
-    ) {
+    BuangSampahActionCard("Elektronik", R.drawable.elektronik, Color(0xFFF44336)) {
         val intent = Intent(context, ElektronikActivity::class.java)
         context.startActivity(intent)
+
     }
 }
 
 @Composable
-fun BesiCard() {
+fun BuangBesiCard() {
     val context = LocalContext.current
-    SampahActionCard(
-        name = "Besi",
-        iconRes = R.drawable.besi,
-        color = Color(0xFF607D8B)
-    ) {
+    BuangSampahActionCard("Besi", R.drawable.besi, Color(0xFF607D8B)) {
         val intent = Intent(context, BesiActivity::class.java)
         context.startActivity(intent)
     }
 }
 
 @Composable
-fun AluminiumCard() {
+fun BuangAluminiumCard() {
     val context = LocalContext.current
-    SampahActionCard(
-        name = "Aluminium",
-        iconRes = R.drawable.alumanium1,
-        color = Color(0xFF9C27B0)
-    ) {
+    BuangSampahActionCard("Aluminium", R.drawable.alumanium1, Color(0xFF9C27B0)) {
         val intent = Intent(context, AluminiumActivity::class.java)
         context.startActivity(intent)
+
     }
 }
 
 @Composable
-fun SampahActionCard(name: String, iconRes: Int, color: Color, onClick: () -> Unit) {
+fun BuangSampahActionCard(name: String, iconRes: Int, color: Color, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .width(100.dp)
@@ -318,36 +307,45 @@ fun SampahActionCard(name: String, iconRes: Int, color: Color, onClick: () -> Un
 }
 
 @Composable
-fun PenjemputanForm() {
+fun BuangTempatTinggalForm() {
     val phoneState = remember { mutableStateOf("") }
     val addressState = remember { mutableStateOf("") }
-    val dateState = remember { mutableStateOf("") }
-    val timeState = remember { mutableStateOf("") }
 
     Column(modifier = Modifier.fillMaxWidth()) {
-        CustomTextField(label = "No. Ponsel :", textState = phoneState)
+        BuangCustomTextField(label = "No. Ponsel :", textState = phoneState)
         Spacer(modifier = Modifier.height(8.dp))
-        CustomTextField(label = "Alamat :", textState = addressState, isMultiline = true)
-        Spacer(modifier = Modifier.height(8.dp))
-        CustomTextField(label = "Tanggal :", textState = dateState)
-        Spacer(modifier = Modifier.height(8.dp))
-        CustomTextField(label = "Waktu :", textState = timeState)
+        BuangCustomTextField(label = "Alamat :", textState = addressState, isMultiline = true)
     }
 }
 
 @Composable
-fun FotoSampahSection() {
+fun BuangPengantaranForm() {
+    val dateState = remember { mutableStateOf("") }
+    val timeState = remember { mutableStateOf("") }
+    val deliveryAddressState = remember { mutableStateOf("") }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        BuangCustomTextField(label = "Tanggal :", textState = dateState)
+        Spacer(modifier = Modifier.height(8.dp))
+        BuangCustomTextField(label = "Waktu :", textState = timeState)
+        Spacer(modifier = Modifier.height(8.dp))
+        BuangCustomTextField(label = "Alamat Pengantaran :", textState = deliveryAddressState)
+    }
+}
+
+@Composable
+fun BuangFotoSampahSection() {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        FotoSampahCard()
-        FotoSampahCard()
+        BuangFotoSampahCard()
+        BuangFotoSampahCard()
     }
 }
 
 @Composable
-fun FotoSampahCard() {
+fun BuangFotoSampahCard() {
     Card(
         modifier = Modifier
             .width(118.dp)
@@ -373,7 +371,7 @@ fun FotoSampahCard() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomTextField(label: String, textState: MutableState<String>, isMultiline: Boolean = false) {
+fun BuangCustomTextField(label: String, textState: MutableState<String>, isMultiline: Boolean = false) {
     OutlinedTextField(
         value = textState.value,
         onValueChange = { textState.value = it },
@@ -392,8 +390,8 @@ fun CustomTextField(label: String, textState: MutableState<String>, isMultiline:
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewAngkutScreen() {
+fun PreviewBuangScreen() {
     MobileAPPTheme {
-        AngkutScreen()
+        BuangScreen()
     }
 }

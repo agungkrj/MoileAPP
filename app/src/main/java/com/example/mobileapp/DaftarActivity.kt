@@ -58,7 +58,7 @@ fun DaftarScreen() {
 
     // Menunda animasi agar dimulai setelah komponen selesai diload
     LaunchedEffect(Unit) {
-        delay(500) // Delay 500 ms sebelum animasi mulai
+        delay(100)
         isVisible = true
     }
 
@@ -89,7 +89,7 @@ fun DaftarScreen() {
             Text(
                 text = "Silahkan daftar untuk dapat menggunakan seluruh fitur aplikasi kami.",
                 fontSize = 14.sp,
-                color = Color.Gray,
+                color = Color.Black,
                 textAlign = TextAlign.Start
             )
         }

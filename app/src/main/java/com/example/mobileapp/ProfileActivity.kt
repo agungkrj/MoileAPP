@@ -1,5 +1,6 @@
 package com.example.mobileapp
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mobileapp.components.BottomNavigationBar
 import com.example.mobileapp.ui.theme.MobileAPPTheme
 
 class ProfileActivity : ComponentActivity() {
@@ -38,6 +40,8 @@ class ProfileActivity : ComponentActivity() {
 fun ProfileScreen() {
     val context = LocalContext.current
     var selectedScreen by remember { mutableStateOf("Profil") }
+    var showLogoutDialog by remember { mutableStateOf(false) } // State to control dialog visibility
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -46,7 +50,6 @@ fun ProfileScreen() {
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Text(
             text = "Akun",
             fontSize = 20.sp,
@@ -63,93 +66,197 @@ fun ProfileScreen() {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Menu Cards
-        ProfileMenuCard(iconRes = R.drawable.user, title = "Akun Saya", subtitle = "Ubah data akun anda", showEditIcon = true)
-        ProfileMenuCard(iconRes = R.drawable.wallet, title = "E-Wallet")
-        ProfileMenuCard(iconRes = R.drawable.exit, title = "Keluar")
+        // Menu Cards with click actions
+        ProfileMenuCard(
+            iconRes = R.drawable.user,
+            title = "Akun Saya",
+            subtitle = "Ubah data akun anda",
+            showEditIcon = true,
+            onEditClick = {
+                val intent = Intent(context, EditProfileActivity::class.java)
+                context.startActivity(intent)
+            },
+            onArrowClick = {
+                val intent = Intent(context, EditProfileActivity::class.java)
+                context.startActivity(intent)
+            }
+        )
+        ProfileMenuCard(
+            iconRes = R.drawable.wallet,
+            title = "E-Wallet",
+            onArrowClick = { println("E-Wallet Arrow clicked") }
+        )
+        ProfileMenuCard(
+            iconRes = R.drawable.exit,
+            title = "Keluar",
+            onArrowClick = { showLogoutDialog = true } // Show dialog on "Keluar" click
+        )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         // Bottom Navigation
         BottomNavigationBar(
-            selectedScreen = selectedScreen,
-            onItemSelected = { selectedScreen = it },
-            context = context, // Pastikan context dikirim ke sini
-
+            selectedItem = remember { mutableStateOf(selectedScreen) },
+            onItemSelected = { selectedScreen = it }
         )
     }
+
+    // Show logout confirmation dialog if requested
+    if (showLogoutDialog) {
+        ConfirmLogoutDialog(
+            onConfirm = { /* Handle logout action */ },
+            onDismiss = { showLogoutDialog = false }
+        )
+    }
+}
+
+@Composable
+fun ConfirmLogoutDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = { onDismiss() },
+        title = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.warning),
+                    contentDescription = null,
+                    tint = Color(0xFF4CAF50),
+                    modifier = Modifier.size(40.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Keluar",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF4CAF50)
+                )
+            }
+        },
+        text = {
+            Text(
+                text = "Apakah anda yakin ingin keluar?",
+                fontSize = 16.sp,
+                color = Color.Black,
+                textAlign = TextAlign.Center
+            )
+        },
+        confirmButton = {
+            Button(
+                onClick = { onConfirm() },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Keluar", color = Color.White)
+            }
+        },
+        dismissButton = {
+            OutlinedButton(
+                onClick = { onDismiss() },
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFF4CAF50)),
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Batal")
+            }
+        },
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth()
+    )
 }
 
 @Composable
 fun ProfileCard() {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
+            .width(374.dp)
+            .height(242.dp)
             .padding(horizontal = 16.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFF55B3A4)),
         elevation = CardDefaults.cardElevation(8.dp)
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(16.dp)
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
         ) {
-            // Profile Icon
-            Icon(
-                painter = painterResource(id = R.drawable.profile), // Replace with your icon resource
-                contentDescription = "Profile Icon",
-                tint = Color.White,
-                modifier = Modifier
-                    .size(60.dp)
-                    .background(Color(0xFF55B3A4), CircleShape)
-                    .padding(10.dp)
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-
-            Text(
-                text = "Username",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            // Kuy Point
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .background(Color(0xFF4CAF50), RoundedCornerShape(12.dp))
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
+                Box(
+                    modifier = Modifier
+                        .size(100.dp)
+                        .background(Color(0xFF55B3A4), CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.profile),
+                        contentDescription = "Profile Picture",
+                        modifier = Modifier
+                            .size(100.dp)
+                            .clip(CircleShape),
+                        tint = Color.Unspecified
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
                 Text(
-                    text = "Kuy Point",
-                    fontSize = 12.sp,
+                    text = "Agro",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
-                Spacer(modifier = Modifier.width(4.dp))
-                Icon(
-                    painter = painterResource(id = R.drawable.koin), // Replace with coin icon resource
-                    contentDescription = "Koin Icon",
-                    tint = Color.Yellow,
-                    modifier = Modifier.size(16.dp)
-                )
-                Text(
-                    text = "15.000",
-                    fontSize = 12.sp,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
-                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .background(Color(0xFF4CAF50), RoundedCornerShape(12.dp))
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                ) {
+                    Text(
+                        text = "Kuy Point",
+                        fontSize = 12.sp,
+                        color = Color.White
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Icon(
+                        painter = painterResource(id = R.drawable.koin),
+                        contentDescription = "Koin Icon",
+                        tint = Color.Yellow,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Text(
+                        text = "15.000",
+                        fontSize = 12.sp,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-fun ProfileMenuCard(iconRes: Int, title: String, subtitle: String? = null, showEditIcon: Boolean = false) {
+fun ProfileMenuCard(
+    iconRes: Int,
+    title: String,
+    subtitle: String? = null,
+    showEditIcon: Boolean = false,
+    onEditClick: (() -> Unit)? = null,
+    onArrowClick: (() -> Unit)? = null
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -181,23 +288,26 @@ fun ProfileMenuCard(iconRes: Int, title: String, subtitle: String? = null, showE
             }
             if (showEditIcon) {
                 Icon(
-                    painter = painterResource(id = R.drawable.pensil), // Replace with edit icon resource
+                    painter = painterResource(id = R.drawable.pensil),
                     contentDescription = "Edit Icon",
                     tint = Color.Black,
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier
+                        .size(20.dp)
+                        .clickable { onEditClick?.invoke() }
                 )
             } else {
                 Icon(
-                    painter = painterResource(id = R.drawable.row), // Replace with arrow icon resource
+                    painter = painterResource(id = R.drawable.row),
                     contentDescription = "Arrow Icon",
                     tint = Color.Black,
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier
+                        .size(20.dp)
+                        .clickable { onArrowClick?.invoke() }
                 )
             }
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

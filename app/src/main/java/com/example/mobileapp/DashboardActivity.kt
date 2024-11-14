@@ -14,10 +14,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,9 +32,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mobileapp.ui.theme.MobileAPPTheme
 
-
-
-
 class DashboardActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,8 +46,8 @@ class DashboardActivity : ComponentActivity() {
 @Composable
 fun DashboardScreen() {
     val context = LocalContext.current
-    var selectedScreen by remember { mutableStateOf("Beranda") }
     val scrollState = rememberScrollState()
+    val selectedItem = remember { mutableStateOf("Beranda") }
 
     Box(
         modifier = Modifier
@@ -104,7 +100,8 @@ fun DashboardScreen() {
                     description = "Buang sampahmu langsung",
                     backgroundColor = Color(0xFFFFF3E0),
                     onClick = {
-
+                        val intent = Intent(context, BuangActivity::class.java)
+                        context.startActivity(intent)
                     },
                     modifier = Modifier.weight(1f)
                 )
@@ -120,12 +117,26 @@ fun DashboardScreen() {
             Spacer(modifier = Modifier.height(24.dp))
         }
 
-        // Menggunakan BottomNavigationBar yang telah diimpor
         BottomNavigationBar(
-            selectedScreen = selectedScreen,
-            onItemSelected = { selectedScreen = it },
-            context = context, // Pastikan context dikirim ke sini
-            modifier = Modifier.align(Alignment.BottomCenter)
+            selectedItem = selectedItem,
+            onItemSelected = { item ->
+                selectedItem.value = item
+                when (item) {
+                    "Beranda" -> {}
+                    "Order" -> {
+                        val intent = Intent(context, OrderActivity::class.java)
+                        context.startActivity(intent)
+                    }
+                    "Profil" -> {
+                        val intent = Intent(context, ProfileActivity::class.java)
+                        context.startActivity(intent)
+                    }
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .padding(horizontal = 20.dp, vertical = 24.dp) // Adjusted padding for elevation
         )
     }
 }
@@ -245,9 +256,18 @@ fun KuyPointCard(context: android.content.Context) {
 }
 
 @Composable
-fun ActionCard(iconRes: Int, title: String, description: String, backgroundColor: Color, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun ActionCard(
+    iconRes: Int,
+    title: String,
+    description: String,
+    backgroundColor: Color,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Card(
         modifier = modifier
+            .width(177.68.dp)
+            .height(210.dp)
             .padding(horizontal = 4.dp)
             .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
@@ -261,13 +281,13 @@ fun ActionCard(iconRes: Int, title: String, description: String, backgroundColor
             Icon(
                 painter = painterResource(id = iconRes),
                 contentDescription = title,
-                modifier = Modifier.size(64.dp),
+                modifier = Modifier.size(width = 95.07.dp, height = 69.16.dp),
                 tint = Color.Unspecified
             )
             Text(
                 text = title,
                 fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
+                fontSize = 20.sp,
                 color = Color.Black,
                 modifier = Modifier.padding(top = 8.dp)
             )
@@ -285,9 +305,9 @@ fun ActionCard(iconRes: Int, title: String, description: String, backgroundColor
 fun RedeemPointsCard(onClick: () -> Unit) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
+            .width(368.dp)
+            .height(143.dp)
             .padding(horizontal = 8.dp)
-            .height(200.dp)
             .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
@@ -323,6 +343,89 @@ fun RedeemPointsCard(onClick: () -> Unit) {
                 )
             }
         }
+    }
+}
+
+@Composable
+fun BottomNavigationBar(
+    selectedItem: MutableState<String>,
+    onItemSelected: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val context = LocalContext.current
+
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(60.dp),
+        shape = RoundedCornerShape(30.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(6.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 12.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            BottomNavigationItem(
+                iconId = R.drawable.home,
+                label = "Beranda",
+                selected = selectedItem.value == "Beranda",
+                onClick = {
+                    selectedItem.value = "Beranda"
+                    val intent = Intent(context, DashboardActivity::class.java)
+                    context.startActivity(intent)
+                }
+            )
+            BottomNavigationItem(
+                iconId = R.drawable.order,
+                label = "Order",
+                selected = selectedItem.value == "Order",
+                onClick = {
+                    selectedItem.value = "Order"
+                    val intent = Intent(context, OrderActivity::class.java)
+                    context.startActivity(intent)
+                }
+            )
+            BottomNavigationItem(
+                iconId = R.drawable.user,
+                label = "Profil",
+                selected = selectedItem.value == "Profil",
+                onClick = {
+                    selectedItem.value = "Profil"
+                    val intent = Intent(context, ProfileActivity::class.java)
+                    context.startActivity(intent)
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun BottomNavigationItem(iconId: Int, label: String, selected: Boolean, onClick: () -> Unit) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .clip(RoundedCornerShape(50))
+            .background(if (selected) Color(0xFF55B3A4) else Color.Transparent)
+            .clickable { onClick() }
+            .padding(horizontal = if (selected) 36.dp else 12.dp, vertical = 2.dp)
+    ) {
+        Icon(
+            painter = painterResource(id = iconId),
+            contentDescription = label,
+            tint = if (selected) Color.White else Color.Black,
+            modifier = Modifier.size(20.dp)
+        )
+        Spacer(modifier = Modifier.height(2.dp))
+        Text(
+            text = label,
+            fontSize = 12.sp,
+            color = if (selected) Color.White else Color.Black
+        )
     }
 }
 

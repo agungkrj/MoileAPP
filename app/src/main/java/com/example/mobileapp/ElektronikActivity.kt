@@ -23,57 +23,57 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mobileapp.ui.theme.MobileAPPTheme
 
-class JenisSampahActivity : ComponentActivity() {
+class ElektronikActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MobileAPPTheme {
-                JenisSampahScreen()
+                ElektronikScreen()
             }
         }
     }
 }
 
 @Composable
-fun JenisSampahScreen() {
-    val scrollState = rememberScrollState() // Menyimpan status scroll
+fun ElektronikScreen() {
+    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .verticalScroll(scrollState) // Mengaktifkan scroll pada seluruh layar
+            .verticalScroll(scrollState)
             .padding(horizontal = 16.dp)
     ) {
-        JenisSampahHeaderSection()
+        ElektronikHeaderSection()
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Centered Card for Jenis Sampah Icon and Name
+        // Centered Card for Elektronik Icon and Name
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            JenisSampahIconCard()
+            ElektronikIconCard()
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Sub Jenis Sampah Section
+        // Sub Jenis Elektronik Section
         Text(
-            text = "Sub Jenis Sampah",
+            text = "Sub Jenis Elektronik",
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black,
             modifier = Modifier.padding(vertical = 8.dp)
         )
 
-        val subJenisSampah = listOf(
-            "Koran", "Buku Bekas", "Kertas Putih / HVS",
-            "Kertas Warna / Duplek", "Kertas Buram", "Karton", "Kertas Lainnya"
+        val subJenisElektronik = listOf(
+            "Handphone Bekas", "Komputer", "TV",
+            "AC", "Kulkas", "Printer", "Elektronik Lainnya"
         )
 
         // State for each item checkbox
-        val checkedStates = remember { mutableStateListOf(*Array(subJenisSampah.size) { false }) }
+        val checkedStates = remember { mutableStateListOf(*Array(subJenisElektronik.size) { false }) }
 
-        subJenisSampah.forEachIndexed { index, item ->
+        subJenisElektronik.forEachIndexed { index, item ->
             Column {
                 Row(
                     modifier = Modifier
@@ -110,8 +110,8 @@ fun JenisSampahScreen() {
 }
 
 @Composable
-fun JenisSampahHeaderSection() {
-    val context = LocalContext.current // Dapatkan context dari LocalContext
+fun ElektronikHeaderSection() {
+    val context = LocalContext.current
 
     Row(
         modifier = Modifier
@@ -131,7 +131,7 @@ fun JenisSampahHeaderSection() {
             )
         }
         Text(
-            text = "Jenis Sampah",
+            text = "Elektronik",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black
@@ -140,7 +140,7 @@ fun JenisSampahHeaderSection() {
 }
 
 @Composable
-fun JenisSampahIconCard() {
+fun ElektronikIconCard() {
     // State for weight value
     var weight by remember { mutableIntStateOf(0) }
 
@@ -157,12 +157,12 @@ fun JenisSampahIconCard() {
             modifier = Modifier.padding(16.dp)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.kertas),
-                contentDescription = "Kertas",
+                painter = painterResource(id = R.drawable.elektronik), // Ganti dengan ikon elektronik jika tersedia
+                contentDescription = "Elektronik",
                 modifier = Modifier.size(60.dp)
             )
             Text(
-                text = "Kertas",
+                text = "Elektronik",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
@@ -197,49 +197,10 @@ fun JenisSampahIconCard() {
     }
 }
 
-@Composable
-fun FooterSection() {
-    val context = LocalContext.current // Dapatkan context dari LocalContext
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 16.dp)
-            .background(Color(0xFF55B3A4), shape = RoundedCornerShape(16.dp))
-            .padding(vertical = 12.dp, horizontal = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column {
-            Text(
-                text = "Rp0 s.d Rp0",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.White
-            )
-            Text(
-                text = "Estimasi Harga /kg",
-                fontSize = 12.sp,
-                color = Color.White
-            )
-        }
-        Button(
-            onClick = {
-                val intent = Intent(context, AngkutActivity::class.java)
-                context.startActivity(intent)
-
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF55B3A4))
-        ) {
-            Text(text = "Lanjut", color = Color.White)
-        }
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
-fun PreviewJenisSampahScreen() {
+fun PreviewElektronikScreen() {
     MobileAPPTheme {
-        JenisSampahScreen()
+        ElektronikScreen()
     }
 }

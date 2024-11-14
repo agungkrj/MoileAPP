@@ -60,6 +60,55 @@
             android:exported="true"
             android:label="tukar" />
 
+        <activity
+            android:name=".OrderActivity"
+            android:exported="true"
+            android:label="tukar" />
+
+        <activity
+            android:name=".PembayaranActivity"
+            android:exported="true"
+            android:label="tukar" />
+
+        <activity
+            android:name=".TukarDanaActivity"
+            android:exported="true"
+            android:label="tukar" />
+
+        <activity
+            android:name=".BuangActivity"
+            android:exported="true"
+            android:label="tukar" />
+
+        <activity
+            android:name=".PlastikActivity"
+            android:exported="true"
+            android:label="tukar" />
+
+        <activity
+            android:name=".BotolKacaActivity"
+            android:exported="true"
+            android:label="tukar" />
+
+        <activity
+            android:name=".ElektronikActivity"
+            android:exported="true"
+            android:label="tukar" />
+
+        <activity
+            android:name=".BesiActivity"
+            android:exported="true"
+            android:label="tukar" />
+
+        <activity
+            android:name=".AluminiumActivity"
+            android:exported="true"
+            android:label="tukar" />
+
+        <activity
+            android:name=".EditProfileActivity"
+            android:exported="true"
+            android:label="tukar" />
 
 
     </application>

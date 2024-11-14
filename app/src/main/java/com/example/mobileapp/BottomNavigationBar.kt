@@ -1,35 +1,32 @@
-package com.example.mobileapp
+package com.example.mobileapp.components
 
-import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.material3.CardDefaults
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mobileapp.DashboardActivity
+import com.example.mobileapp.OrderActivity
+import com.example.mobileapp.ProfileActivity
+import com.example.mobileapp.R
 
 @Composable
-fun BottomNavigationBar(
-    selectedScreen: String,
-    onItemSelected: (String) -> Unit,
-    context: Context,
-    modifier: Modifier = Modifier
-) {
+fun BottomNavigationBar(selectedItem: MutableState<String>, onItemSelected: (String) -> Unit) {
+    val context = LocalContext.current // Mendapatkan context di sini
+
     Card(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 0.dp)
             .height(60.dp),
         shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -38,16 +35,16 @@ fun BottomNavigationBar(
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 14.dp),
+                .padding(horizontal = 12.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
             BottomNavigationItem(
                 iconId = R.drawable.home,
                 label = "Beranda",
-                selected = selectedScreen == "Beranda",
+                selected = selectedItem.value == "Beranda",
                 onClick = {
-                    onItemSelected("Beranda")
+                    selectedItem.value = "Beranda" // Set item terpilih
                     val intent = Intent(context, DashboardActivity::class.java)
                     context.startActivity(intent)
                 }
@@ -55,18 +52,19 @@ fun BottomNavigationBar(
             BottomNavigationItem(
                 iconId = R.drawable.order,
                 label = "Order",
-                selected = selectedScreen == "Order",
+                selected = selectedItem.value == "Order",
                 onClick = {
-                    onItemSelected("Order")
-
+                    selectedItem.value = "Order" // Set item terpilih
+                    val intent = Intent(context, OrderActivity::class.java)
+                    context.startActivity(intent)
                 }
             )
             BottomNavigationItem(
                 iconId = R.drawable.user,
                 label = "Profil",
-                selected = selectedScreen == "Profil",
+                selected = selectedItem.value == "Profil",
                 onClick = {
-                    onItemSelected("Profil")
+                    selectedItem.value = "Profil" // Set item terpilih
                     val intent = Intent(context, ProfileActivity::class.java)
                     context.startActivity(intent)
                 }
