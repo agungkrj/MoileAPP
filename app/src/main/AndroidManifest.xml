@@ -110,6 +110,26 @@
             android:exported="true"
             android:label="tukar" />
 
+        <activity
+            android:name=".OrderYukAngkutActivity"
+            android:exported="true"
+            android:label="tukar" />
+
+        <activity
+            android:name=".OrderYukBuangActivity"
+            android:exported="true"
+            android:label="tukar" />
+
+        <activity
+            android:name=".BatalOrderYukAngkutActivity"
+            android:exported="true"
+            android:label="tukar" />
+
+        <activity
+            android:name=".BatalOrderYukBuangActivity"
+            android:exported="true"
+            android:label="tukar" />
+
 
     </application>
 
