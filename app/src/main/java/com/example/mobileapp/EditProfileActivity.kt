@@ -76,9 +76,7 @@ fun FullWidthHeader() {
             )
         },
         navigationIcon = {
-            IconButton(onClick = {
-
-            }) {
+            IconButton(onClick = { }) {
                 Icon(
                     painter = painterResource(id = R.drawable.panah),
                     contentDescription = "Back",
