@@ -74,6 +74,11 @@
             android:name=".TukarDanaActivity"
             android:exported="true"
             android:label="tukar" />
+        <activity
+            android:name=".TukarBankActivity"
+            android:exported="true"
+            android:label="tukar" />
+
 
         <activity
             android:name=".BuangActivity"

@@ -1,6 +1,7 @@
-// File: TukarBank.kt
+// File: TukarBankActivity.kt
 package com.example.mobileapp
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,17 +10,16 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.window.Dialog
 import com.example.mobileapp.ui.theme.MobileAPPTheme
 
 class TukarBankActivity : ComponentActivity() {
@@ -35,6 +35,10 @@ class TukarBankActivity : ComponentActivity() {
 
 @Composable
 fun TukarBankScreen() {
+    val bankList = listOf("Bank BNI", "Bank BRI", "Bank Mandiri", "Bank BCA")
+    val selectedBank = remember { mutableStateOf("Nama Bank") }
+    val showBankList = remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -53,6 +57,13 @@ fun TukarBankScreen() {
             color = Color.Black,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
+        Text(
+            text = "Sekarang kamu bisa menukarkan KuyPoint yang kamu miliki dengan saldo Bank! Ayo lakukan lebih banyak Yuk Angkut! dan Yuk Buang!",
+            fontSize = 15.sp,
+            color = Color.Gray,
+            modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
+        )
+
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -67,7 +78,7 @@ fun TukarBankScreen() {
                 modifier = Modifier.padding(bottom = 4.dp)
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.iconbank), // Pastikan nama sesuai dengan file di drawable
+                    painter = painterResource(id = R.drawable.iconbank), // Pastikan ikon ada di drawable
                     contentDescription = "Bank Icon",
                     tint = Color.Black,
                     modifier = Modifier.size(16.dp)
@@ -85,16 +96,16 @@ fun TukarBankScreen() {
                     .fillMaxWidth()
                     .background(Color(0xFFF5F5F5), RoundedCornerShape(8.dp))
                     .padding(horizontal = 12.dp, vertical = 12.dp)
-                    .clickable { /* Handle dropdown click */ }
+                    .clickable { showBankList.value = true }
             ) {
                 Text(
-                    text = "Bank BRI",
+                    text = selectedBank.value,
                     fontSize = 14.sp,
                     color = Color.Black,
                     modifier = Modifier.weight(1f)
                 )
                 Icon(
-                    painter = painterResource(id = R.drawable.drobdown), // Ganti dengan ikon dropdown Anda
+                    painter = painterResource(id = R.drawable.drobdown), // Pastikan ikon ada di drawable
                     contentDescription = "Dropdown Icon",
                     tint = Color.Black,
                     modifier = Modifier.size(16.dp)
@@ -123,13 +134,13 @@ fun TukarBankScreen() {
             Text(
                 text = "081234567810",
                 fontSize = 14.sp,
-                color = Color.Gray
+                color = Color.Black
             )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Nominal options
+        // Nominal Options
         Text(
             text = "Nominal",
             fontSize = 14.sp,
@@ -171,9 +182,10 @@ fun TukarBankScreen() {
         )
         Box(
             modifier = Modifier
-                .width(370.dp) // Lebar sesuai dimensi pada gambar
-                .height(71.dp) // Tinggi sesuai dimensi pada gambar
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
                 .background(Color(0xFFF5F5F5), RoundedCornerShape(8.dp))
+                .height(71.dp)
                 .padding(horizontal = 16.dp),
             contentAlignment = Alignment.CenterStart
         ) {
@@ -183,13 +195,13 @@ fun TukarBankScreen() {
                 Text(
                     text = "Rp",
                     fontSize = 14.sp,
-                    color = Color.Gray
+                    color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "Minimal top up Rp 15.000",
                     fontSize = 12.sp,
-                    color = Color.Gray
+                    color = Color.Black
                 )
             }
         }
@@ -208,38 +220,56 @@ fun TukarBankScreen() {
         ) {
             Text(text = "Tukar Sekarang", fontSize = 16.sp, color = Color.White)
         }
+
+        // Bank List Dialog
+        if (showBankList.value) {
+            Dialog(onDismissRequest = { showBankList.value = false }) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White, RoundedCornerShape(12.dp))
+                        .padding(16.dp)
+                        .wrapContentHeight()
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.padding(16.dp)
+                    ) {
+                        Text(
+                            text = "Daftar Bank",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
+                        bankList.forEach { bank ->
+                            Text(
+                                text = bank,
+                                fontSize = 16.sp,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        selectedBank.value = bank
+                                        showBankList.value = false
+                                    }
+                                    .padding(vertical = 12.dp)
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
 @Composable
 fun ExchangeHeader() {
+    val context = LocalContext.current
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(
-                brush = Brush.linearGradient(
-                    colors = listOf(
-                        Color(0xFF79D7C7), // Warna pertama pada posisi 0%
-                        Color(0xFF52AC9D)  // Warna kedua pada posisi 71%
-                    ),
-                    start = Offset(0f, 0f),
-                    end = Offset(0f, 710f) // Mengatur titik akhir gradasi
-                )
-            )
+            .background(Color(0xFF79D7C7))
             .padding(vertical = 12.dp, horizontal = 16.dp)
     ) {
-        // Ikon Kembali
-        Icon(
-            painter = painterResource(id = R.drawable.keluar), // Ganti dengan ikon back Anda
-            contentDescription = "Back",
-            modifier = Modifier
-                .align(Alignment.CenterStart)
-                .size(24.dp)
-                .clickable { /* Handle back click */ },
-            tint = Color.Black
-        )
-
-        // Teks Judul di Tengah
         Text(
             text = "Tukar Kuy Point",
             fontSize = 18.sp,
@@ -247,8 +277,22 @@ fun ExchangeHeader() {
             color = Color.Black,
             modifier = Modifier.align(Alignment.Center)
         )
+        // Ikon Kembali
+        Icon(
+            painter = painterResource(id = R.drawable.keluar), // Ganti dengan ikon back Anda
+            contentDescription = "Back",
+            modifier = Modifier
+                .align(Alignment.CenterStart)
+                .size(24.dp)
+                .clickable {
+                    val intent = Intent(context, TukarKuyPointActivity::class.java)
+                    context.startActivity(intent)
+                },
+            tint = Color.Black
+        )
     }
 }
+
 
 @Composable
 fun AmountButton(text: String, modifier: Modifier = Modifier) {
@@ -260,13 +304,5 @@ fun AmountButton(text: String, modifier: Modifier = Modifier) {
             .padding(vertical = 8.dp)
     ) {
         Text(text = text, fontSize = 14.sp, color = Color.Black)
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewTukarBankScreen() {
-    MobileAPPTheme {
-        TukarBankScreen()
     }
 }

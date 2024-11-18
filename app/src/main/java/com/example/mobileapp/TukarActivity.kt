@@ -138,7 +138,10 @@ fun TukarKuyPointScreen() {
         ActionCard(
             imageResId = R.drawable.bank2,
             description = "Tukar Kuy Point Kamu ke saldo Bank Anda",
-            onClick = { /* Action for Bank */ }
+            onClick = {
+                val intent = Intent(context, TukarBankActivity::class.java)
+                context.startActivity(intent)
+            }
         )
 
         Spacer(modifier = Modifier.height(8.dp))
