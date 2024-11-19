@@ -76,11 +76,22 @@ fun EditProfileScreen() {
 
             // Informasi pengguna
             ProfileInfoField("Nama Lengkap", name, isEditing) { name = it }
+            Divider(color = Color.LightGray, thickness = 1.dp)
+
             ProfileInfoField("Email", email, isEditing) { email = it }
+            Divider(color = Color.LightGray, thickness = 1.dp)
+
             ProfileInfoField("No Handphone", phone, isEditing) { phone = it }
+            Divider(color = Color.LightGray, thickness = 1.dp)
+
             ProfileInfoField("Jenis Kelamin", gender, isEditing) { gender = it }
+            Divider(color = Color.LightGray, thickness = 1.dp)
+
             ProfileInfoField("Tanggal Lahir", birthDate, isEditing) { birthDate = it }
+            Divider(color = Color.LightGray, thickness = 1.dp)
+
             ProfileInfoField("Alamat", address, isEditing) { address = it }
+            Divider(color = Color.LightGray, thickness = 1.dp)
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -162,16 +173,17 @@ fun FullWidthHeader() {
                 fontWeight = FontWeight.Bold,
                 color = Color.White
             )
-
+        },
+        navigationIcon = {
             IconButton(onClick = {
                 val intent = Intent(context, DashboardActivity::class.java)
                 context.startActivity(intent)
             }) {
-            Icon(
-                painter = painterResource(id = R.drawable.panah),
-                contentDescription = "Back",
-                tint = Color.Black
-            )
+                Icon(
+                    painter = painterResource(id = R.drawable.panah),
+                    contentDescription = "Back",
+                    tint = Color.White
+                )
             }
         },
         colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color(0xFF55B3A4)),
