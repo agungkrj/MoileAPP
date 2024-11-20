@@ -24,117 +24,111 @@
             </intent-filter>
         </activity>
 
-        <!-- Tambahkan deklarasi MasukActivity di sini -->
+        <!-- MasukActivity -->
         <activity
             android:name=".MasukActivity"
             android:exported="true"
             android:label="Masuk" />
 
+        <!-- GantiPasswordActivity -->
+        <activity
+            android:name=".GantiPasswordActivity"
+            android:exported="true"
+            android:label="Ganti Password" />
+
+        <!-- Deklarasi aktivitas lainnya -->
         <activity
             android:name=".DaftarActivity"
             android:exported="true"
             android:label="Daftar" />
-
         <activity
             android:name=".DashboardActivity"
             android:exported="true"
-            android:label="masuk" />
-
+            android:label="Dashboard" />
         <activity
             android:name=".TukarKuyPointActivity"
             android:exported="true"
-            android:label="tukar" />
-
+            android:label="Tukar KuyPoint" />
         <activity
             android:name=".AngkutActivity"
             android:exported="true"
-            android:label="tukar" />
-
+            android:label="Angkut" />
         <activity
             android:name=".JenisSampahActivity"
             android:exported="true"
-            android:label="tukar" />
-
+            android:label="Jenis Sampah" />
         <activity
             android:name=".ProfileActivity"
             android:exported="true"
-            android:label="tukar" />
-
+            android:label="Profile" />
         <activity
             android:name=".OrderActivity"
             android:exported="true"
-            android:label="tukar" />
-
+            android:label="Order" />
         <activity
             android:name=".PembayaranActivity"
             android:exported="true"
-            android:label="tukar" />
-
+            android:label="Pembayaran" />
         <activity
             android:name=".TukarDanaActivity"
             android:exported="true"
-            android:label="tukar" />
+            android:label="Tukar Dana" />
         <activity
             android:name=".TukarBankActivity"
             android:exported="true"
-            android:label="tukar" />
-
-
+            android:label="Tukar Bank" />
+        <activity
+            android:name=".TukarOvoActivity"
+            android:exported="true"
+            android:label="Tukar Ovo" />
+        <activity
+            android:name=".TukarShopeePayActivity"
+            android:exported="true"
+            android:label="Tukar ShopeePay" />
         <activity
             android:name=".BuangActivity"
             android:exported="true"
-            android:label="tukar" />
-
+            android:label="Buang" />
         <activity
             android:name=".PlastikActivity"
             android:exported="true"
-            android:label="tukar" />
-
+            android:label="Plastik" />
         <activity
             android:name=".BotolKacaActivity"
             android:exported="true"
-            android:label="tukar" />
-
+            android:label="Botol Kaca" />
         <activity
             android:name=".ElektronikActivity"
             android:exported="true"
-            android:label="tukar" />
-
+            android:label="Elektronik" />
         <activity
             android:name=".BesiActivity"
             android:exported="true"
-            android:label="tukar" />
-
+            android:label="Besi" />
         <activity
             android:name=".AluminiumActivity"
             android:exported="true"
-            android:label="tukar" />
-
+            android:label="Aluminium" />
         <activity
             android:name=".EditProfileActivity"
             android:exported="true"
-            android:label="tukar" />
-
+            android:label="Edit Profile" />
         <activity
             android:name=".OrderYukAngkutActivity"
             android:exported="true"
-            android:label="tukar" />
-
+            android:label="Order Yuk Angkut" />
         <activity
             android:name=".OrderYukBuangActivity"
             android:exported="true"
-            android:label="tukar" />
-
+            android:label="Order Yuk Buang" />
         <activity
             android:name=".BatalOrderYukAngkutActivity"
             android:exported="true"
-            android:label="tukar" />
-
+            android:label="Batal Order Yuk Angkut" />
         <activity
             android:name=".BatalOrderYukBuangActivity"
             android:exported="true"
-            android:label="tukar" />
-
+            android:label="Batal Order Yuk Buang" />
 
     </application>
 
