@@ -129,7 +129,10 @@ fun OrderScreen() {
                 color = Color(0xFF00796B),
                 modifier = Modifier
                     .padding(vertical = 16.dp)
-                    .clickable { /* TODO: Aksi untuk 'Lihat Riwayat' */ }
+                    .clickable {
+                        val intent = Intent(context, RiwayatActivity::class.java)
+                        context.startActivity(intent)
+                    }
             )
 
             // BottomNavigationBar
