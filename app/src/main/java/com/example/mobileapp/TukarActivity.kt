@@ -162,7 +162,8 @@ fun TukarKuyPointScreen() {
         ActionCard(
             imageResId = R.drawable.ovo2,
             description = "Tukar Kuy Point Kamu menjadi saldo OVO",
-            onClick = { /* Action for OVO */ }
+            onClick = { val intent = Intent(context, TukarOvoActivity::class.java)
+                context.startActivity(intent) }
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -171,7 +172,8 @@ fun TukarKuyPointScreen() {
         ActionCard(
             imageResId = R.drawable.shopee2,
             description = "Tukar Kuy Point Kamu menjadi saldo ShopeePay",
-            onClick = { /* Action for ShopeePay */ }
+            onClick = { val intent = Intent(context, TukarShopeePayActivity::class.java)
+                context.startActivity(intent) }
         )
     }
 }
