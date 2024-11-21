@@ -1,4 +1,3 @@
-// File: TukarDana.kt
 package com.example.mobileapp
 
 import android.content.Intent
@@ -10,47 +9,55 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.mobileapp.ui.theme.MobileAPPTheme
-import androidx.compose.ui.geometry.Offset
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 class TukarDanaActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MobileAPPTheme {
-                TukarDanaScreen()
+                TukarDanaMainScreen()
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TukarDanaScreen() {
+fun TukarDanaMainScreen() {
+    val rekeningDANA = remember { mutableStateOf(TextFieldValue("")) }
+    val selectedNominal = remember { mutableStateOf("") }
+
+    // Validasi jika semua input sudah diisi
+    val isFormComplete = remember(rekeningDANA.value.text, selectedNominal.value) {
+        rekeningDANA.value.text.isNotEmpty() && selectedNominal.value.isNotEmpty()
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
         // Header
-        HeaderTukarKuyPoint()
+        TukarDanaHeader()
 
         Spacer(modifier = Modifier.height(16.dp))
 
         // Header Text
         Text(
-            text = "Tukar Kuy Point dengan saldo DANA",
+            text = "Tukar Kuy Point ke saldo DANA",
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black,
@@ -65,39 +72,30 @@ fun TukarDanaScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Input for DANA number
+        // Input Nomor DANA
         Text(
             text = "Masukkan Nomor DANA Kamu",
             fontSize = 14.sp,
             color = Color.Black,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+        TextField(
+            value = rekeningDANA.value,
+            onValueChange = { rekeningDANA.value = it },
+            placeholder = { Text(text = "Masukkan nomor DANA") },
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFFF5F5F5), RoundedCornerShape(8.dp))
-                .padding(horizontal = 12.dp, vertical = 8.dp)
                 .padding(horizontal = 16.dp)
-        ) {
-            Text(
-                text = "081234567810",
-                fontSize = 14.sp,
-                color = Color.Black,
-                modifier = Modifier.weight(1f)
+                .background(Color(0xFFF5F5F5), RoundedCornerShape(8.dp)),
+            singleLine = true,
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color(0xFFF5F5F5)
             )
-            Icon(
-                painter = painterResource(id = R.drawable.pensil), // replace with your edit icon
-                contentDescription = "Edit",
-                modifier = Modifier
-                    .size(20.dp)
-                    .clickable { /* Handle edit click */ }
-            )
-        }
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Nominal options
+        // Nominal Options
         Text(
             text = "Nominal",
             fontSize = 14.sp,
@@ -113,18 +111,18 @@ fun TukarDanaScreen() {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                NominalButton("Rp 20.000", Modifier.weight(1f))
-                NominalButton("Rp 30.000", Modifier.weight(1f))
-                NominalButton("Rp 50.000", Modifier.weight(1f))
+                TukarDanaNominalButton("Rp 20.000", Modifier.weight(1f), selectedNominal)
+                TukarDanaNominalButton("Rp 30.000", Modifier.weight(1f), selectedNominal)
+                TukarDanaNominalButton("Rp 50.000", Modifier.weight(1f), selectedNominal)
             }
             Spacer(modifier = Modifier.height(8.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                NominalButton("Rp 70.000", Modifier.weight(1f))
-                NominalButton("Rp 80.000", Modifier.weight(1f))
-                NominalButton("Rp 100.000", Modifier.weight(1f))
+                TukarDanaNominalButton("Rp 70.000", Modifier.weight(1f), selectedNominal)
+                TukarDanaNominalButton("Rp 80.000", Modifier.weight(1f), selectedNominal)
+                TukarDanaNominalButton("Rp 100.000", Modifier.weight(1f), selectedNominal)
             }
         }
 
@@ -139,34 +137,29 @@ fun TukarDanaScreen() {
         )
         Box(
             modifier = Modifier
-                .width(370.dp) // Lebar sesuai dimensi pada gambar
-                .height(71.dp) // Tinggi sesuai dimensi pada gambar
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
                 .background(Color(0xFFF5F5F5), RoundedCornerShape(8.dp))
+                .height(50.dp)
                 .padding(horizontal = 16.dp),
             contentAlignment = Alignment.CenterStart
         ) {
-            Column(
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
-            ) {
-                Text(
-                    text = "Rp",
-                    fontSize = 14.sp,
-                    color = Color.Black
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Minimal top up Rp 15.000",
-                    fontSize = 12.sp,
-                    color = Color.Black
-                )
-            }
+            Text(
+                text = selectedNominal.value.ifEmpty { "Minimal top up Rp 15.000" },
+                fontSize = 14.sp,
+                color = Color.Black
+            )
         }
-        Spacer(modifier = Modifier.height(60.dp))
+
+        Spacer(modifier = Modifier.height(100.dp))
 
         // Exchange button
         Button(
             onClick = { /* Handle exchange click */ },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+            enabled = isFormComplete,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = if (isFormComplete) Color(0xFF55B3A4) else Color.Gray
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
@@ -179,27 +172,23 @@ fun TukarDanaScreen() {
 }
 
 @Composable
-fun HeaderTukarKuyPoint() {
-    val context = LocalContext.current // Mendapatkan context
-
+fun TukarDanaHeader() {
+    val context = LocalContext.current
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(
-                brush = Brush.linearGradient(
-                    colors = listOf(
-                        Color(0xFF79D7C7), // Warna pertama pada posisi 0%
-                        Color(0xFF52AC9D)  // Warna kedua pada posisi 71%
-                    ),
-                    start = Offset(0f, 0f),
-                    end = Offset(0f, 710f) // Mengatur titik akhir gradasi
-                )
-            )
+            .background(Color(0xFF55B3A4))
             .padding(vertical = 12.dp, horizontal = 16.dp)
     ) {
-        // Ikon Kembali
+        Text(
+            text = "Tukar Kuy Point",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black,
+            modifier = Modifier.align(Alignment.Center)
+        )
         Icon(
-            painter = painterResource(id = R.drawable.keluar), // Ganti dengan ikon back Anda
+            painter = painterResource(id = R.drawable.keluar),
             contentDescription = "Back",
             modifier = Modifier
                 .align(Alignment.CenterStart)
@@ -210,37 +199,32 @@ fun HeaderTukarKuyPoint() {
                 },
             tint = Color.Black
         )
-
-        // Teks Judul di Tengah
-        Text(
-            text = "Tukar Kuy Point",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            modifier = Modifier.align(Alignment.Center)
-        )
     }
 }
 
-
-
 @Composable
-fun NominalButton(text: String, modifier: Modifier = Modifier) {
+fun TukarDanaNominalButton(text: String, modifier: Modifier = Modifier, selectedNominal: MutableState<String>) {
+    val isSelected = selectedNominal.value == text
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .background(Color(0xFFF5F5F5), RoundedCornerShape(8.dp))
-            .clickable { /* Handle nominal selection */ }
+            .background(if (isSelected) Color(0xFF55B3A4) else Color(0xFFF5F5F5), RoundedCornerShape(8.dp))
+            .clickable { selectedNominal.value = text }
             .padding(vertical = 8.dp)
     ) {
-        Text(text = text, fontSize = 14.sp, color = Color.Black)
+        Text(
+            text = text,
+            fontSize = 14.sp,
+            color = if (isSelected) Color.White else Color.Black
+        )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewTukarDanaScreen() {
+fun PreviewTukarDanaMainScreen() {
     MobileAPPTheme {
-        TukarDanaScreen()
+        TukarDanaMainScreen()
     }
 }

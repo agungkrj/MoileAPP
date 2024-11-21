@@ -37,12 +37,13 @@ class JenisSampahActivity : ComponentActivity() {
 @Composable
 fun JenisSampahScreen() {
     val scrollState = rememberScrollState() // Menyimpan status scroll
+    var totalWeight by remember { mutableIntStateOf(0) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .verticalScroll(scrollState) // Mengaktifkan scroll pada seluruh layar
+            .verticalScroll(scrollState)
             .padding(horizontal = 16.dp)
     ) {
         JenisSampahHeaderSection()
@@ -51,7 +52,7 @@ fun JenisSampahScreen() {
 
         // Centered Card for Jenis Sampah Icon and Name
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            JenisSampahIconCard()
+            JenisSampahIconCard(onWeightChange = { totalWeight += it })
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -70,7 +71,6 @@ fun JenisSampahScreen() {
             "Kertas Warna / Duplek", "Kertas Buram", "Karton", "Kertas Lainnya"
         )
 
-        // State for each item checkbox
         val checkedStates = remember { mutableStateListOf(*Array(subJenisSampah.size) { false }) }
 
         subJenisSampah.forEachIndexed { index, item ->
@@ -104,8 +104,7 @@ fun JenisSampahScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Footer with Estimated Price and Next Button
-        FooterSection()
+        FooterSection(totalWeight = totalWeight)
     }
 }
 
@@ -140,9 +139,13 @@ fun JenisSampahHeaderSection() {
 }
 
 @Composable
-fun JenisSampahIconCard() {
-    // State for weight value
+fun JenisSampahIconCard(onWeightChange: (Int) -> Unit) {
     var weight by remember { mutableIntStateOf(0) }
+    val pricePerKgMin = 1000
+    val pricePerKgMax = 2500
+
+    val estimatedMinPrice = weight * pricePerKgMin
+    val estimatedMaxPrice = weight * pricePerKgMax
 
     Card(
         modifier = Modifier
@@ -172,7 +175,12 @@ fun JenisSampahIconCard() {
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.padding(top = 8.dp)
             ) {
-                IconButton(onClick = { if (weight > 0) weight-- }) {
+                IconButton(onClick = {
+                    if (weight > 0) {
+                        weight--
+                        onWeightChange(-1)
+                    }
+                }) {
                     Icon(
                         painter = painterResource(id = R.drawable.minus),
                         contentDescription = "Decrease",
@@ -185,7 +193,10 @@ fun JenisSampahIconCard() {
                     color = Color.Black,
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
-                IconButton(onClick = { weight++ }) {
+                IconButton(onClick = {
+                    weight++
+                    onWeightChange(1)
+                }) {
                     Icon(
                         painter = painterResource(id = R.drawable.plus),
                         contentDescription = "Increase",
@@ -198,8 +209,12 @@ fun JenisSampahIconCard() {
 }
 
 @Composable
-fun FooterSection() {
-    val context = LocalContext.current // Dapatkan context dari LocalContext
+fun FooterSection(totalWeight: Int) {
+    val pricePerKgMin = 1000
+    val pricePerKgMax = 2500
+
+    val estimatedMinPrice = totalWeight * pricePerKgMin
+    val estimatedMaxPrice = totalWeight * pricePerKgMax
 
     Row(
         modifier = Modifier
@@ -212,23 +227,19 @@ fun FooterSection() {
     ) {
         Column {
             Text(
-                text = "Rp0 s.d Rp0",
+                text = "Rp$estimatedMinPrice s.d Rp$estimatedMaxPrice",
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = Color.White
             )
             Text(
-                text = "Estimasi Harga /kg",
+                text = "Estimasi Harga Total",
                 fontSize = 12.sp,
                 color = Color.White
             )
         }
         Button(
-            onClick = {
-                val intent = Intent(context, AngkutActivity::class.java)
-                context.startActivity(intent)
-
-            },
+            onClick = { /* Lanjutkan ke aktivitas berikutnya */ },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF55B3A4))
         ) {
             Text(text = "Lanjut", color = Color.White)
@@ -236,7 +247,7 @@ fun FooterSection() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true )
 @Composable
 fun PreviewJenisSampahScreen() {
     MobileAPPTheme {

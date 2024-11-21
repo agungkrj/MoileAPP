@@ -37,6 +37,7 @@ class BotolKacaActivity : ComponentActivity() {
 @Composable
 fun BotolKacaScreen() {
     val scrollState = rememberScrollState()
+    var totalWeight by remember { mutableIntStateOf(0) } // Total berat botol kaca
 
     Column(
         modifier = Modifier
@@ -45,13 +46,13 @@ fun BotolKacaScreen() {
             .verticalScroll(scrollState)
             .padding(horizontal = 16.dp)
     ) {
-        BotolKacaHeaderSection()
+        BotolKacaHeader()
 
         Spacer(modifier = Modifier.height(8.dp))
 
         // Centered Card for Botol Kaca Icon and Name
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            BotolKacaIconCard()
+            BotolKacaIconCard(onWeightChange = { totalWeight += it })
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -70,7 +71,6 @@ fun BotolKacaScreen() {
             "Gelas Kaca", "Piring Kaca", "Kaca Pecah"
         )
 
-        // State for each item checkbox
         val checkedStates = remember { mutableStateListOf(*Array(subJenisBotolKaca.size) { false }) }
 
         subJenisBotolKaca.forEachIndexed { index, item ->
@@ -104,13 +104,12 @@ fun BotolKacaScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Footer with Estimated Price and Next Button
-        FooterSection()
+        BotolKacaFooter(totalWeight = totalWeight)
     }
 }
 
 @Composable
-fun BotolKacaHeaderSection() {
+fun BotolKacaHeader() {
     val context = LocalContext.current
 
     Row(
@@ -140,9 +139,13 @@ fun BotolKacaHeaderSection() {
 }
 
 @Composable
-fun BotolKacaIconCard() {
-    // State for weight value
+fun BotolKacaIconCard(onWeightChange: (Int) -> Unit) {
     var weight by remember { mutableIntStateOf(0) }
+    val pricePerKgMin = 500 // Harga minimum per kg
+    val pricePerKgMax = 2000 // Harga maksimum per kg
+
+    val estimatedMinPrice = weight * pricePerKgMin
+    val estimatedMaxPrice = weight * pricePerKgMax
 
     Card(
         modifier = Modifier
@@ -172,7 +175,12 @@ fun BotolKacaIconCard() {
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.padding(top = 8.dp)
             ) {
-                IconButton(onClick = { if (weight > 0) weight-- }) {
+                IconButton(onClick = {
+                    if (weight > 0) {
+                        weight--
+                        onWeightChange(-1)
+                    }
+                }) {
                     Icon(
                         painter = painterResource(id = R.drawable.minus),
                         contentDescription = "Decrease",
@@ -185,7 +193,10 @@ fun BotolKacaIconCard() {
                     color = Color.Black,
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
-                IconButton(onClick = { weight++ }) {
+                IconButton(onClick = {
+                    weight++
+                    onWeightChange(1)
+                }) {
                     Icon(
                         painter = painterResource(id = R.drawable.plus),
                         contentDescription = "Increase",
@@ -193,6 +204,46 @@ fun BotolKacaIconCard() {
                     )
                 }
             }
+
+        }
+    }
+}
+
+@Composable
+fun BotolKacaFooter(totalWeight: Int) {
+    val pricePerKgMin = 500
+    val pricePerKgMax = 2000
+
+    val estimatedMinPrice = totalWeight * pricePerKgMin
+    val estimatedMaxPrice = totalWeight * pricePerKgMax
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp)
+            .background(Color(0xFF55B3A4), shape = RoundedCornerShape(16.dp))
+            .padding(vertical = 12.dp, horizontal = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column {
+            Text(
+                text = "Rp$estimatedMinPrice s.d Rp$estimatedMaxPrice",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.White
+            )
+            Text(
+                text = "Estimasi Harga Total",
+                fontSize = 12.sp,
+                color = Color.White
+            )
+        }
+        Button(
+            onClick = { /* Lanjutkan ke aktivitas berikutnya */ },
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF55B3A4))
+        ) {
+            Text(text = "Lanjut", color = Color.White)
         }
     }
 }

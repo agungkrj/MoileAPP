@@ -1,4 +1,3 @@
-// File: TukarOvoActivity.kt
 package com.example.mobileapp
 
 import android.content.Intent
@@ -10,40 +9,49 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.mobileapp.ui.theme.MobileAPPTheme
-import androidx.compose.ui.geometry.Offset
 
+@OptIn(ExperimentalMaterial3Api::class)
 class TukarOvoActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MobileAPPTheme {
-                TukarOvoScreen()
+                TukarOvoMainScreen()
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TukarOvoScreen() {
+fun TukarOvoMainScreen() {
+    val ovoNumber = remember { mutableStateOf(TextFieldValue("")) }
+    val selectedNominal = remember { mutableStateOf("") }
+
+    // Validasi jika semua input sudah diisi
+    val isFormComplete = remember(ovoNumber.value.text, selectedNominal.value) {
+        ovoNumber.value.text.isNotEmpty() && selectedNominal.value.isNotEmpty()
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
         // Header
-        HeaderTukarOvoPoint()
+        TukarOvoHeader()
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -64,39 +72,30 @@ fun TukarOvoScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Input for OVO number
+        // Input Nomor OVO
         Text(
             text = "Masukkan Nomor OVO Kamu",
             fontSize = 14.sp,
             color = Color.Black,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+        TextField(
+            value = ovoNumber.value,
+            onValueChange = { ovoNumber.value = it },
+            placeholder = { Text(text = "Masukkan nomor OVO") },
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFFF5F5F5), RoundedCornerShape(8.dp))
-                .padding(horizontal = 12.dp, vertical = 8.dp)
                 .padding(horizontal = 16.dp)
-        ) {
-            Text(
-                text = "081234567810",
-                fontSize = 14.sp,
-                color = Color.Black,
-                modifier = Modifier.weight(1f)
+                .background(Color(0xFFF5F5F5), RoundedCornerShape(8.dp)),
+            singleLine = true,
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color(0xFFF5F5F5)
             )
-            Icon(
-                painter = painterResource(id = R.drawable.pensil), // replace with your edit icon
-                contentDescription = "Edit",
-                modifier = Modifier
-                    .size(20.dp)
-                    .clickable { /* Handle edit click */ }
-            )
-        }
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Nominal options
+        // Nominal Options
         Text(
             text = "Nominal",
             fontSize = 14.sp,
@@ -112,18 +111,18 @@ fun TukarOvoScreen() {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                NominalOvoButton("Rp 20.000", Modifier.weight(1f))
-                NominalOvoButton("Rp 30.000", Modifier.weight(1f))
-                NominalOvoButton("Rp 50.000", Modifier.weight(1f))
+                TukarOvoNominalButton("Rp 20.000", Modifier.weight(1f), selectedNominal)
+                TukarOvoNominalButton("Rp 30.000", Modifier.weight(1f), selectedNominal)
+                TukarOvoNominalButton("Rp 50.000", Modifier.weight(1f), selectedNominal)
             }
             Spacer(modifier = Modifier.height(8.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                NominalOvoButton("Rp 70.000", Modifier.weight(1f))
-                NominalOvoButton("Rp 80.000", Modifier.weight(1f))
-                NominalOvoButton("Rp 100.000", Modifier.weight(1f))
+                TukarOvoNominalButton("Rp 70.000", Modifier.weight(1f), selectedNominal)
+                TukarOvoNominalButton("Rp 80.000", Modifier.weight(1f), selectedNominal)
+                TukarOvoNominalButton("Rp 100.000", Modifier.weight(1f), selectedNominal)
             }
         }
 
@@ -138,34 +137,29 @@ fun TukarOvoScreen() {
         )
         Box(
             modifier = Modifier
-                .width(370.dp) // Lebar sesuai dimensi pada gambar
-                .height(71.dp) // Tinggi sesuai dimensi pada gambar
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
                 .background(Color(0xFFF5F5F5), RoundedCornerShape(8.dp))
+                .height(50.dp)
                 .padding(horizontal = 16.dp),
             contentAlignment = Alignment.CenterStart
         ) {
-            Column(
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
-            ) {
-                Text(
-                    text = "Rp",
-                    fontSize = 14.sp,
-                    color = Color.Black
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Minimal top up Rp 15.000",
-                    fontSize = 12.sp,
-                    color = Color.Black
-                )
-            }
+            Text(
+                text = selectedNominal.value.ifEmpty { "Minimal top up Rp 15.000" },
+                fontSize = 14.sp,
+                color = Color.Black
+            )
         }
-        Spacer(modifier = Modifier.height(60.dp))
+
+        Spacer(modifier = Modifier.height(100.dp))
 
         // Exchange button
         Button(
             onClick = { /* Handle exchange click */ },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+            enabled = isFormComplete,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = if (isFormComplete) Color(0xFF55B3A4) else Color.Gray
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
@@ -178,27 +172,23 @@ fun TukarOvoScreen() {
 }
 
 @Composable
-fun HeaderTukarOvoPoint() {
-    val context = LocalContext.current // Mendapatkan context
-
+fun TukarOvoHeader() {
+    val context = LocalContext.current
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(
-                brush = Brush.linearGradient(
-                    colors = listOf(
-                        Color(0xFF79D7C7), // Warna pertama pada posisi 0%
-                        Color(0xFF52AC9D)  // Warna kedua pada posisi 71%
-                    ),
-                    start = Offset(0f, 0f),
-                    end = Offset(0f, 710f) // Mengatur titik akhir gradasi
-                )
-            )
+            .background(Color(0xFF55B3A4))
             .padding(vertical = 12.dp, horizontal = 16.dp)
     ) {
-        // Ikon Kembali
+        Text(
+            text = "Tukar Kuy Point",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black,
+            modifier = Modifier.align(Alignment.Center)
+        )
         Icon(
-            painter = painterResource(id = R.drawable.keluar), // Ganti dengan ikon back Anda
+            painter = painterResource(id = R.drawable.keluar),
             contentDescription = "Back",
             modifier = Modifier
                 .align(Alignment.CenterStart)
@@ -209,35 +199,32 @@ fun HeaderTukarOvoPoint() {
                 },
             tint = Color.Black
         )
-
-        // Teks Judul di Tengah
-        Text(
-            text = "Tukar Kuy Point",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            modifier = Modifier.align(Alignment.Center)
-        )
     }
 }
 
 @Composable
-fun NominalOvoButton(text: String, modifier: Modifier = Modifier) {
+fun TukarOvoNominalButton(text: String, modifier: Modifier = Modifier, selectedNominal: MutableState<String>) {
+    val isSelected = selectedNominal.value == text
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .background(Color(0xFFF5F5F5), RoundedCornerShape(8.dp))
-            .clickable { /* Handle nominal selection */ }
+            .background(if (isSelected) Color(0xFF55B3A4) else Color(0xFFF5F5F5), RoundedCornerShape(8.dp))
+            .clickable { selectedNominal.value = text }
             .padding(vertical = 8.dp)
     ) {
-        Text(text = text, fontSize = 14.sp, color = Color.Black)
+        Text(
+            text = text,
+            fontSize = 14.sp,
+            color = if (isSelected) Color.White else Color.Black
+        )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewTukarOvoScreen() {
+fun PreviewTukarOvoMainScreen() {
     MobileAPPTheme {
-        TukarOvoScreen()
+        TukarOvoMainScreen()
     }
 }

@@ -36,22 +36,23 @@ class PlastikActivity : ComponentActivity() {
 
 @Composable
 fun PlastikScreen() {
-    val scrollState = rememberScrollState() // Menyimpan status scroll
+    val scrollState = rememberScrollState()
+    var totalWeight by remember { mutableIntStateOf(0) } // Total berat plastik
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .verticalScroll(scrollState) // Mengaktifkan scroll pada seluruh layar
+            .verticalScroll(scrollState)
             .padding(horizontal = 16.dp)
     ) {
-        PlastikHeaderSection()
+        PlastikHeader()
 
         Spacer(modifier = Modifier.height(8.dp))
 
         // Centered Card for Plastik Icon and Name
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            PlastikIconCard()
+            PlastikIconCard(onWeightChange = { totalWeight += it })
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -70,7 +71,6 @@ fun PlastikScreen() {
             "Plastik HDPE", "Plastik PVC", "Plastik PET", "Plastik Lainnya"
         )
 
-        // State for each item checkbox
         val checkedStates = remember { mutableStateListOf(*Array(subJenisPlastik.size) { false }) }
 
         subJenisPlastik.forEachIndexed { index, item ->
@@ -104,14 +104,13 @@ fun PlastikScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Footer with Estimated Price and Next Button
-        FooterSection()
+        PlastikFooter(totalWeight = totalWeight)
     }
 }
 
 @Composable
-fun PlastikHeaderSection() {
-    val context = LocalContext.current // Dapatkan context dari LocalContext
+fun PlastikHeader() {
+    val context = LocalContext.current
 
     Row(
         modifier = Modifier
@@ -140,9 +139,13 @@ fun PlastikHeaderSection() {
 }
 
 @Composable
-fun PlastikIconCard() {
-    // State for weight value
+fun PlastikIconCard(onWeightChange: (Int) -> Unit) {
     var weight by remember { mutableIntStateOf(0) }
+    val pricePerKgMin = 3000 // Harga minimum per kg
+    val pricePerKgMax = 8000 // Harga maksimum per kg
+
+    val estimatedMinPrice = weight * pricePerKgMin
+    val estimatedMaxPrice = weight * pricePerKgMax
 
     Card(
         modifier = Modifier
@@ -172,7 +175,12 @@ fun PlastikIconCard() {
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.padding(top = 8.dp)
             ) {
-                IconButton(onClick = { if (weight > 0) weight-- }) {
+                IconButton(onClick = {
+                    if (weight > 0) {
+                        weight--
+                        onWeightChange(-1)
+                    }
+                }) {
                     Icon(
                         painter = painterResource(id = R.drawable.minus),
                         contentDescription = "Decrease",
@@ -185,7 +193,10 @@ fun PlastikIconCard() {
                     color = Color.Black,
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
-                IconButton(onClick = { weight++ }) {
+                IconButton(onClick = {
+                    weight++
+                    onWeightChange(1)
+                }) {
                     Icon(
                         painter = painterResource(id = R.drawable.plus),
                         contentDescription = "Increase",
@@ -193,6 +204,46 @@ fun PlastikIconCard() {
                     )
                 }
             }
+
+        }
+    }
+}
+
+@Composable
+fun PlastikFooter(totalWeight: Int) {
+    val pricePerKgMin = 3000
+    val pricePerKgMax = 8000
+
+    val estimatedMinPrice = totalWeight * pricePerKgMin
+    val estimatedMaxPrice = totalWeight * pricePerKgMax
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp)
+            .background(Color(0xFF55B3A4), shape = RoundedCornerShape(16.dp))
+            .padding(vertical = 12.dp, horizontal = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column {
+            Text(
+                text = "Rp$estimatedMinPrice s.d Rp$estimatedMaxPrice",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.White
+            )
+            Text(
+                text = "Estimasi Harga Total",
+                fontSize = 12.sp,
+                color = Color.White
+            )
+        }
+        Button(
+            onClick = { /* Lanjutkan ke aktivitas berikutnya */ },
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF55B3A4))
+        ) {
+            Text(text = "Lanjut", color = Color.White)
         }
     }
 }

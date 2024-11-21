@@ -11,7 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -24,42 +24,38 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mobileapp.ui.theme.MobileAPPTheme
 import androidx.compose.foundation.border
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.foundation.clickable
-import androidx.compose.runtime.*
 
-class PembayaranActivity : ComponentActivity() {
+class PembayaranYukBuangActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MobileAPPTheme {
-                PembayaranScreen()
+                PembayaranYukBuangScreen()
             }
         }
     }
 }
 
 @Composable
-fun PembayaranScreen() {
-    val context = LocalContext.current
+fun PembayaranYukBuangScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
-        PembayaranHeaderSection()
+        PembayaranYukBuangHeader()
 
         Spacer(modifier = Modifier.height(20.dp))
 
         Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-            InformasiSection("Informasi Tempat Tinggal", listOf("No. Ponsel :" to "081234567890", "Alamat :" to "Jl. Contoh Alamat No.123"))
+            InformasiYukBuangSection("Informasi Tempat Tinggal", listOf("No. Ponsel :" to "081234567890", "Alamat :" to "Jl. Contoh Alamat No.123"))
             Spacer(modifier = Modifier.height(8.dp))
 
-            InformasiSection("Informasi Penjemputan", listOf("Tanggal :" to "12-12-2023", "Waktu :" to "10:00 AM"))
+            InformasiPengantaranSection()
             Spacer(modifier = Modifier.height(8.dp))
 
-            InformasiPenjualanSection()
+            InformasiYukBuangPenjualan()
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -71,14 +67,12 @@ fun PembayaranScreen() {
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
-            MetodePembayaranSection()
+            MetodePembayaranYukBuang()
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = {
-
-                },
+                onClick = { /* Handle send action */ },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
@@ -92,7 +86,7 @@ fun PembayaranScreen() {
 }
 
 @Composable
-fun PembayaranHeaderSection() {
+fun PembayaranYukBuangHeader() {
     val context = LocalContext.current
 
     Box(
@@ -112,7 +106,7 @@ fun PembayaranHeaderSection() {
             horizontalArrangement = Arrangement.Start
         ) {
             IconButton(onClick = {
-                val intent = Intent(context, AngkutActivity::class.java)
+                val intent = Intent(context, BuangActivity::class.java)
                 context.startActivity(intent)
             }) {
                 Icon(
@@ -140,7 +134,7 @@ fun PembayaranHeaderSection() {
 }
 
 @Composable
-fun InformasiSection(title: String, fields: List<Pair<String, String>>) {
+fun InformasiYukBuangSection(title: String, fields: List<Pair<String, String>>) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
@@ -193,7 +187,64 @@ fun InformasiSection(title: String, fields: List<Pair<String, String>>) {
 }
 
 @Composable
-fun InformasiPenjualanSection() {
+fun InformasiPengantaranSection() {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(8.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+    ) {
+        Column {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color(0xFFD3D3D3), shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = "Informasi Pengantaran",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .background(Color.White)
+                    .padding(16.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(text = "Tanggal :", fontSize = 14.sp, color = Color.Black)
+                    Text(text = "12-12-2023", fontSize = 14.sp, color = Color.Black)
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(text = "Waktu :", fontSize = 14.sp, color = Color.Black)
+                    Text(text = "10:00 AM", fontSize = 14.sp, color = Color.Black)
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(text = "Alamat :", fontSize = 14.sp, color = Color.Black)
+                    Text(text = "Jl. Contoh Alamat No.123", fontSize = 14.sp, color = Color.Black)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun InformasiYukBuangPenjualan() {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
@@ -260,20 +311,20 @@ fun InformasiPenjualanSection() {
 }
 
 @Composable
-fun MetodePembayaranSection() {
+fun MetodePembayaranYukBuang() {
     val selectedOption = remember { mutableStateOf<String?>(null) }
 
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        PembayaranOption(
+        PembayaranYukBuangOption(
             text = "Tunai",
             iconResId = R.drawable.tunai,
             isSelected = selectedOption.value == "Tunai",
             onClick = { selectedOption.value = "Tunai" }
         )
-        PembayaranOption(
+        PembayaranYukBuangOption(
             text = "Kuy Point",
             iconResId = R.drawable.koin,
             isSelected = selectedOption.value == "Kuy Point",
@@ -283,7 +334,7 @@ fun MetodePembayaranSection() {
 }
 
 @Composable
-fun PembayaranOption(
+fun PembayaranYukBuangOption(
     text: String,
     iconResId: Int,
     isSelected: Boolean,
@@ -328,8 +379,8 @@ fun PembayaranOption(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewPembayaranScreen() {
+fun PreviewPembayaranYukBuangScreen() {
     MobileAPPTheme {
-        PembayaranScreen()
+        PembayaranYukBuangScreen()
     }
 }

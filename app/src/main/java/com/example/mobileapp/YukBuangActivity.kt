@@ -123,7 +123,7 @@ fun BuangScreen() {
 
             Button(
                 onClick = {
-                    val intent = Intent(context, PembayaranActivity::class.java)
+                    val intent = Intent(context, PembayaranYukBuangActivity::class.java)
                     context.startActivity(intent)
                 },
                 modifier = Modifier

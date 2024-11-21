@@ -143,6 +143,16 @@
             android:exported="true"
             android:label="tukar" />
 
+        <activity
+            android:name=".PembayaranYukBuangActivity"
+            android:exported="true"
+            android:label="tukar" />
+
+        <activity
+            android:name=".ProsesTukarActivity"
+            android:exported="true"
+            android:label="tukar" />
+
 
     </application>
 

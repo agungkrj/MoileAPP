@@ -36,22 +36,23 @@ class AluminiumActivity : ComponentActivity() {
 
 @Composable
 fun AluminiumScreen() {
-    val scrollState = rememberScrollState() // Menyimpan status scroll
+    val scrollState = rememberScrollState()
+    var totalWeight by remember { mutableIntStateOf(0) } // Total berat aluminium
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .verticalScroll(scrollState) // Mengaktifkan scroll pada seluruh layar
+            .verticalScroll(scrollState)
             .padding(horizontal = 16.dp)
     ) {
-        AluminiumHeaderSection()
+        AluminiumHeader()
 
         Spacer(modifier = Modifier.height(8.dp))
 
         // Centered Card for Aluminium Icon and Name
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            AluminiumIconCard()
+            AluminiumIconCard(onWeightChange = { totalWeight += it })
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -70,7 +71,6 @@ fun AluminiumScreen() {
             "Kabel Aluminium", "Aluminium Campuran", "Besi Aluminium"
         )
 
-        // State for each item checkbox
         val checkedStates = remember { mutableStateListOf(*Array(subJenisAluminium.size) { false }) }
 
         subJenisAluminium.forEachIndexed { index, item ->
@@ -104,14 +104,13 @@ fun AluminiumScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Footer with Estimated Price and Next Button
-        FooterSection()
+        AluminiumFooter(totalWeight = totalWeight)
     }
 }
 
 @Composable
-fun AluminiumHeaderSection() {
-    val context = LocalContext.current // Dapatkan context dari LocalContext
+fun AluminiumHeader() {
+    val context = LocalContext.current
 
     Row(
         modifier = Modifier
@@ -125,7 +124,7 @@ fun AluminiumHeaderSection() {
             context.startActivity(intent)
         }) {
             Icon(
-                painter = painterResource(id = R.drawable.panah),
+                painter = painterResource(id = R.drawable.panah), // Ganti dengan ikon panah Anda
                 contentDescription = "Back",
                 tint = Color.Black
             )
@@ -140,9 +139,13 @@ fun AluminiumHeaderSection() {
 }
 
 @Composable
-fun AluminiumIconCard() {
-    // State for weight value
+fun AluminiumIconCard(onWeightChange: (Int) -> Unit) {
     var weight by remember { mutableIntStateOf(0) }
+    val pricePerKgMin = 10000
+    val pricePerKgMax = 20000
+
+    val estimatedMinPrice = weight * pricePerKgMin
+    val estimatedMaxPrice = weight * pricePerKgMax
 
     Card(
         modifier = Modifier
@@ -157,7 +160,7 @@ fun AluminiumIconCard() {
             modifier = Modifier.padding(16.dp)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.alumanium1), // Ganti dengan ikon aluminium jika tersedia
+                painter = painterResource(id = R.drawable.alumanium1), // Ganti dengan ikon aluminium
                 contentDescription = "Aluminium",
                 modifier = Modifier.size(60.dp)
             )
@@ -172,9 +175,14 @@ fun AluminiumIconCard() {
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.padding(top = 8.dp)
             ) {
-                IconButton(onClick = { if (weight > 0) weight-- }) {
+                IconButton(onClick = {
+                    if (weight > 0) {
+                        weight--
+                        onWeightChange(-1)
+                    }
+                }) {
                     Icon(
-                        painter = painterResource(id = R.drawable.minus),
+                        painter = painterResource(id = R.drawable.minus), // Ganti dengan ikon minus Anda
                         contentDescription = "Decrease",
                         tint = Color(0xFF55B3A4)
                     )
@@ -185,14 +193,57 @@ fun AluminiumIconCard() {
                     color = Color.Black,
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
-                IconButton(onClick = { weight++ }) {
+                IconButton(onClick = {
+                    weight++
+                    onWeightChange(1)
+                }) {
                     Icon(
-                        painter = painterResource(id = R.drawable.plus),
+                        painter = painterResource(id = R.drawable.plus), // Ganti dengan ikon plus Anda
                         contentDescription = "Increase",
                         tint = Color(0xFF55B3A4)
                     )
                 }
             }
+
+        }
+    }
+}
+
+@Composable
+fun AluminiumFooter(totalWeight: Int) {
+    val pricePerKgMin = 10000
+    val pricePerKgMax = 20000
+
+    val estimatedMinPrice = totalWeight * pricePerKgMin
+    val estimatedMaxPrice = totalWeight * pricePerKgMax
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp)
+            .background(Color(0xFF55B3A4), shape = RoundedCornerShape(16.dp))
+            .padding(vertical = 12.dp, horizontal = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column {
+            Text(
+                text = "Rp$estimatedMinPrice s.d Rp$estimatedMaxPrice",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.White
+            )
+            Text(
+                text = "Estimasi Harga Total",
+                fontSize = 12.sp,
+                color = Color.White
+            )
+        }
+        Button(
+            onClick = { /* Lanjutkan ke aktivitas berikutnya */ },
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF55B3A4))
+        ) {
+            Text(text = "Lanjut", color = Color.White)
         }
     }
 }
