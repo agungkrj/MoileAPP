@@ -78,14 +78,6 @@
             android:name=".TukarBankActivity"
             android:exported="true"
             android:label="tukar" />
-        <activity
-            android:name=".TukarOvoActivity"
-            android:exported="true"
-            android:label="tukar" />
-        <activity
-            android:name=".TukarShopeePayActivity"
-            android:exported="true"
-            android:label="tukar" />
 
 
         <activity
