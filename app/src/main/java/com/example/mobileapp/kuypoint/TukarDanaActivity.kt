@@ -1,4 +1,4 @@
-package com.example.mobileapp
+package com.example.mobileapp.kuypoint
 
 import android.content.Intent
 import android.os.Bundle
@@ -20,6 +20,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mobileapp.R
 import com.example.mobileapp.ui.theme.MobileAPPTheme
 
 @OptIn(ExperimentalMaterial3Api::class)

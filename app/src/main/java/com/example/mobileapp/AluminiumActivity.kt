@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mobileapp.ui.theme.MobileAPPTheme
+import com.example.mobileapp.yukangkut.AngkutActivity
 
 class AluminiumActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
