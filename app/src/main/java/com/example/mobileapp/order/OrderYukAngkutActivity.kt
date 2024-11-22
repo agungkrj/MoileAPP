@@ -1,4 +1,4 @@
-package com.example.mobileapp
+package com.example.mobileapp.order
 
 import android.content.Intent
 import android.os.Bundle
@@ -23,13 +23,14 @@ import androidx.compose.ui.unit.sp
 import com.example.mobileapp.ui.theme.MobileAPPTheme
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.platform.LocalContext
+import com.example.mobileapp.R
 
-class OrderYukBuangActivity : ComponentActivity() {
+class OrderYukAngkutActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MobileAPPTheme {
-                OrderYukBuangScreen()
+                OrderYukAngkutScreen()
             }
         }
     }
@@ -37,7 +38,7 @@ class OrderYukBuangActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun YukBuangHeader() {
+fun OrderHeader() {
     val context = LocalContext.current
     TopAppBar(
         modifier = Modifier.fillMaxWidth(),
@@ -74,9 +75,9 @@ fun YukBuangHeader() {
 }
 
 @Composable
-fun OrderYukBuangScreen() {
+fun OrderYukAngkutScreen() {
     Scaffold(
-        topBar = { YukBuangHeader() }
+        topBar = { OrderHeader() }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -88,25 +89,32 @@ fun OrderYukBuangScreen() {
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            YukBuangStatusSection()
+            OrderStatusSection()
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            YukBuangDescriptionText()
+            Text(
+                text = "Kami sedang meninjau permintaan Yuk Angkut! Kamu. Silakan menunggu maksimal 1x24 jam untuk proses selanjutnya.",
+                fontSize = 14.sp,
+                color = Color.Black,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            YukBuangDetailSection()
+            OrderDetailSection()
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            YukBuangCancelButton()
+            CancelTransactionButton()
         }
     }
 }
 
 @Composable
-fun YukBuangStatusSection() {
+fun OrderStatusSection() {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -143,39 +151,65 @@ fun YukBuangStatusSection() {
 }
 
 @Composable
-fun YukBuangDescriptionText() {
-    Text(
-        text = "Kami sedang meninjau permintaan Yuk Buang! Kamu. Silakan menunggu maksimal 1x24 jam untuk proses selanjutnya.",
-        fontSize = 14.sp,
-        color = Color.Black,
-        textAlign = TextAlign.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-    )
+fun StatusItem(title: String, color: Color, iconId: Int) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.width(80.dp)
+    ) {
+        Icon(
+            painter = painterResource(id = iconId),
+            contentDescription = title,
+            tint = color,
+            modifier = Modifier.size(32.dp)
+        )
+        Text(
+            text = title,
+            fontSize = 12.sp,
+            color = color,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
+        )
+    }
 }
 
 @Composable
-fun YukBuangDetailSection() {
+fun DottedLine() {
+    Row(
+        modifier = Modifier
+            .width(40.dp)
+            .padding(horizontal = 4.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        repeat(6) {
+            Box(
+                modifier = Modifier
+                    .size(4.dp)
+                    .background(Color.Gray, shape = CircleShape)
+            )
+        }
+    }
+}
+
+@Composable
+fun OrderDetailSection() {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        YukBuangInfoCard(title = "Informasi Tempat Tinggal", info = listOf(
+        OrderInfoCard(title = "Informasi Tempat Tinggal", info = listOf(
             "No. Ponsel : 081234567810",
             "Alamat : Jln. Melati Blok C3 No. 28, Batam"
         ))
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        YukBuangInfoCard(title = "Informasi Pengantaran", info = listOf(
-            "Tanggal : 09 Maret 2024",
-            "Waktu : 10.40 WIB",
-            "Alamat : Simpang Polsek Kecamatan Nongsa, Batam"
+        OrderInfoCard(title = "Informasi Penjemputan", info = listOf(
+            "Tanggal : 23 April 2024",
+            "Waktu : 14.40 WIB"
         ))
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        YukBuangInfoCard(title = "Informasi Penjualan", info = listOf(
+        OrderInfoCard(title = "Informasi Penjualan", info = listOf(
             "Kertas 1 kg Rp 1500 s.d Rp 2000",
             "Estimasi harga  Rp 1500 s.d Rp 2000",
             "Biaya Layanan Rp 150 s.d Rp 200",
@@ -185,7 +219,7 @@ fun YukBuangDetailSection() {
 }
 
 @Composable
-fun YukBuangInfoCard(title: String, info: List<String>) {
+fun OrderInfoCard(title: String, info: List<String>) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -227,7 +261,7 @@ fun YukBuangInfoCard(title: String, info: List<String>) {
 }
 
 @Composable
-fun YukBuangCancelButton() {
+fun CancelTransactionButton() {
     val context = LocalContext.current
     var showDialog by remember { mutableStateOf(false) }
 
@@ -252,35 +286,35 @@ fun YukBuangCancelButton() {
             color = Color.Red,
             textAlign = TextAlign.Center
         )
-    }
 
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false },
-            confirmButton = {
-                TextButton(onClick = {
-                    val intent = Intent(context, BatalOrderYukBuangActivity::class.java)
-                    context.startActivity(intent)
-                    showDialog = false
-                }) {
-                    Text("Ya", color = Color.Red)
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showDialog = false }) {
-                    Text("Tidak", color = Color.Gray)
-                }
-            },
-            title = { Text("Batalkan Transaksi") },
-            text = { Text("Anda yakin ingin membatalkan transaksi?") }
-        )
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = { showDialog = false },
+                confirmButton = {
+                    TextButton(onClick = {
+                        val intent = Intent(context, BatalOrderYukAngkutActivity::class.java)
+                        context.startActivity(intent)
+                        showDialog = false
+                    }) {
+                        Text("Ya", color = Color.Red)
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showDialog = false }) {
+                        Text("Tidak", color = Color.Gray)
+                    }
+                },
+                title = { Text("Batalkan Transaksi") },
+                text = { Text("Anda yakin ingin membatalkan transaksi?") }
+            )
+        }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewOrderYukBuangScreen() {
+fun PreviewOrderYukAngkutScreen() {
     MobileAPPTheme {
-        OrderYukBuangScreen()
+        OrderYukAngkutScreen()
     }
 }

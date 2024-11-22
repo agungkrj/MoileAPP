@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.mobileapp
+package com.example.mobileapp.yukangkut
 
 import android.content.Intent
 import android.os.Bundle
@@ -27,7 +27,7 @@ import androidx.compose.foundation.border
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.foundation.clickable
-import androidx.compose.runtime.*
+import com.example.mobileapp.R
 
 class PembayaranActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

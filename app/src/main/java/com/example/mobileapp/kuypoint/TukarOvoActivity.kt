@@ -1,4 +1,4 @@
-package com.example.mobileapp
+package com.example.mobileapp.kuypoint
 
 import android.content.Intent
 import android.os.Bundle
@@ -20,16 +20,16 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
+import com.example.mobileapp.R
 import com.example.mobileapp.ui.theme.MobileAPPTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
-class TukarBankActivity : ComponentActivity() {
+class TukarOvoActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MobileAPPTheme {
-                TukarBankScreen()
+                TukarOvoMainScreen()
             }
         }
     }
@@ -37,19 +37,13 @@ class TukarBankActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TukarBankScreen() {
-    val context = LocalContext.current
-    val bankList = listOf("Bank BNI", "Bank BRI", "Bank Mandiri", "Bank BCA")
-    val selectedBank = remember { mutableStateOf("Nama Bank") }
-    val showBankList = remember { mutableStateOf(false) }
-    val rekeningNumber = remember { mutableStateOf(TextFieldValue("")) }
+fun TukarOvoMainScreen() {
+    val ovoNumber = remember { mutableStateOf(TextFieldValue("")) }
     val selectedNominal = remember { mutableStateOf("") }
 
     // Validasi jika semua input sudah diisi
-    val isFormComplete = remember(selectedBank.value, rekeningNumber.value.text, selectedNominal.value) {
-        selectedBank.value != "Nama Bank" &&
-                rekeningNumber.value.text.isNotEmpty() &&
-                selectedNominal.value.isNotEmpty()
+    val isFormComplete = remember(ovoNumber.value.text, selectedNominal.value) {
+        ovoNumber.value.text.isNotEmpty() && selectedNominal.value.isNotEmpty()
     }
 
     Column(
@@ -58,20 +52,20 @@ fun TukarBankScreen() {
             .background(Color.White)
     ) {
         // Header
-        ExchangeHeader()
+        TukarOvoHeader()
 
         Spacer(modifier = Modifier.height(16.dp))
 
         // Header Text
         Text(
-            text = "Tukar Kuy Point ke saldo Bank",
+            text = "Tukar Kuy Point dengan saldo OVO",
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
         Text(
-            text = "Sekarang kamu bisa menukarkan KuyPoint yang kamu miliki dengan saldo Bank! Ayo lakukan lebih banyak Yuk Angkut! dan Yuk Buang!",
+            text = "Sekarang kamu bisa menukarkan KuyPoint yang kamu miliki dengan saldo OVO! Ayo lakukan lebih banyak Yuk Angkut! dan Yuk Buang!",
             fontSize = 15.sp,
             color = Color.Gray,
             modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
@@ -79,65 +73,17 @@ fun TukarBankScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Dropdown Nama Bank
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(bottom = 4.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.iconbank),
-                    contentDescription = "Bank Icon",
-                    tint = Color.Black,
-                    modifier = Modifier.size(16.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = "Nama Bank",
-                    fontSize = 12.sp,
-                    color = Color.Black
-                )
-            }
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color(0xFFF5F5F5), RoundedCornerShape(8.dp))
-                    .padding(horizontal = 12.dp, vertical = 12.dp)
-                    .clickable { showBankList.value = true }
-            ) {
-                Text(
-                    text = selectedBank.value,
-                    fontSize = 14.sp,
-                    color = Color.Black,
-                    modifier = Modifier.weight(1f)
-                )
-                Icon(
-                    painter = painterResource(id = R.drawable.drobdown),
-                    contentDescription = "Dropdown Icon",
-                    tint = Color.Black,
-                    modifier = Modifier.size(16.dp)
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Input Nomor Rekening
+        // Input Nomor OVO
         Text(
-            text = "Masukkan Nomor Rekening Kamu",
+            text = "Masukkan Nomor OVO Kamu",
             fontSize = 14.sp,
             color = Color.Black,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
         TextField(
-            value = rekeningNumber.value,
-            onValueChange = { rekeningNumber.value = it },
-            placeholder = { Text(text = "Masukkan nomor rekening") },
+            value = ovoNumber.value,
+            onValueChange = { ovoNumber.value = it },
+            placeholder = { Text(text = "Masukkan nomor OVO") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
@@ -166,18 +112,18 @@ fun TukarBankScreen() {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                AmountButton("Rp 20.000", Modifier.weight(1f), selectedNominal)
-                AmountButton("Rp 30.000", Modifier.weight(1f), selectedNominal)
-                AmountButton("Rp 50.000", Modifier.weight(1f), selectedNominal)
+                TukarOvoNominalButton("Rp 20.000", Modifier.weight(1f), selectedNominal)
+                TukarOvoNominalButton("Rp 30.000", Modifier.weight(1f), selectedNominal)
+                TukarOvoNominalButton("Rp 50.000", Modifier.weight(1f), selectedNominal)
             }
             Spacer(modifier = Modifier.height(8.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                AmountButton("Rp 70.000", Modifier.weight(1f), selectedNominal)
-                AmountButton("Rp 80.000", Modifier.weight(1f), selectedNominal)
-                AmountButton("Rp 100.000", Modifier.weight(1f), selectedNominal)
+                TukarOvoNominalButton("Rp 70.000", Modifier.weight(1f), selectedNominal)
+                TukarOvoNominalButton("Rp 80.000", Modifier.weight(1f), selectedNominal)
+                TukarOvoNominalButton("Rp 100.000", Modifier.weight(1f), selectedNominal)
             }
         }
 
@@ -210,11 +156,7 @@ fun TukarBankScreen() {
 
         // Exchange button
         Button(
-            onClick = {
-                val intent = Intent(context, ProsesTukarActivity::class.java)
-                context.startActivity(intent)
-
-            },
+            onClick = { /* Handle exchange click */ },
             enabled = isFormComplete,
             colors = ButtonDefaults.buttonColors(
                 containerColor = if (isFormComplete) Color(0xFF55B3A4) else Color.Gray
@@ -227,49 +169,11 @@ fun TukarBankScreen() {
         ) {
             Text(text = "Tukar Sekarang", fontSize = 16.sp, color = Color.White)
         }
-
-        // Bank List Dialog
-        if (showBankList.value) {
-            Dialog(onDismissRequest = { showBankList.value = false }) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color.White, RoundedCornerShape(12.dp))
-                        .padding(16.dp)
-                        .wrapContentHeight()
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-                        Text(
-                            text = "Daftar Bank",
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(bottom = 16.dp)
-                        )
-                        bankList.forEach { bank ->
-                            Text(
-                                text = bank,
-                                fontSize = 16.sp,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        selectedBank.value = bank
-                                        showBankList.value = false
-                                    }
-                                    .padding(vertical = 12.dp)
-                            )
-                        }
-                    }
-                }
-            }
-        }
     }
 }
 
 @Composable
-fun ExchangeHeader() {
+fun TukarOvoHeader() {
     val context = LocalContext.current
     Box(
         modifier = Modifier
@@ -300,7 +204,7 @@ fun ExchangeHeader() {
 }
 
 @Composable
-fun AmountButton(text: String, modifier: Modifier = Modifier, selectedNominal: MutableState<String>) {
+fun TukarOvoNominalButton(text: String, modifier: Modifier = Modifier, selectedNominal: MutableState<String>) {
     val isSelected = selectedNominal.value == text
 
     Box(
@@ -320,8 +224,8 @@ fun AmountButton(text: String, modifier: Modifier = Modifier, selectedNominal: M
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewTukarBankScreen() {
+fun PreviewTukarOvoMainScreen() {
     MobileAPPTheme {
-        TukarBankScreen()
+        TukarOvoMainScreen()
     }
 }

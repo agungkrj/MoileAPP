@@ -26,27 +26,27 @@
 
         <!-- Tambahkan deklarasi MasukActivity di sini -->
         <activity
-            android:name=".MasukActivity"
+            android:name=".login.MasukActivity"
             android:exported="true"
             android:label="Masuk" />
 
         <activity
-            android:name=".DaftarActivity"
+            android:name=".login.DaftarActivity"
             android:exported="true"
             android:label="Daftar" />
 
         <activity
-            android:name=".DashboardActivity"
+            android:name=".beranda.DashboardActivity"
             android:exported="true"
             android:label="masuk" />
 
         <activity
-            android:name=".TukarKuyPointActivity"
+            android:name=".kuypoint.TukarKuyPointActivity"
             android:exported="true"
             android:label="tukar" />
 
         <activity
-            android:name=".AngkutActivity"
+            android:name=".yukangkut.AngkutActivity"
             android:exported="true"
             android:label="tukar" />
 
@@ -56,40 +56,40 @@
             android:label="tukar" />
 
         <activity
-            android:name=".ProfileActivity"
+            android:name=".profile.ProfileActivity"
             android:exported="true"
             android:label="tukar" />
 
         <activity
-            android:name=".OrderActivity"
+            android:name=".order.OrderActivity"
             android:exported="true"
             android:label="tukar" />
 
         <activity
-            android:name=".PembayaranActivity"
+            android:name=".yukangkut.PembayaranActivity"
             android:exported="true"
             android:label="tukar" />
 
         <activity
-            android:name=".TukarDanaActivity"
+            android:name=".kuypoint.TukarDanaActivity"
             android:exported="true"
             android:label="tukar" />
         <activity
-            android:name=".TukarBankActivity"
+            android:name=".kuypoint.TukarBankActivity"
             android:exported="true"
             android:label="tukar" />
         <activity
-            android:name=".TukarOvoActivity"
+            android:name=".kuypoint.TukarOvoActivity"
             android:exported="true"
             android:label="tukar" />
         <activity
-            android:name=".TukarShopeePayActivity"
+            android:name=".kuypoint.TukarShopeePayActivity"
             android:exported="true"
             android:label="tukar" />
 
 
         <activity
-            android:name=".BuangActivity"
+            android:name=".yukbuang.BuangActivity"
             android:exported="true"
             android:label="tukar" />
 
@@ -124,38 +124,46 @@
             android:label="tukar" />
 
         <activity
-            android:name=".OrderYukAngkutActivity"
+            android:name=".order.OrderYukAngkutActivity"
             android:exported="true"
             android:label="tukar" />
 
         <activity
-            android:name=".OrderYukBuangActivity"
+            android:name=".order.OrderYukBuangActivity"
             android:exported="true"
             android:label="tukar" />
 
         <activity
-            android:name=".BatalOrderYukAngkutActivity"
+            android:name=".order.BatalOrderYukAngkutActivity"
             android:exported="true"
             android:label="tukar" />
 
         <activity
-            android:name=".BatalOrderYukBuangActivity"
+            android:name=".order.BatalOrderYukBuangActivity"
             android:exported="true"
             android:label="tukar" />
 
         <activity
-            android:name=".PembayaranYukBuangActivity"
+            android:name=".yukbuang.PembayaranYukBuangActivity"
             android:exported="true"
             android:label="tukar" />
 
         <activity
-            android:name=".ProsesTukarActivity"
+            android:name=".kuypoint.ProsesTukarActivity"
             android:exported="true"
             android:label="tukar" />
         <activity
             android:name=".RiwayatActivity"
             android:exported="true"
             android:label="tukar" />
+
+        <activity
+            android:name=".order.RiwayatActivity"
+            android:exported="true"
+            android:label="tukar" />
+
+
+
 
 
     </application>

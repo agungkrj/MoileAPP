@@ -1,4 +1,4 @@
-package com.example.mobileapp
+package com.example.mobileapp.order
 
 import android.content.Intent
 import android.os.Bundle
@@ -21,15 +21,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mobileapp.ui.theme.MobileAPPTheme
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.platform.LocalContext
+import com.example.mobileapp.R
 
-class BatalOrderYukAngkutActivity : ComponentActivity() {
+class BatalOrderYukBuangActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MobileAPPTheme {
-                BatalOrderYukAngkutScreen()
+                BatalOrderYukBuangScreen()
             }
         }
     }
@@ -37,7 +37,7 @@ class BatalOrderYukAngkutActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BatalOrderHeader() {
+fun BatalOrderYukBuangHeader() {
     val context = LocalContext.current
     TopAppBar(
         modifier = Modifier.fillMaxWidth(),
@@ -60,7 +60,6 @@ fun BatalOrderHeader() {
             IconButton(onClick = {
                 val intent = Intent(context, OrderActivity::class.java)
                 context.startActivity(intent)
-
             }) {
                 Icon(
                     painter = painterResource(id = R.drawable.keluar),
@@ -75,9 +74,9 @@ fun BatalOrderHeader() {
 }
 
 @Composable
-fun BatalOrderYukAngkutScreen() {
+fun BatalOrderYukBuangScreen() {
     Scaffold(
-        topBar = { BatalOrderHeader() }
+        topBar = { BatalOrderYukBuangHeader() }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -89,16 +88,15 @@ fun BatalOrderYukAngkutScreen() {
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            BatalOrderStatusSection()
+            BatalOrderYukBuangStatusSection()
 
             Spacer(modifier = Modifier.height(8.dp))
 
             // Teks di luar Card status
             Text(
-                text = "Transaksi Yuk Angkut! Kamu telah dibatalkan.",
+                text = "Transaksi Yuk Buang! Kamu telah gagal.",
                 fontSize = 14.sp,
                 color = Color.Black,
-                textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
@@ -106,17 +104,17 @@ fun BatalOrderYukAngkutScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            BatalOrderDetailSection()
+            BatalOrderYukBuangDetailSection()
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            CancelledTransactionMessage()
+            BatalOrderYukBuangCancelledMessage()
         }
     }
 }
 
 @Composable
-fun BatalOrderStatusSection() {
+fun BatalOrderYukBuangStatusSection() {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -147,7 +145,7 @@ fun BatalOrderStatusSection() {
 }
 
 @Composable
-fun BatalOrderDetailSection() {
+fun BatalOrderYukBuangDetailSection() {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -158,9 +156,10 @@ fun BatalOrderDetailSection() {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        OrderInfoCard(title = "Informasi Penjemputan", info = listOf(
-            "Tanggal : 23 April 2024",
-            "Waktu : 14.40 WIB"
+        OrderInfoCard(title = "Informasi Pengantaran", info = listOf(
+            "Tanggal : 09 Maret 2024",
+            "Waktu : 10.40 WIB",
+            "Alamat : Simpang Polsek Kecamatan Nongsa, Batam"
         ))
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -175,7 +174,7 @@ fun BatalOrderDetailSection() {
 }
 
 @Composable
-fun CancelledTransactionMessage() {
+fun BatalOrderYukBuangCancelledMessage() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -183,7 +182,7 @@ fun CancelledTransactionMessage() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Transaksi Yuk Angkut! Kamu telah dibatalkan",
+            text = "Transaksi Yuk Buang! Kamu telah dibatalkan",
             fontSize = 14.sp,
             color = Color(0xFF55B3A4),
             textAlign = TextAlign.Center,
@@ -196,8 +195,8 @@ fun CancelledTransactionMessage() {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewBatalOrderYukAngkutScreen() {
+fun PreviewBatalOrderYukBuangScreen() {
     MobileAPPTheme {
-        BatalOrderYukAngkutScreen()
+        BatalOrderYukBuangScreen()
     }
 }

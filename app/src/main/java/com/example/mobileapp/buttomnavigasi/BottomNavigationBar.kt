@@ -15,9 +15,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mobileapp.DashboardActivity
-import com.example.mobileapp.OrderActivity
-import com.example.mobileapp.ProfileActivity
+import com.example.mobileapp.beranda.DashboardActivity
+import com.example.mobileapp.order.OrderActivity
+import com.example.mobileapp.profile.ProfileActivity
 import com.example.mobileapp.R
 
 @Composable

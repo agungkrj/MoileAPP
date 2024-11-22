@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.mobileapp
+package com.example.mobileapp.yukbuang
 
 import android.content.Intent
 import android.os.Bundle
@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import com.example.mobileapp.ui.theme.MobileAPPTheme
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import com.example.mobileapp.R
 
 class PembayaranYukBuangActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
