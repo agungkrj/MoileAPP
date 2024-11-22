@@ -301,25 +301,28 @@ fun SampahActionCard(name: String, iconRes: Int, color: Color, onClick: () -> Un
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
+        // Menyatukan konten ke tengah
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally, // Konten horisontal di tengah
+            verticalArrangement = Arrangement.Center // Konten vertikal di tengah
         ) {
             Image(
                 painter = painterResource(id = iconRes),
                 contentDescription = name,
-                modifier = Modifier.size(36.dp),
+                modifier = Modifier.size(40.dp), // Ikon dengan ukuran lebih besar jika diperlukan
                 colorFilter = ColorFilter.tint(color)
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(8.dp)) // Spasi antara ikon dan teks
             Text(
                 text = name,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.SemiBold,
+                fontSize = 14.sp, // Font sedikit lebih besar agar terlihat jelas
+                fontWeight = FontWeight.Bold, // Teks dibuat lebih tebal
                 color = Color.Black,
                 textAlign = TextAlign.Center,
-                maxLines = 1
+                maxLines = 1 // Membatasi teks ke satu baris
             )
         }
     }

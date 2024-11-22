@@ -290,25 +290,28 @@ fun BuangSampahActionCard(name: String, iconRes: Int, color: Color, onClick: () 
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
+        // Menyatukan konten ke tengah
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp), // Padding internal untuk menyesuaikan konten
+            horizontalAlignment = Alignment.CenterHorizontally, // Konten horisontal di tengah
+            verticalArrangement = Arrangement.Center // Konten vertikal di tengah
         ) {
             Image(
                 painter = painterResource(id = iconRes),
                 contentDescription = name,
-                modifier = Modifier.size(36.dp),
-                colorFilter = ColorFilter.tint(color)
+                modifier = Modifier.size(40.dp), // Ukuran ikon sedikit lebih besar
+                colorFilter = ColorFilter.tint(color) // Menambahkan warna ikon
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(8.dp)) // Spasi antara ikon dan teks
             Text(
                 text = name,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.SemiBold,
+                fontSize = 14.sp, // Ukuran font teks sedikit lebih besar
+                fontWeight = FontWeight.Bold, // Teks dibuat lebih tebal
                 color = Color.Black,
-                textAlign = TextAlign.Center,
-                maxLines = 1
+                textAlign = TextAlign.Center, // Teks berada di tengah
+                maxLines = 1 // Membatasi teks hanya satu baris
             )
         }
     }

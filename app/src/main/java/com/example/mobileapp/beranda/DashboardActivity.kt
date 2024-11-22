@@ -80,7 +80,6 @@ fun DashboardScreen() {
             )
 
             GreetingCard()
-            KuyPointCard(context)
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -164,7 +163,6 @@ fun BackgroundOverlay() {
         )
     }
 }
-
 @Composable
 fun GreetingCard() {
     Card(
@@ -175,87 +173,102 @@ fun GreetingCard() {
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.profile),
-                contentDescription = "Profile Picture",
-                modifier = Modifier
-                    .size(48.dp)
-                    .clip(CircleShape),
-                tint = Color.Unspecified
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Column {
-                Text(
-                    text = "Halo, Agro!",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
-                    color = Color.Black
-                )
-                Text(
-                    text = "Sudah buang sampah hari ini?",
-                    fontSize = 14.sp,
-                    color = Color.Gray
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun KuyPointCard(context: android.content.Context) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(4.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column {
-                Text(
-                    text = "Kuy Point",
-                    fontSize = 14.sp,
-                    color = Color.Gray
-                )
-                Row(verticalAlignment = Alignment.CenterVertically) {
+        val context = LocalContext.current
+        Column(modifier = Modifier.padding(16.dp)) {
+            // Bagian Atas: Profil
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                // Icon Profile
+                IconButton(
+                    onClick = {
+                        val intent = Intent(context, ProfileActivity::class.java)
+                        context.startActivity(intent)
+                    },
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(CircleShape)
+                ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.koin),
-                        contentDescription = "Coin Icon",
-                        modifier = Modifier.size(24.dp),
+                        painter = painterResource(id = R.drawable.profile),
+                        contentDescription = "Profile Picture",
+                        modifier = Modifier.size(48.dp),
                         tint = Color.Unspecified
                     )
-                    Spacer(modifier = Modifier.width(4.dp))
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                // Teks Profil
+                Column {
                     Text(
-                        text = "15.000",
+                        text = "Halo, Agro!",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 24.sp,
+                        fontSize = 16.sp,
                         color = Color.Black
+                    )
+                    Text(
+                        text = "Sudah buang sampah hari ini?",
+                        fontSize = 14.sp,
+                        color = Color.Gray
                     )
                 }
             }
-            Button(
-                onClick = {
-                    val intent = Intent(context, TukarKuyPointActivity::class.java)
-                    context.startActivity(intent)
-                },
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF55B3A4),
-                    contentColor = Color.White
-                )
+
+            // Garis Pemisah
+            Spacer(modifier = Modifier.height(16.dp))
+            Divider(color = Color(0xFFCCCCCC), thickness = 1.dp)
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Bagian Bawah: Kuy Point
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Tukar")
+                // Kuy Point Label dan Ikon
+                Column {
+                    Text(
+                        text = "Kuy Point",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        color = Color.Black
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.koin),
+                            contentDescription = "Coin Icon",
+                            modifier = Modifier.size(32.dp),
+                            tint = Color.Unspecified
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "15.000",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 28.sp,
+                            color = Color(0xFFDAA520) // Warna emas
+                        )
+                    }
+                }
+
+                // Tombol Tukar di Sebelah Kanan Bawah
+                Button(
+                    onClick = {
+                        val intent = Intent(context, TukarKuyPointActivity::class.java)
+                        context.startActivity(intent)
+                    },
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF55B3A4),
+                        contentColor = Color.White
+                    ),
+                    modifier = Modifier
+                        .width(120.dp) // Lebar tombol tetap besar
+                        .height(48.dp) // Tinggi tombol
+                ) {
+                    Text(
+                        text = "Tukar",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
         }
     }
@@ -311,9 +324,8 @@ fun ActionCard(
 fun RedeemPointsCard(onClick: () -> Unit) {
     Card(
         modifier = Modifier
-            .width(368.dp)
-            .height(143.dp)
-            .padding(horizontal = 8.dp)
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
             .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
@@ -338,19 +350,24 @@ fun RedeemPointsCard(onClick: () -> Unit) {
                 Image(
                     painter = painterResource(id = R.drawable.gift),
                     contentDescription = "Gift Icon",
-                    modifier = Modifier.size(130.dp)
+                    modifier = Modifier
+                        .weight(0.3f)
+                        .size(130.dp) // Gambar responsif
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
                     text = "Ayo tukar KuyPoint kamu!",
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
-                    color = Color.White
+                    color = Color.White,
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.weight(0.7f) // Menjadikan teks responsif
                 )
             }
         }
     }
 }
+
 
 @Composable
 fun BottomNavigationBar(

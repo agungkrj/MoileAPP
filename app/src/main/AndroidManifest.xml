@@ -152,10 +152,7 @@
             android:name=".kuypoint.ProsesTukarActivity"
             android:exported="true"
             android:label="tukar" />
-        <activity
-            android:name=".RiwayatActivity"
-            android:exported="true"
-            android:label="tukar" />
+
 
         <activity
             android:name=".order.RiwayatActivity"
