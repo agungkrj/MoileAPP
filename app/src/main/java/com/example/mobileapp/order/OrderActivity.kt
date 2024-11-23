@@ -46,14 +46,12 @@ fun OrderScreen() {
             .fillMaxSize()
             .background(Color.White)
     ) {
-        // Header with linear gradient and centered title
+        // Header with solid color and centered title
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    brush = Brush.horizontalGradient(
-                        colors = listOf(Color(0xFF55B3A4), Color(0xFF00796B))
-                    )
+                    color = Color(0xFF55B3A4) // Solid color for the header
                 )
                 .padding(vertical = 16.dp),
             contentAlignment = Alignment.Center
@@ -109,7 +107,10 @@ fun OrderScreen() {
                         description = "Sedang meninjau penukaran Kuy Point Kamu. Silahkan menunggu maksimal 1x24 jam untuk proses selanjutnya",
                         time = "13:40 WIB",
                         iconResId = R.drawable.transfer,
-                        onClick = { /* Aksi untuk 'Tukar Kuy Point!' (transfer) */ }
+                        onClick = {
+                            val intent = Intent(context, TransaksiBerhasilActivity::class.java)
+                            context.startActivity(intent)
+                        }
                     )
                 }
                 item {

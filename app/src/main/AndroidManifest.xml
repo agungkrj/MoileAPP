@@ -51,7 +51,7 @@
             android:label="tukar" />
 
         <activity
-            android:name=".JenisSampahActivity"
+            android:name=".sampah.JenisSampahActivity"
             android:exported="true"
             android:label="tukar" />
 
@@ -94,32 +94,32 @@
             android:label="tukar" />
 
         <activity
-            android:name=".PlastikActivity"
+            android:name=".sampah.PlastikActivity"
             android:exported="true"
             android:label="tukar" />
 
         <activity
-            android:name=".BotolKacaActivity"
+            android:name=".sampah.BotolKacaActivity"
             android:exported="true"
             android:label="tukar" />
 
         <activity
-            android:name=".ElektronikActivity"
+            android:name=".sampah.ElektronikActivity"
             android:exported="true"
             android:label="tukar" />
 
         <activity
-            android:name=".BesiActivity"
+            android:name=".sampah.BesiActivity"
             android:exported="true"
             android:label="tukar" />
 
         <activity
-            android:name=".AluminiumActivity"
+            android:name=".sampah.AluminiumActivity"
             android:exported="true"
             android:label="tukar" />
 
         <activity
-            android:name=".EditProfileActivity"
+            android:name=".profile.EditProfileActivity"
             android:exported="true"
             android:label="tukar" />
 
@@ -156,6 +156,11 @@
 
         <activity
             android:name=".order.RiwayatActivity"
+            android:exported="true"
+            android:label="tukar" />
+
+        <activity
+            android:name=".order.TransaksiBerhasilActivity"
             android:exported="true"
             android:label="tukar" />
 

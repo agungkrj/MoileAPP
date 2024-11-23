@@ -28,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.foundation.clickable
 import com.example.mobileapp.R
+import com.example.mobileapp.yukbuang.BuangActivity
 
 class PembayaranActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,9 +100,7 @@ fun PembayaranHeaderSection() {
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                brush = Brush.horizontalGradient(
-                    colors = listOf(Color(0xFF79D7C7), Color(0xFF52AC9D))
-                ),
+                color = Color(0xFF55B3A4), // Solid color for the header
                 shape = RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)
             )
             .padding(vertical = 24.dp)
@@ -118,7 +117,7 @@ fun PembayaranHeaderSection() {
                 Icon(
                     painter = painterResource(id = R.drawable.panah),
                     contentDescription = "Back",
-                    tint = Color.Black
+                    tint = Color.White
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
@@ -127,12 +126,12 @@ fun PembayaranHeaderSection() {
                     text = "Pembayaran",
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black
+                    color = Color.White
                 )
                 Text(
                     text = "Selesaikan transaksi mu sekarang.",
                     fontSize = 14.sp,
-                    color = Color.Black
+                    color = Color.White
                 )
             }
         }

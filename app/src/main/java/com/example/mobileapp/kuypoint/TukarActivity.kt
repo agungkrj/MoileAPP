@@ -77,7 +77,7 @@ fun TukarKuyPointScreen() {
                         Icon(
                             painter = painterResource(id = R.drawable.panah),
                             contentDescription = "Back",
-                            tint = Color.Black
+                            tint = Color.White
                         )
                     }
                     Spacer(modifier = Modifier.width(8.dp))
@@ -85,7 +85,7 @@ fun TukarKuyPointScreen() {
                         text = "Tukar Kuy Point",
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = Color.White
                     )
                 }
 

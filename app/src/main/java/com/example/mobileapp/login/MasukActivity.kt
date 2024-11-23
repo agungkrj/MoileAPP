@@ -11,15 +11,21 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,7 +44,6 @@ class MasukActivity : ComponentActivity() {
     }
 }
 
-@Preview
 @Composable
 fun MasukScreen() {
     val context = LocalContext.current
@@ -150,6 +155,36 @@ fun MasukScreen() {
                 ) {
                     Text(text = "Masuk", fontSize = 16.sp)
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                val annotatedText = buildAnnotatedString {
+                    append("Belum punya akun? ")
+
+                    pushStringAnnotation(tag = "register", annotation = "register")
+                    withStyle(
+                        style = SpanStyle(
+                            color = Color(0xFF55B3A4),
+                            textDecoration = TextDecoration.Underline
+                        )
+                    ) {
+                        append("Daftar di sini")
+                    }
+                    pop()
+                }
+
+                ClickableText(
+                    text = annotatedText,
+                    style = TextStyle(fontSize = 14.sp, color = Color.Gray),
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    onClick = { offset ->
+                        annotatedText.getStringAnnotations(tag = "register", start = offset, end = offset)
+                            .firstOrNull()?.let {
+                                val intent = Intent(context, DaftarActivity::class.java)
+                                context.startActivity(intent)
+                            }
+                    }
+                )
             }
         }
     }
@@ -175,86 +210,102 @@ fun DialogLupaPassword(
     onDismiss: () -> Unit,
     onSend: () -> Unit
 ) {
-    val context = LocalContext.current
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0x99000000))
-    ) {
-        Column(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .padding(16.dp)
-                .background(Color.White, shape = RoundedCornerShape(16.dp))
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
             Box(
-                modifier = Modifier
-                    .size(72.dp)
-                    .background(Color(0xFF55B3A4), shape = CircleShape),
+                modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "?",
-                    fontSize = 36.sp,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
-                )
+                // Circular icon container
+                Box(
+                    modifier = Modifier
+                        .size(72.dp)
+                        .background(Color(0xFF55B3A4), shape = CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "?",
+                        fontSize = 36.sp,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = "Lupa Password",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = Color(0xFF004D40)
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = "Kami akan mengirimkan password ke email yang telah kamu daftarkan.",
-                fontSize = 14.sp,
-                color = Color.Gray,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
-                value = email,
-                onValueChange = onEmailChange,
-                label = { Text("Email") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
-                singleLine = true
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier.fillMaxWidth()
+        },
+        text = {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Button(
-                    onClick = onSend,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF55B3A4)),
-                    modifier = Modifier.weight(1f).padding(end = 8.dp)
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Title text
+                Text(
+                    text = "Lupa Password",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    color = Color(0xFF004D40)
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Subtitle text
+                Text(
+                    text = "Kami akan mengirimkan password ke email yang telah kamu daftarkan.",
+                    fontSize = 14.sp,
+                    color = Color.Gray,
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Email input field
+                OutlinedTextField(
+                    value = email,
+                    onValueChange = onEmailChange,
+                    label = { Text("Email") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    shape = RoundedCornerShape(8.dp)
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Action buttons
+                Row(
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Kirim Sekarang", color = Color.White)
-                }
-                OutlinedButton(
-                    onClick = onDismiss,
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red),
-                    modifier = Modifier.weight(1f).padding(start = 8.dp)
-                ) {
-                    Text("Batal", color = Color.Red)
+                    Button(
+                        onClick = onSend,
+                        modifier = Modifier.weight(1f).padding(end = 4.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF55B3A4))
+                    ) {
+                        Text("Kirim", color = Color.White)
+                    }
+                    OutlinedButton(
+                        onClick = onDismiss,
+                        modifier = Modifier.weight(1f).padding(start = 4.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red)
+                    ) {
+                        Text("Batal", color = Color.Red)
+                    }
                 }
             }
-        }
+        },
+        confirmButton = {}, // Remove default confirm button
+        dismissButton = {}  // Remove default dismiss button
+    )
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewMasukScreen() {
+    MobileAPPTheme {
+        MasukScreen()
     }
 }

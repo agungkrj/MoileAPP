@@ -52,8 +52,7 @@ fun RiwayatScreen() {
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        val intent = Intent(context, OrderActivity::class.java)
-                        context.startActivity(intent)
+                        (context as? ComponentActivity)?.finish()
                     }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,

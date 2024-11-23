@@ -319,49 +319,48 @@ fun ActionCard(
         }
     }
 }
-
 @Composable
 fun RedeemPointsCard(onClick: () -> Unit) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .fillMaxWidth() // Ensures the card spans the full width
+            .padding(horizontal = 8.dp) // Matches other card paddings
+            .height(140.dp) // Increased height for emphasis
             .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-        elevation = CardDefaults.cardElevation(4.dp)
+        elevation = CardDefaults.cardElevation(8.dp)
     ) {
         Box(
-            contentAlignment = Alignment.Center,
             modifier = Modifier
-                .fillMaxSize()
                 .background(
                     brush = Brush.verticalGradient(
-                        colors = listOf(Color(0xFF00BFA5), Color(0xFFFFE082))
+                        colors = listOf(Color(0xFF00BFA5), Color(0xFFFFE082)) // Gradient colors
                     )
                 )
                 .padding(16.dp)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start,
-                modifier = Modifier.fillMaxWidth()
+                horizontalArrangement = Arrangement.Start, // Keeps icon and text aligned
+                modifier = Modifier.fillMaxSize()
             ) {
+                // Gift Icon
                 Image(
                     painter = painterResource(id = R.drawable.gift),
                     contentDescription = "Gift Icon",
                     modifier = Modifier
-                        .weight(0.3f)
-                        .size(130.dp) // Gambar responsif
+                        .size(100.dp) // Adjusted icon size for a balanced layout
+                        .padding(end = 16.dp)
                 )
-                Spacer(modifier = Modifier.width(16.dp))
+
+                // Text Section
                 Text(
                     text = "Ayo tukar KuyPoint kamu!",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
+                    fontSize = 20.sp, // Bold title with a slightly larger size
                     color = Color.White,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier.weight(0.7f) // Menjadikan teks responsif
+                    modifier = Modifier.padding(start = 8.dp) // Adds consistent spacing
                 )
             }
         }

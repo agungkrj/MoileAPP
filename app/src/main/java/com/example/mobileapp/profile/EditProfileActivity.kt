@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.mobileapp
+package com.example.mobileapp.profile
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,8 +9,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mobileapp.R
 import com.example.mobileapp.beranda.DashboardActivity
 import com.example.mobileapp.ui.theme.MobileAPPTheme
 
@@ -38,7 +41,7 @@ class EditProfileActivity : ComponentActivity() {
 
 @Composable
 fun EditProfileScreen() {
-    // State untuk data pengguna
+    // State for user data
     var name by remember { mutableStateOf("Agro") }
     var email by remember { mutableStateOf("username@gmail.com") }
     var phone by remember { mutableStateOf("081234567810") }
@@ -46,7 +49,7 @@ fun EditProfileScreen() {
     var birthDate by remember { mutableStateOf("27/10/2024") }
     var address by remember { mutableStateOf("JL. Anggrek Sari perumahan Legenda Seluler Blok Z No. 192 RT.12/RW.11 Batam Center, Batam kota, Batam, Kepulauan Riau.") }
 
-    // State untuk data asli (salinan) - digunakan untuk tombol "Batal"
+    // State for original data (used for the "Batal" button)
     var originalName by remember { mutableStateOf(name) }
     var originalEmail by remember { mutableStateOf(email) }
     var originalPhone by remember { mutableStateOf(phone) }
@@ -54,7 +57,7 @@ fun EditProfileScreen() {
     var originalBirthDate by remember { mutableStateOf(birthDate) }
     var originalAddress by remember { mutableStateOf(address) }
 
-    // State untuk mengontrol mode edit
+    // State to control edit mode
     var isEditing by remember { mutableStateOf(false) }
 
     Column(
@@ -64,18 +67,20 @@ fun EditProfileScreen() {
     ) {
         FullWidthHeader()
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
+        // Scrollable Content
         Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()) // Enable scrolling
                 .padding(horizontal = 16.dp)
         ) {
             ProfilePictureSection()
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Informasi pengguna
+            // User information fields
             ProfileInfoField("Nama Lengkap", name, isEditing) { name = it }
             Divider(color = Color.LightGray, thickness = 1.dp)
 
@@ -96,16 +101,18 @@ fun EditProfileScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Tombol aksi
+            // Action buttons
             if (isEditing) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp) // Consistent spacing
                 ) {
-                    // Tombol "Batal"
+                    // "Batal" button
                     Button(
                         onClick = {
-                            // Mengembalikan nilai asli
+                            // Restore original values
                             name = originalName
                             email = originalEmail
                             phone = originalPhone
@@ -117,17 +124,16 @@ fun EditProfileScreen() {
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
                         shape = RoundedCornerShape(16.dp),
                         modifier = Modifier
-                            .weight(1f)
-                            .padding(end = 8.dp)
+                            .weight(1f) // Equal width for both buttons
                             .height(50.dp)
                     ) {
                         Text("Batal", color = Color.White, fontSize = 16.sp)
                     }
 
-                    // Tombol "Simpan"
+                    // "Simpan" button
                     Button(
                         onClick = {
-                            // Menyimpan data terbaru
+                            // Save updated values
                             originalName = name
                             originalEmail = email
                             originalPhone = phone
@@ -139,15 +145,14 @@ fun EditProfileScreen() {
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF55B3A4)),
                         shape = RoundedCornerShape(16.dp),
                         modifier = Modifier
-                            .weight(1f)
-                            .padding(start = 8.dp)
+                            .weight(1f) // Equal width for both buttons
                             .height(50.dp)
                     ) {
                         Text("Simpan", color = Color.White, fontSize = 16.sp)
                     }
                 }
             } else {
-                // Tombol "Edit"
+                // "Edit" button
                 Button(
                     onClick = { isEditing = true },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEEEEEE)),
@@ -188,7 +193,7 @@ fun FullWidthHeader() {
             }
         },
         colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color(0xFF55B3A4)),
-        modifier = Modifier.fillMaxWidth() // Header memenuhi lebar layar
+        modifier = Modifier.fillMaxWidth() // Header spans the entire screen width
     )
 }
 

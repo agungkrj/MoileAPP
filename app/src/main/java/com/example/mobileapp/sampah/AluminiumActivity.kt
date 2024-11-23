@@ -1,6 +1,5 @@
-package com.example.mobileapp
+package com.example.mobileapp.sampah
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,24 +20,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mobileapp.R
 import com.example.mobileapp.ui.theme.MobileAPPTheme
-import com.example.mobileapp.yukangkut.AngkutActivity
 
-class BesiActivity : ComponentActivity() {
+class AluminiumActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MobileAPPTheme {
-                BesiScreen()
+                AluminiumScreen()
             }
         }
     }
 }
 
 @Composable
-fun BesiScreen() {
+fun AluminiumScreen() {
     val scrollState = rememberScrollState()
-    var totalWeight by remember { mutableIntStateOf(0) } // Total berat besi
+    var totalWeight by remember { mutableIntStateOf(0) } // Total berat aluminium
 
     Column(
         modifier = Modifier
@@ -47,34 +46,34 @@ fun BesiScreen() {
             .verticalScroll(scrollState)
             .padding(horizontal = 16.dp)
     ) {
-        BesiHeader()
+        AluminiumHeader()
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Centered Card for Besi Icon and Name
+        // Centered Card for Aluminium Icon and Name
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            BesiIconCard(onWeightChange = { totalWeight += it })
+            AluminiumIconCard(onWeightChange = { totalWeight += it })
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Sub Jenis Besi Section
+        // Sub Aluminium Section
         Text(
-            text = "Sub Jenis Besi",
+            text = "Sub Jenis Aluminium",
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black,
             modifier = Modifier.padding(vertical = 8.dp)
         )
 
-        val subJenisBesi = listOf(
-            "Besi Tua", "Besi Scrap", "Besi Bekas Alat Berat",
-            "Besi Beton", "Besi Pipa", "Besi Lainnya"
+        val subJenisAluminium = listOf(
+            "Kaleng", "Foil Aluminium", "Logam Bekas",
+            "Kabel Aluminium", "Aluminium Campuran", "Besi Aluminium"
         )
 
-        val checkedStates = remember { mutableStateListOf(*Array(subJenisBesi.size) { false }) }
+        val checkedStates = remember { mutableStateListOf(*Array(subJenisAluminium.size) { false }) }
 
-        subJenisBesi.forEachIndexed { index, item ->
+        subJenisAluminium.forEachIndexed { index, item ->
             Column {
                 Row(
                     modifier = Modifier
@@ -105,12 +104,12 @@ fun BesiScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        BesiFooter(totalWeight = totalWeight)
+        AluminiumFooter(totalWeight = totalWeight)
     }
 }
 
 @Composable
-fun BesiHeader() {
+fun AluminiumHeader() {
     val context = LocalContext.current
 
     Row(
@@ -121,17 +120,16 @@ fun BesiHeader() {
         horizontalArrangement = Arrangement.Start
     ) {
         IconButton(onClick = {
-            val intent = Intent(context, AngkutActivity::class.java)
-            context.startActivity(intent)
+            (context as? ComponentActivity)?.finish()
         }) {
             Icon(
-                painter = painterResource(id = R.drawable.panah),
+                painter = painterResource(id = R.drawable.panah), // Ganti dengan ikon panah Anda
                 contentDescription = "Back",
                 tint = Color.Black
             )
         }
         Text(
-            text = "Besi",
+            text = "Aluminium",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black
@@ -140,10 +138,10 @@ fun BesiHeader() {
 }
 
 @Composable
-fun BesiIconCard(onWeightChange: (Int) -> Unit) {
+fun AluminiumIconCard(onWeightChange: (Int) -> Unit) {
     var weight by remember { mutableIntStateOf(0) }
-    val pricePerKgMin = 2000 // Harga minimum per kg
-    val pricePerKgMax = 5000 // Harga maksimum per kg
+    val pricePerKgMin = 10000
+    val pricePerKgMax = 20000
 
     val estimatedMinPrice = weight * pricePerKgMin
     val estimatedMaxPrice = weight * pricePerKgMax
@@ -161,12 +159,12 @@ fun BesiIconCard(onWeightChange: (Int) -> Unit) {
             modifier = Modifier.padding(16.dp)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.besi), // Ganti dengan ikon besi jika tersedia
-                contentDescription = "Besi",
+                painter = painterResource(id = R.drawable.alumanium1), // Ganti dengan ikon aluminium
+                contentDescription = "Aluminium",
                 modifier = Modifier.size(60.dp)
             )
             Text(
-                text = "Besi",
+                text = "Aluminium",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
@@ -183,7 +181,7 @@ fun BesiIconCard(onWeightChange: (Int) -> Unit) {
                     }
                 }) {
                     Icon(
-                        painter = painterResource(id = R.drawable.minus),
+                        painter = painterResource(id = R.drawable.minus), // Ganti dengan ikon minus Anda
                         contentDescription = "Decrease",
                         tint = Color(0xFF55B3A4)
                     )
@@ -199,7 +197,7 @@ fun BesiIconCard(onWeightChange: (Int) -> Unit) {
                     onWeightChange(1)
                 }) {
                     Icon(
-                        painter = painterResource(id = R.drawable.plus),
+                        painter = painterResource(id = R.drawable.plus), // Ganti dengan ikon plus Anda
                         contentDescription = "Increase",
                         tint = Color(0xFF55B3A4)
                     )
@@ -211,9 +209,9 @@ fun BesiIconCard(onWeightChange: (Int) -> Unit) {
 }
 
 @Composable
-fun BesiFooter(totalWeight: Int) {
-    val pricePerKgMin = 2000
-    val pricePerKgMax = 5000
+fun AluminiumFooter(totalWeight: Int) {
+    val pricePerKgMin = 10000
+    val pricePerKgMax = 20000
 
     val estimatedMinPrice = totalWeight * pricePerKgMin
     val estimatedMaxPrice = totalWeight * pricePerKgMax
@@ -251,8 +249,8 @@ fun BesiFooter(totalWeight: Int) {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewBesiScreen() {
+fun PreviewAluminiumScreen() {
     MobileAPPTheme {
-        BesiScreen()
+        AluminiumScreen()
     }
 }

@@ -1,6 +1,5 @@
-package com.example.mobileapp
+package com.example.mobileapp.sampah
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,24 +20,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mobileapp.R
 import com.example.mobileapp.ui.theme.MobileAPPTheme
-import com.example.mobileapp.yukangkut.AngkutActivity
 
-class ElektronikActivity : ComponentActivity() {
+class BesiActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MobileAPPTheme {
-                ElektronikScreen()
+                BesiScreen()
             }
         }
     }
 }
 
 @Composable
-fun ElektronikScreen() {
+fun BesiScreen() {
     val scrollState = rememberScrollState()
-    var totalWeight by remember { mutableIntStateOf(0) } // Total berat elektronik
+    var totalWeight by remember { mutableIntStateOf(0) } // Total berat besi
 
     Column(
         modifier = Modifier
@@ -47,34 +46,34 @@ fun ElektronikScreen() {
             .verticalScroll(scrollState)
             .padding(horizontal = 16.dp)
     ) {
-        ElektronikHeader()
+        BesiHeader()
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Centered Card for Elektronik Icon and Name
+        // Centered Card for Besi Icon and Name
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            ElektronikIconCard(onWeightChange = { totalWeight += it })
+            BesiIconCard(onWeightChange = { totalWeight += it })
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Sub Jenis Elektronik Section
+        // Sub Jenis Besi Section
         Text(
-            text = "Sub Jenis Elektronik",
+            text = "Sub Jenis Besi",
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black,
             modifier = Modifier.padding(vertical = 8.dp)
         )
 
-        val subJenisElektronik = listOf(
-            "Handphone Bekas", "Komputer", "TV",
-            "AC", "Kulkas", "Printer", "Elektronik Lainnya"
+        val subJenisBesi = listOf(
+            "Besi Tua", "Besi Scrap", "Besi Bekas Alat Berat",
+            "Besi Beton", "Besi Pipa", "Besi Lainnya"
         )
 
-        val checkedStates = remember { mutableStateListOf(*Array(subJenisElektronik.size) { false }) }
+        val checkedStates = remember { mutableStateListOf(*Array(subJenisBesi.size) { false }) }
 
-        subJenisElektronik.forEachIndexed { index, item ->
+        subJenisBesi.forEachIndexed { index, item ->
             Column {
                 Row(
                     modifier = Modifier
@@ -105,12 +104,12 @@ fun ElektronikScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        ElektronikFooter(totalWeight = totalWeight)
+        BesiFooter(totalWeight = totalWeight)
     }
 }
 
 @Composable
-fun ElektronikHeader() {
+fun BesiHeader() {
     val context = LocalContext.current
 
     Row(
@@ -121,8 +120,7 @@ fun ElektronikHeader() {
         horizontalArrangement = Arrangement.Start
     ) {
         IconButton(onClick = {
-            val intent = Intent(context, AngkutActivity::class.java)
-            context.startActivity(intent)
+            (context as? ComponentActivity)?.finish()
         }) {
             Icon(
                 painter = painterResource(id = R.drawable.panah),
@@ -131,7 +129,7 @@ fun ElektronikHeader() {
             )
         }
         Text(
-            text = "Elektronik",
+            text = "Besi",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black
@@ -140,10 +138,10 @@ fun ElektronikHeader() {
 }
 
 @Composable
-fun ElektronikIconCard(onWeightChange: (Int) -> Unit) {
+fun BesiIconCard(onWeightChange: (Int) -> Unit) {
     var weight by remember { mutableIntStateOf(0) }
-    val pricePerKgMin = 5000 // Harga minimum per kg
-    val pricePerKgMax = 50000 // Harga maksimum per kg
+    val pricePerKgMin = 2000 // Harga minimum per kg
+    val pricePerKgMax = 5000 // Harga maksimum per kg
 
     val estimatedMinPrice = weight * pricePerKgMin
     val estimatedMaxPrice = weight * pricePerKgMax
@@ -161,12 +159,12 @@ fun ElektronikIconCard(onWeightChange: (Int) -> Unit) {
             modifier = Modifier.padding(16.dp)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.elektronik), // Ganti dengan ikon elektronik jika tersedia
-                contentDescription = "Elektronik",
+                painter = painterResource(id = R.drawable.besi), // Ganti dengan ikon besi jika tersedia
+                contentDescription = "Besi",
                 modifier = Modifier.size(60.dp)
             )
             Text(
-                text = "Elektronik",
+                text = "Besi",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
@@ -211,9 +209,9 @@ fun ElektronikIconCard(onWeightChange: (Int) -> Unit) {
 }
 
 @Composable
-fun ElektronikFooter(totalWeight: Int) {
-    val pricePerKgMin = 5000
-    val pricePerKgMax = 50000
+fun BesiFooter(totalWeight: Int) {
+    val pricePerKgMin = 2000
+    val pricePerKgMax = 5000
 
     val estimatedMinPrice = totalWeight * pricePerKgMin
     val estimatedMaxPrice = totalWeight * pricePerKgMax
@@ -251,8 +249,8 @@ fun ElektronikFooter(totalWeight: Int) {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewElektronikScreen() {
+fun PreviewBesiScreen() {
     MobileAPPTheme {
-        ElektronikScreen()
+        BesiScreen()
     }
 }

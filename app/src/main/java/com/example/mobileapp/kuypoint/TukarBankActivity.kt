@@ -282,7 +282,7 @@ fun ExchangeHeader() {
             text = "Tukar Kuy Point",
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Black,
+            color = Color.White,
             modifier = Modifier.align(Alignment.Center)
         )
         Icon(
@@ -292,10 +292,9 @@ fun ExchangeHeader() {
                 .align(Alignment.CenterStart)
                 .size(24.dp)
                 .clickable {
-                    val intent = Intent(context, TukarKuyPointActivity::class.java)
-                    context.startActivity(intent)
+                    (context as? ComponentActivity)?.finish()
                 },
-            tint = Color.Black
+            tint = Color.White
         )
     }
 }

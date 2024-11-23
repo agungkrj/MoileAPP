@@ -1,6 +1,5 @@
-package com.example.mobileapp
+package com.example.mobileapp.sampah
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,24 +20,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mobileapp.R
 import com.example.mobileapp.ui.theme.MobileAPPTheme
-import com.example.mobileapp.yukangkut.AngkutActivity
 
-class PlastikActivity : ComponentActivity() {
+class JenisSampahActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MobileAPPTheme {
-                PlastikScreen()
+                JenisSampahScreen()
             }
         }
     }
 }
 
 @Composable
-fun PlastikScreen() {
-    val scrollState = rememberScrollState()
-    var totalWeight by remember { mutableIntStateOf(0) } // Total berat plastik
+fun JenisSampahScreen() {
+    val scrollState = rememberScrollState() // Menyimpan status scroll
+    var totalWeight by remember { mutableIntStateOf(0) }
 
     Column(
         modifier = Modifier
@@ -47,34 +46,34 @@ fun PlastikScreen() {
             .verticalScroll(scrollState)
             .padding(horizontal = 16.dp)
     ) {
-        PlastikHeader()
+        JenisSampahHeaderSection()
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Centered Card for Plastik Icon and Name
+        // Centered Card for Jenis Sampah Icon and Name
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            PlastikIconCard(onWeightChange = { totalWeight += it })
+            JenisSampahIconCard(onWeightChange = { totalWeight += it })
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Sub Jenis Plastik Section
+        // Sub Jenis Sampah Section
         Text(
-            text = "Sub Jenis Plastik",
+            text = "Sub Jenis Sampah",
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black,
             modifier = Modifier.padding(vertical = 8.dp)
         )
 
-        val subJenisPlastik = listOf(
-            "Botol Plastik", "Plastik Bekas Kemasan", "Kantong Plastik",
-            "Plastik HDPE", "Plastik PVC", "Plastik PET", "Plastik Lainnya"
+        val subJenisSampah = listOf(
+            "Koran", "Buku Bekas", "Kertas Putih / HVS",
+            "Kertas Warna / Duplek", "Kertas Buram", "Karton", "Kertas Lainnya"
         )
 
-        val checkedStates = remember { mutableStateListOf(*Array(subJenisPlastik.size) { false }) }
+        val checkedStates = remember { mutableStateListOf(*Array(subJenisSampah.size) { false }) }
 
-        subJenisPlastik.forEachIndexed { index, item ->
+        subJenisSampah.forEachIndexed { index, item ->
             Column {
                 Row(
                     modifier = Modifier
@@ -105,13 +104,13 @@ fun PlastikScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        PlastikFooter(totalWeight = totalWeight)
+        FooterSection(totalWeight = totalWeight)
     }
 }
 
 @Composable
-fun PlastikHeader() {
-    val context = LocalContext.current
+fun JenisSampahHeaderSection() {
+    val context = LocalContext.current // Dapatkan context dari LocalContext
 
     Row(
         modifier = Modifier
@@ -121,8 +120,7 @@ fun PlastikHeader() {
         horizontalArrangement = Arrangement.Start
     ) {
         IconButton(onClick = {
-            val intent = Intent(context, AngkutActivity::class.java)
-            context.startActivity(intent)
+            (context as? ComponentActivity)?.finish()
         }) {
             Icon(
                 painter = painterResource(id = R.drawable.panah),
@@ -131,7 +129,7 @@ fun PlastikHeader() {
             )
         }
         Text(
-            text = "Plastik",
+            text = "Jenis Sampah",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black
@@ -140,10 +138,10 @@ fun PlastikHeader() {
 }
 
 @Composable
-fun PlastikIconCard(onWeightChange: (Int) -> Unit) {
+fun JenisSampahIconCard(onWeightChange: (Int) -> Unit) {
     var weight by remember { mutableIntStateOf(0) }
-    val pricePerKgMin = 3000 // Harga minimum per kg
-    val pricePerKgMax = 8000 // Harga maksimum per kg
+    val pricePerKgMin = 1000
+    val pricePerKgMax = 2500
 
     val estimatedMinPrice = weight * pricePerKgMin
     val estimatedMaxPrice = weight * pricePerKgMax
@@ -161,12 +159,12 @@ fun PlastikIconCard(onWeightChange: (Int) -> Unit) {
             modifier = Modifier.padding(16.dp)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.plastik), // Ganti dengan ikon plastik jika tersedia
-                contentDescription = "Plastik",
+                painter = painterResource(id = R.drawable.kertas),
+                contentDescription = "Kertas",
                 modifier = Modifier.size(60.dp)
             )
             Text(
-                text = "Plastik",
+                text = "Kertas",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
@@ -205,15 +203,14 @@ fun PlastikIconCard(onWeightChange: (Int) -> Unit) {
                     )
                 }
             }
-
         }
     }
 }
 
 @Composable
-fun PlastikFooter(totalWeight: Int) {
-    val pricePerKgMin = 3000
-    val pricePerKgMax = 8000
+fun FooterSection(totalWeight: Int) {
+    val pricePerKgMin = 1000
+    val pricePerKgMax = 2500
 
     val estimatedMinPrice = totalWeight * pricePerKgMin
     val estimatedMaxPrice = totalWeight * pricePerKgMax
@@ -249,10 +246,10 @@ fun PlastikFooter(totalWeight: Int) {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true )
 @Composable
-fun PreviewPlastikScreen() {
+fun PreviewJenisSampahScreen() {
     MobileAPPTheme {
-        PlastikScreen()
+        JenisSampahScreen()
     }
 }

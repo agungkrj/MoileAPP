@@ -21,12 +21,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import com.example.mobileapp.R
 import com.example.mobileapp.ui.theme.MobileAPPTheme
 
 class TransaksiBerhasilActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Set the activity to full-screen
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             MobileAPPTheme {
                 TransaksiBerhasilScreen()
@@ -34,6 +37,43 @@ class TransaksiBerhasilActivity : ComponentActivity() {
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TransaksiBerhasilHeader() {
+    val context = LocalContext.current
+    TopAppBar(
+        modifier = Modifier.fillMaxWidth(),
+        title = {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Detail Order",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    textAlign = TextAlign.Center
+                )
+            }
+        },
+        navigationIcon = {
+            IconButton(onClick = {
+                (context as? ComponentActivity)?.finish()
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.keluar),
+                    contentDescription = "Back",
+                    tint = Color.White,
+                    modifier = Modifier.size(28.dp)
+                )
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF52AC9D))
+    )
+}
+
 
 @Composable
 fun TransaksiBerhasilScreen() {
@@ -43,22 +83,22 @@ fun TransaksiBerhasilScreen() {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.White) // Warna latar belakang putih
+                    .background(Color.White)
                     .padding(innerPadding),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Ilustrasi Gambar
+                // Success Image
                 Image(
-                    painter = painterResource(id = R.drawable.hp), // Ganti dengan gambar sukses Anda
+                    painter = painterResource(id = R.drawable.hp), // Replace with your success image resource
                     contentDescription = "Ilustrasi Sukses",
                     modifier = Modifier
-                        .size(200.dp)
+                        .size(300.dp)
                         .padding(16.dp)
                 )
 
-                // Bagian Judul
+                // Title and success message
                 Text(
                     text = "Tukar Kuy Point ke saldo Bank",
                     fontSize = 18.sp,
@@ -74,7 +114,7 @@ fun TransaksiBerhasilScreen() {
                     text = "Transaksi Berhasil",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF4CAF50), // Warna hijau sukses
+                    color = Color(0xFF4CAF50),
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -83,7 +123,7 @@ fun TransaksiBerhasilScreen() {
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Kartu Sukses dengan Detail Transaksi
+                // Success Card with Details
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -97,7 +137,7 @@ fun TransaksiBerhasilScreen() {
                             .fillMaxWidth()
                             .padding(24.dp)
                     ) {
-                        // Ikon Sukses
+                        // Success Icon
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.Center
@@ -110,7 +150,7 @@ fun TransaksiBerhasilScreen() {
                                 contentAlignment = Alignment.Center
                             ) {
                                 Icon(
-                                    painter = painterResource(id = R.drawable.cek), // Ganti dengan ikon centang sukses
+                                    painter = painterResource(id = R.drawable.cek), // Replace with your success check icon
                                     contentDescription = "Sukses",
                                     tint = Color.White,
                                     modifier = Modifier.size(36.dp)
@@ -120,11 +160,11 @@ fun TransaksiBerhasilScreen() {
 
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        // Detail Transaksi
+                        // Transaction Details
                         DetailItem(label = "Tanggal", value = "28 Maret 2024")
                         DetailItem(label = "Sumber Dana", value = "Admin\n1234567892100")
                         DetailItem(label = "Jenis Transaksi", value = "Transfer Bank")
-                        DetailItem(label = "Nomor Rekening Tujuan", value = "1234567892123")
+                        DetailItem(label = "Nomor Rekening", value = "1234567892123")
                         DetailItem(label = "Nominal", value = "Rp 15.000")
                     }
                 }
@@ -133,26 +173,6 @@ fun TransaksiBerhasilScreen() {
             }
         }
     )
-}
-
-@Composable
-fun TransaksiBerhasilHeader() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color(0xFF52AC9D)) // Warna header disesuaikan
-            .padding(vertical = 8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // Judul
-        Text(
-            text = "Detail Order",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            textAlign = TextAlign.Center
-        )
-    }
 }
 
 @Composable
@@ -166,12 +186,15 @@ fun DetailItem(label: String, value: String) {
                 text = label,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black
+                color = Color.Black,
+                modifier = Modifier.weight(1f)
             )
             Text(
                 text = value,
                 fontSize = 14.sp,
-                color = Color.Gray
+                color = Color.Black,
+                textAlign = TextAlign.End,
+                modifier = Modifier.weight(1.5f)
             )
         }
         Spacer(modifier = Modifier.height(8.dp))
@@ -179,7 +202,7 @@ fun DetailItem(label: String, value: String) {
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(showBackground = true, showSystemUi = false)
 @Composable
 fun PreviewTransaksiBerhasilScreen() {
     MobileAPPTheme {
