@@ -22,7 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mobileapp.EditProfileActivity
+import com.example.mobileapp.MainActivity
 import com.example.mobileapp.R
 import com.example.mobileapp.components.BottomNavigationBar
 import com.example.mobileapp.ui.theme.MobileAPPTheme
@@ -42,78 +42,90 @@ class ProfileActivity : ComponentActivity() {
 fun ProfileScreen() {
     val context = LocalContext.current
     var selectedScreen by remember { mutableStateOf("Profil") }
-    var showLogoutDialog by remember { mutableStateOf(false) } // State to control dialog visibility
+    var showLogoutDialog by remember { mutableStateOf(false) }
 
-    Column(
+    // Layout utama
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
-            .padding(16.dp),
-        verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(Color(0xFFF5F5F5)) // Warna background abu-abu terang
+            .padding(top = 24.dp, bottom = 16.dp) // Padding atas dan bawah
     ) {
-        Text(
-            text = "Akun",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
-        )
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Header
+            Text(
+                text = "Akun",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
 
-        Spacer(modifier = Modifier.height(16.dp))
+            // Kartu Profil
+            ProfileCard()
 
-        // Profile Card
-        ProfileCard()
+            Spacer(modifier = Modifier.height(24.dp)) // Jarak antar elemen
 
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Menu Cards with click actions
-        ProfileMenuCard(
-            iconRes = R.drawable.user,
-            title = "Akun Saya",
-            subtitle = "Ubah data akun anda",
-            showEditIcon = true,
-            onEditClick = {
-                val intent = Intent(context, EditProfileActivity::class.java)
-                context.startActivity(intent)
-            },
-            onArrowClick = {
-                val intent = Intent(context, EditProfileActivity::class.java)
-                context.startActivity(intent)
-            }
-        )
-        ProfileMenuCard(
-            iconRes = R.drawable.wallet,
-            title = "E-Wallet",
-            onArrowClick = { println("E-Wallet Arrow clicked") }
-        )
-        ProfileMenuCard(
-            iconRes = R.drawable.exit,
-            title = "Keluar",
-            onArrowClick = { showLogoutDialog = true } // Show dialog on "Keluar" click
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
+            // Kartu Menu
+            ProfileMenuCard(
+                iconRes = R.drawable.user,
+                title = "Akun Saya",
+                subtitle = "Ubah data akun anda",
+                showEditIcon = true,
+                onEditClick = {
+                    val intent = Intent(context, EditProfileActivity::class.java)
+                    context.startActivity(intent)
+                },
+                onArrowClick = {
+                    val intent = Intent(context, EditProfileActivity::class.java)
+                    context.startActivity(intent)
+                }
+            )
+            ProfileMenuCard(
+                iconRes = R.drawable.wallet,
+                title = "E-Wallet",
+                subtitle = "Lihat saldo dan transaksi Anda",
+                onArrowClick = { println("E-Wallet Arrow clicked") }
+            )
+            ProfileMenuCard(
+                iconRes = R.drawable.exit,
+                title = "Keluar",
+                onArrowClick = { showLogoutDialog = true } // Memunculkan dialog keluar
+            )
+        }
 
         // Bottom Navigation
         BottomNavigationBar(
             selectedItem = remember { mutableStateOf(selectedScreen) },
-            onItemSelected = { selectedScreen = it }
+            onItemSelected = { selectedScreen = it },
+            modifier = Modifier
+                .align(Alignment.BottomCenter) // Posisi di bawah
+                .padding(horizontal = 16.dp, vertical = 8.dp) // Padding
         )
     }
 
-    // Show logout confirmation dialog if requested
+    // Dialog untuk konfirmasi keluar
     if (showLogoutDialog) {
         ConfirmLogoutDialog(
-            onConfirm = { /* Handle logout action */ },
+            onConfirm = {
+                showLogoutDialog = false
+                // Logika keluar aplikasi, bisa tambahkan di sini
+                (context as ComponentActivity).finish()
+            },
             onDismiss = { showLogoutDialog = false }
         )
     }
 }
 
+
+
 @Composable
 fun ConfirmLogoutDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
+    val context = LocalContext.current // Mengambil konteks lokal
+
     AlertDialog(
         onDismissRequest = { onDismiss() },
         title = {
@@ -147,7 +159,11 @@ fun ConfirmLogoutDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
         },
         confirmButton = {
             Button(
-                onClick = { onConfirm() },
+                onClick = {
+                    onConfirm() // Eksekusi logika yang dikirimkan
+                    val intent = Intent(context, MainActivity::class.java) // Pindah ke MainActivity
+                    context.startActivity(intent)
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier.fillMaxWidth()
@@ -170,6 +186,7 @@ fun ConfirmLogoutDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
             .fillMaxWidth()
     )
 }
+
 
 @Composable
 fun ProfileCard() {

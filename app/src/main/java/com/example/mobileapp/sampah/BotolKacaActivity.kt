@@ -1,6 +1,5 @@
-package com.example.mobileapp
+package com.example.mobileapp.sampah
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,8 +20,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mobileapp.R
 import com.example.mobileapp.ui.theme.MobileAPPTheme
-import com.example.mobileapp.yukangkut.AngkutActivity
 
 class BotolKacaActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -121,8 +120,7 @@ fun BotolKacaHeader() {
         horizontalArrangement = Arrangement.Start
     ) {
         IconButton(onClick = {
-            val intent = Intent(context, AngkutActivity::class.java)
-            context.startActivity(intent)
+            (context as? ComponentActivity)?.finish()
         }) {
             Icon(
                 painter = painterResource(id = R.drawable.panah),

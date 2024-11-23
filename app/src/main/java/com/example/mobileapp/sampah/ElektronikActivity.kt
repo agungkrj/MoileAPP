@@ -1,6 +1,5 @@
-package com.example.mobileapp
+package com.example.mobileapp.sampah
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,24 +20,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mobileapp.R
 import com.example.mobileapp.ui.theme.MobileAPPTheme
-import com.example.mobileapp.yukangkut.AngkutActivity
 
-class AluminiumActivity : ComponentActivity() {
+class ElektronikActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MobileAPPTheme {
-                AluminiumScreen()
+                ElektronikScreen()
             }
         }
     }
 }
 
 @Composable
-fun AluminiumScreen() {
+fun ElektronikScreen() {
     val scrollState = rememberScrollState()
-    var totalWeight by remember { mutableIntStateOf(0) } // Total berat aluminium
+    var totalWeight by remember { mutableIntStateOf(0) } // Total berat elektronik
 
     Column(
         modifier = Modifier
@@ -47,34 +46,34 @@ fun AluminiumScreen() {
             .verticalScroll(scrollState)
             .padding(horizontal = 16.dp)
     ) {
-        AluminiumHeader()
+        ElektronikHeader()
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Centered Card for Aluminium Icon and Name
+        // Centered Card for Elektronik Icon and Name
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            AluminiumIconCard(onWeightChange = { totalWeight += it })
+            ElektronikIconCard(onWeightChange = { totalWeight += it })
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Sub Aluminium Section
+        // Sub Jenis Elektronik Section
         Text(
-            text = "Sub Jenis Aluminium",
+            text = "Sub Jenis Elektronik",
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black,
             modifier = Modifier.padding(vertical = 8.dp)
         )
 
-        val subJenisAluminium = listOf(
-            "Kaleng", "Foil Aluminium", "Logam Bekas",
-            "Kabel Aluminium", "Aluminium Campuran", "Besi Aluminium"
+        val subJenisElektronik = listOf(
+            "Handphone Bekas", "Komputer", "TV",
+            "AC", "Kulkas", "Printer", "Elektronik Lainnya"
         )
 
-        val checkedStates = remember { mutableStateListOf(*Array(subJenisAluminium.size) { false }) }
+        val checkedStates = remember { mutableStateListOf(*Array(subJenisElektronik.size) { false }) }
 
-        subJenisAluminium.forEachIndexed { index, item ->
+        subJenisElektronik.forEachIndexed { index, item ->
             Column {
                 Row(
                     modifier = Modifier
@@ -105,12 +104,12 @@ fun AluminiumScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        AluminiumFooter(totalWeight = totalWeight)
+        ElektronikFooter(totalWeight = totalWeight)
     }
 }
 
 @Composable
-fun AluminiumHeader() {
+fun ElektronikHeader() {
     val context = LocalContext.current
 
     Row(
@@ -121,17 +120,16 @@ fun AluminiumHeader() {
         horizontalArrangement = Arrangement.Start
     ) {
         IconButton(onClick = {
-            val intent = Intent(context, AngkutActivity::class.java)
-            context.startActivity(intent)
+            (context as? ComponentActivity)?.finish()
         }) {
             Icon(
-                painter = painterResource(id = R.drawable.panah), // Ganti dengan ikon panah Anda
+                painter = painterResource(id = R.drawable.panah),
                 contentDescription = "Back",
                 tint = Color.Black
             )
         }
         Text(
-            text = "Aluminium",
+            text = "Elektronik",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black
@@ -140,10 +138,10 @@ fun AluminiumHeader() {
 }
 
 @Composable
-fun AluminiumIconCard(onWeightChange: (Int) -> Unit) {
+fun ElektronikIconCard(onWeightChange: (Int) -> Unit) {
     var weight by remember { mutableIntStateOf(0) }
-    val pricePerKgMin = 10000
-    val pricePerKgMax = 20000
+    val pricePerKgMin = 5000 // Harga minimum per kg
+    val pricePerKgMax = 50000 // Harga maksimum per kg
 
     val estimatedMinPrice = weight * pricePerKgMin
     val estimatedMaxPrice = weight * pricePerKgMax
@@ -161,12 +159,12 @@ fun AluminiumIconCard(onWeightChange: (Int) -> Unit) {
             modifier = Modifier.padding(16.dp)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.alumanium1), // Ganti dengan ikon aluminium
-                contentDescription = "Aluminium",
+                painter = painterResource(id = R.drawable.elektronik), // Ganti dengan ikon elektronik jika tersedia
+                contentDescription = "Elektronik",
                 modifier = Modifier.size(60.dp)
             )
             Text(
-                text = "Aluminium",
+                text = "Elektronik",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
@@ -183,7 +181,7 @@ fun AluminiumIconCard(onWeightChange: (Int) -> Unit) {
                     }
                 }) {
                     Icon(
-                        painter = painterResource(id = R.drawable.minus), // Ganti dengan ikon minus Anda
+                        painter = painterResource(id = R.drawable.minus),
                         contentDescription = "Decrease",
                         tint = Color(0xFF55B3A4)
                     )
@@ -199,7 +197,7 @@ fun AluminiumIconCard(onWeightChange: (Int) -> Unit) {
                     onWeightChange(1)
                 }) {
                     Icon(
-                        painter = painterResource(id = R.drawable.plus), // Ganti dengan ikon plus Anda
+                        painter = painterResource(id = R.drawable.plus),
                         contentDescription = "Increase",
                         tint = Color(0xFF55B3A4)
                     )
@@ -211,9 +209,9 @@ fun AluminiumIconCard(onWeightChange: (Int) -> Unit) {
 }
 
 @Composable
-fun AluminiumFooter(totalWeight: Int) {
-    val pricePerKgMin = 10000
-    val pricePerKgMax = 20000
+fun ElektronikFooter(totalWeight: Int) {
+    val pricePerKgMin = 5000
+    val pricePerKgMax = 50000
 
     val estimatedMinPrice = totalWeight * pricePerKgMin
     val estimatedMaxPrice = totalWeight * pricePerKgMax
@@ -251,8 +249,8 @@ fun AluminiumFooter(totalWeight: Int) {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewAluminiumScreen() {
+fun PreviewElektronikScreen() {
     MobileAPPTheme {
-        AluminiumScreen()
+        ElektronikScreen()
     }
 }

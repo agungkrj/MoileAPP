@@ -21,11 +21,15 @@ import com.example.mobileapp.profile.ProfileActivity
 import com.example.mobileapp.R
 
 @Composable
-fun BottomNavigationBar(selectedItem: MutableState<String>, onItemSelected: (String) -> Unit) {
+fun BottomNavigationBar(
+    selectedItem: MutableState<String>,
+    onItemSelected: (String) -> Unit,
+    modifier: Modifier = Modifier // Menambahkan parameter modifier
+) {
     val context = LocalContext.current // Mendapatkan context di sini
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(60.dp),
         shape = RoundedCornerShape(30.dp),
@@ -74,7 +78,12 @@ fun BottomNavigationBar(selectedItem: MutableState<String>, onItemSelected: (Str
 }
 
 @Composable
-fun BottomNavigationItem(iconId: Int, label: String, selected: Boolean, onClick: () -> Unit) {
+fun BottomNavigationItem(
+    iconId: Int,
+    label: String,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -98,3 +107,4 @@ fun BottomNavigationItem(iconId: Int, label: String, selected: Boolean, onClick:
         )
     }
 }
+

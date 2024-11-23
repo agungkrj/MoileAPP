@@ -25,13 +25,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mobileapp.AluminiumActivity
-import com.example.mobileapp.BesiActivity
-import com.example.mobileapp.BotolKacaActivity
+import com.example.mobileapp.sampah.AluminiumActivity
+import com.example.mobileapp.sampah.BesiActivity
+import com.example.mobileapp.sampah.BotolKacaActivity
 import com.example.mobileapp.beranda.DashboardActivity
-import com.example.mobileapp.ElektronikActivity
-import com.example.mobileapp.JenisSampahActivity
-import com.example.mobileapp.PlastikActivity
+import com.example.mobileapp.sampah.ElektronikActivity
+import com.example.mobileapp.sampah.JenisSampahActivity
+import com.example.mobileapp.sampah.PlastikActivity
 import com.example.mobileapp.R
 import com.example.mobileapp.ui.theme.MobileAPPTheme
 
