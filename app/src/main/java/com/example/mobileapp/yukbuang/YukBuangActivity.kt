@@ -1,9 +1,13 @@
 package com.example.mobileapp.yukbuang
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,6 +19,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -25,6 +30,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
+import coil.compose.rememberAsyncImagePainter
 import com.example.mobileapp.sampah.AluminiumActivity
 import com.example.mobileapp.sampah.BesiActivity
 import com.example.mobileapp.sampah.BotolKacaActivity
@@ -34,6 +41,7 @@ import com.example.mobileapp.sampah.JenisSampahActivity
 import com.example.mobileapp.sampah.PlastikActivity
 import com.example.mobileapp.R
 import com.example.mobileapp.ui.theme.MobileAPPTheme
+import java.io.File
 
 class BuangActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -346,36 +354,98 @@ fun BuangPengantaranForm() {
 
 @Composable
 fun BuangFotoSampahSection() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-        BuangFotoSampahCard()
-        BuangFotoSampahCard()
-    }
+    BuangFotoSampahCard(label = "Foto Sampah")
+
+
 }
 
 @Composable
-fun BuangFotoSampahCard() {
+fun BuangFotoSampahCard(label: String) {
+    val context = LocalContext.current
+
+    // State untuk menyimpan URI foto
+    val photoUri = remember { mutableStateOf<Uri?>(null) }
+    val cacheFile = remember { mutableStateOf<File?>(null) }
+
+    // Launcher untuk membuka kamera bawaan
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture()
+    ) { success ->
+        if (success && cacheFile.value != null) {
+            // Jika foto berhasil, simpan URI ke state
+            photoUri.value = FileProvider.getUriForFile(
+                context,
+                "${context.packageName}.fileprovider",
+                cacheFile.value!!
+            )
+            Toast.makeText(context, "Foto berhasil diambil!", Toast.LENGTH_SHORT).show()
+        } else {
+            // Jika gagal, hapus file sementara (jika ada)
+            cacheFile.value?.let { file ->
+                if (file.exists()) file.delete()
+            }
+            photoUri.value = null
+            Toast.makeText(context, "Pengambilan foto dibatalkan.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // Desain kartu
     Card(
         modifier = Modifier
-            .width(118.dp)
-            .height(117.dp)
-            .padding(4.dp),
+            .size(120.dp) // Ukuran kartu 120x120 dp
+            .padding(8.dp),
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFF0F7F7))
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFF0F7F7)),
+        elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+        // Konten dalam kartu
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp),
+            contentAlignment = Alignment.Center // Konten dipusatkan
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.kamera),
-                contentDescription = "Foto Sampah",
-                tint = Color.Gray,
-                modifier = Modifier.size(36.dp)
-            )
+            // Jika ada foto, tampilkan foto
+            photoUri.value?.let { uri ->
+                Image(
+                    painter = rememberAsyncImagePainter(model = uri),
+                    contentDescription = "Captured Photo",
+                    modifier = Modifier
+                        .fillMaxSize() // Foto memenuhi kartu
+                        .clip(RoundedCornerShape(8.dp)) // Foto dengan sudut membulat
+                )
+            } ?: run {
+                // Jika belum ada foto, tampilkan ikon kamera
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.kamera),
+                        contentDescription = "Foto Sampah",
+                        tint = Color.Gray,
+                        modifier = Modifier
+                            .size(40.dp) // Ukuran ikon kamera
+                            .clickable {
+                                // Hanya buat file sementara saat kamera akan dibuka
+                                val file = File(context.cacheDir, "${label.replace(" ", "_")}_photo.jpg")
+                                cacheFile.value = file
+                                val uri = FileProvider.getUriForFile(
+                                    context,
+                                    "${context.packageName}.fileprovider",
+                                    file
+                                )
+                                launcher.launch(uri) // Buka kamera dengan URI baru
+                            }
+                    )
+                    Spacer(modifier = Modifier.height(8.dp)) // Spasi antara ikon dan teks
+                    Text(
+                        text = "Ambil Foto",
+                        fontSize = 12.sp,
+                        color = Color.Gray
+                    )
+                }
+            }
         }
     }
 }
