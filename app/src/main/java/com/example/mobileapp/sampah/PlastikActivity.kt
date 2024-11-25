@@ -125,7 +125,8 @@ fun PlastikHeader() {
             Icon(
                 painter = painterResource(id = R.drawable.panah),
                 contentDescription = "Back",
-                tint = Color.Black
+                tint = Color.Black,
+                modifier = Modifier.size(24.dp)
             )
         }
         Text(

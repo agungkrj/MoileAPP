@@ -125,7 +125,8 @@ fun AluminiumHeader() {
             Icon(
                 painter = painterResource(id = R.drawable.panah), // Ganti dengan ikon panah Anda
                 contentDescription = "Back",
-                tint = Color.Black
+                tint = Color.Black,
+                modifier = Modifier.size(24.dp)
             )
         }
         Text(

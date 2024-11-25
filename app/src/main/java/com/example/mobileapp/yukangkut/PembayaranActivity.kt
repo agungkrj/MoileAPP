@@ -117,21 +117,22 @@ fun PembayaranHeaderSection() {
                 Icon(
                     painter = painterResource(id = R.drawable.panah),
                     contentDescription = "Back",
-                    tint = Color.White
+                    tint = Color.Black,
+                    modifier = Modifier.size(24.dp)
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column{
                 Text(
                     text = "Pembayaran",
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    color = Color.Black
                 )
                 Text(
                     text = "Selesaikan transaksi mu sekarang.",
                     fontSize = 14.sp,
-                    color = Color.White
+                    color = Color.Black
                 )
             }
         }

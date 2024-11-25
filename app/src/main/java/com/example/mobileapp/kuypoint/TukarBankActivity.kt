@@ -282,7 +282,7 @@ fun ExchangeHeader() {
             text = "Tukar Kuy Point",
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.White,
+            color = Color.Black,
             modifier = Modifier.align(Alignment.Center)
         )
         Icon(
@@ -294,7 +294,7 @@ fun ExchangeHeader() {
                 .clickable {
                     (context as? ComponentActivity)?.finish()
                 },
-            tint = Color.White
+            tint = Color.Black
         )
     }
 }

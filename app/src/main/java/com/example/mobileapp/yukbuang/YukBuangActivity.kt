@@ -184,21 +184,22 @@ fun BuangHeaderSection() {
                 Icon(
                     painter = painterResource(id = R.drawable.panah),
                     contentDescription = "Back",
-                    tint = Color.White
+                    tint = Color.Black,
+                    modifier = Modifier.size(24.dp)
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
-            Column {
+            Column{
                 Text(
                     text = "Yuk Buang!",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    color = Color.Black
                 )
                 Text(
                     text = "Kamu bisa antar sampah mu ke titik terdekat",
                     fontSize = 14.sp,
-                    color = Color.White
+                    color = Color.Black
                 )
             }
         }
@@ -367,12 +368,14 @@ fun BuangFotoSampahCard(label: String) {
     val photoUri = remember { mutableStateOf<Uri?>(null) }
     val cacheFile = remember { mutableStateOf<File?>(null) }
 
-    // Launcher untuk membuka kamera bawaan
-    val launcher = rememberLauncherForActivityResult(
+    // State untuk dialog pilihan (kamera atau galeri)
+    val showDialog = remember { mutableStateOf(false) }
+
+    // Launcher untuk membuka kamera
+    val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture()
     ) { success ->
         if (success && cacheFile.value != null) {
-            // Jika foto berhasil, simpan URI ke state
             photoUri.value = FileProvider.getUriForFile(
                 context,
                 "${context.packageName}.fileprovider",
@@ -380,12 +383,23 @@ fun BuangFotoSampahCard(label: String) {
             )
             Toast.makeText(context, "Foto berhasil diambil!", Toast.LENGTH_SHORT).show()
         } else {
-            // Jika gagal, hapus file sementara (jika ada)
             cacheFile.value?.let { file ->
                 if (file.exists()) file.delete()
             }
             photoUri.value = null
             Toast.makeText(context, "Pengambilan foto dibatalkan.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // Launcher untuk membuka galeri
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            photoUri.value = uri
+            Toast.makeText(context, "Gambar berhasil dipilih!", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "Tidak ada gambar yang dipilih.", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -398,12 +412,11 @@ fun BuangFotoSampahCard(label: String) {
         colors = CardDefaults.cardColors(containerColor = Color(0xFFF0F7F7)),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        // Konten dalam kartu
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(8.dp),
-            contentAlignment = Alignment.Center // Konten dipusatkan
+            contentAlignment = Alignment.Center
         ) {
             // Jika ada foto, tampilkan foto
             photoUri.value?.let { uri ->
@@ -411,8 +424,8 @@ fun BuangFotoSampahCard(label: String) {
                     painter = rememberAsyncImagePainter(model = uri),
                     contentDescription = "Captured Photo",
                     modifier = Modifier
-                        .fillMaxSize() // Foto memenuhi kartu
-                        .clip(RoundedCornerShape(8.dp)) // Foto dengan sudut membulat
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(8.dp))
                 )
             } ?: run {
                 // Jika belum ada foto, tampilkan ikon kamera
@@ -425,22 +438,14 @@ fun BuangFotoSampahCard(label: String) {
                         contentDescription = "Foto Sampah",
                         tint = Color.Gray,
                         modifier = Modifier
-                            .size(40.dp) // Ukuran ikon kamera
+                            .size(40.dp)
                             .clickable {
-                                // Hanya buat file sementara saat kamera akan dibuka
-                                val file = File(context.cacheDir, "${label.replace(" ", "_")}_photo.jpg")
-                                cacheFile.value = file
-                                val uri = FileProvider.getUriForFile(
-                                    context,
-                                    "${context.packageName}.fileprovider",
-                                    file
-                                )
-                                launcher.launch(uri) // Buka kamera dengan URI baru
+                                showDialog.value = true // Tampilkan dialog pilihan
                             }
                     )
-                    Spacer(modifier = Modifier.height(8.dp)) // Spasi antara ikon dan teks
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "Ambil Foto",
+                        text = "Ambil foto",
                         fontSize = 12.sp,
                         color = Color.Gray
                     )
@@ -448,7 +453,43 @@ fun BuangFotoSampahCard(label: String) {
             }
         }
     }
+
+    // Dialog untuk memilih kamera atau galeri
+    if (showDialog.value) {
+        AlertDialog(
+            onDismissRequest = { showDialog.value = false },
+            title = { Text(text = "Pilih Sumber Gambar") },
+            text = {
+                Text(text = "Pilih untuk mengambil gambar melalui kamera atau memilih dari galeri.")
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    showDialog.value = false
+                    // Buat file cache untuk kamera
+                    val file = File(context.cacheDir, "${label.replace(" ", "_")}_photo.jpg")
+                    cacheFile.value = file
+                    val uri = FileProvider.getUriForFile(
+                        context,
+                        "${context.packageName}.fileprovider",
+                        file
+                    )
+                    cameraLauncher.launch(uri) // Buka kamera
+                }) {
+                    Text("Kamera")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    showDialog.value = false
+                    galleryLauncher.launch("image/*") // Buka galeri
+                }) {
+                    Text("Galeri")
+                }
+            }
+        )
+    }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

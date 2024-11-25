@@ -201,7 +201,11 @@ fun GreetingCard() {
                         text = "Halo, Agro!",
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
-                        color = Color.Black
+                        color = Color.Black,
+                        modifier = Modifier.clickable {
+                            val intent = Intent(context, ProfileActivity::class.java)
+                            context.startActivity(intent)
+                        }
                     )
                     Text(
                         text = "Sudah buang sampah hari ini?",
