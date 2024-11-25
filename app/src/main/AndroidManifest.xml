@@ -144,16 +144,6 @@
             android:label="tukar" />
 
         <activity
-            android:name=".order.BatalOrderYukAngkutActivity"
-            android:exported="true"
-            android:label="tukar" />
-
-        <activity
-            android:name=".order.BatalOrderYukBuangActivity"
-            android:exported="true"
-            android:label="tukar" />
-
-        <activity
             android:name=".yukbuang.PembayaranYukBuangActivity"
             android:exported="true"
             android:label="tukar" />

@@ -123,7 +123,16 @@ fun AngkutScreen() {
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
-            FotoSampahSection()
+            // Baris untuk menampilkan Foto Sampah secara horizontal
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly // Spasi rata antar elemen
+            ) {
+                FotoSampahSection() // Foto Sampah 1
+                FotoSampahSection() // Foto Sampah 2
+            }
 
             Spacer(modifier = Modifier.height(24.dp))
 

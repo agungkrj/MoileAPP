@@ -68,11 +68,13 @@ fun BuangScreen() {
             .background(Color.White)
             .verticalScroll(scrollState)
     ) {
+        // Header Section
         BuangHeaderSection()
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+            // Jenis Sampah Section
             Text(
                 text = "Jenis Sampah",
                 fontSize = 18.sp,
@@ -87,11 +89,11 @@ fun BuangScreen() {
             )
 
             Spacer(modifier = Modifier.height(8.dp))
-
-            BuangSampahOptions()
+            BuangSampahOptions() // Mengganti dengan komponen untuk opsi sampah
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Informasi Tempat Tinggal Section
             Text(
                 text = "Informasi Tempat Tinggal",
                 fontSize = 18.sp,
@@ -99,10 +101,11 @@ fun BuangScreen() {
                 color = Color.Black,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            BuangTempatTinggalForm()
+            BuangTempatTinggalForm() // Mengganti form tempat tinggal
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Informasi Pengantaran Section
             Text(
                 text = "Informasi Pengantaran",
                 fontSize = 18.sp,
@@ -110,10 +113,11 @@ fun BuangScreen() {
                 color = Color.Black,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            BuangPengantaranForm()
+            BuangPengantaranForm() // Mengganti form pengantaran
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Pesan Tambahan Section
             Text(
                 text = "Pesan Tambahan",
                 fontSize = 18.sp,
@@ -121,10 +125,15 @@ fun BuangScreen() {
                 color = Color.Black,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            BuangCustomTextField(label = "Masukkan pesan tambahan di sini", textState = additionalMessageState, isMultiline = true)
+            BuangCustomTextField(
+                label = "Masukkan pesan tambahan di sini",
+                textState = additionalMessageState,
+                isMultiline = true
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Foto Sampah Section
             Text(
                 text = "Foto Sampah",
                 fontSize = 18.sp,
@@ -132,11 +141,11 @@ fun BuangScreen() {
                 color = Color.Black,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-
-            BuangFotoSampahSection()
+            BuangFotoSampahSection() // Mengganti dengan bagian foto sampah
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            // Tombol Selanjutnya
             Button(
                 onClick = {
                     val intent = Intent(context, PembayaranYukBuangActivity::class.java)
@@ -156,10 +165,11 @@ fun BuangScreen() {
     }
 }
 
+
+// Fungsi Header Section
 @Composable
 fun BuangHeaderSection() {
     val context = LocalContext.current
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -189,7 +199,7 @@ fun BuangHeaderSection() {
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
-            Column{
+            Column {
                 Text(
                     text = "Yuk Buang!",
                     fontSize = 24.sp,
@@ -355,9 +365,16 @@ fun BuangPengantaranForm() {
 
 @Composable
 fun BuangFotoSampahSection() {
-    BuangFotoSampahCard(label = "Foto Sampah")
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        // Kartu Foto Sampah 1
+        BuangFotoSampahCard(label = "Foto Sampah 1")
 
-
+        // Kartu Foto Sampah 2 (Duplikat)
+        BuangFotoSampahCard(label = "Foto Sampah 2")
+    }
 }
 
 @Composable

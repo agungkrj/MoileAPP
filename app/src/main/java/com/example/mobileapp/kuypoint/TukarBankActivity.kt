@@ -7,7 +7,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,13 +19,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.mobileapp.R
 import com.example.mobileapp.ui.theme.MobileAPPTheme
+import java.text.NumberFormat
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 class TukarBankActivity : ComponentActivity() {
@@ -45,6 +52,8 @@ fun TukarBankScreen() {
     val showBankList = remember { mutableStateOf(false) }
     val rekeningNumber = remember { mutableStateOf(TextFieldValue("")) }
     val selectedNominal = remember { mutableStateOf("") }
+    val showErrorDialog = remember { mutableStateOf(false) }
+    val errorMessage = remember { mutableStateOf("") }
 
     // Validasi jika semua input sudah diisi
     val isFormComplete = remember(selectedBank.value, rekeningNumber.value.text, selectedNominal.value) {
@@ -53,10 +62,19 @@ fun TukarBankScreen() {
                 selectedNominal.value.isNotEmpty()
     }
 
+    // Validasi nominal minimal 15.000
+    val isNominalValid = remember(selectedNominal.value) {
+        val nominalValue = selectedNominal.value.replace(Regex("[^\\d]"), "").toLongOrNull() ?: 0
+        nominalValue >= 15000
+    }
+
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
+            .verticalScroll(scrollState)
     ) {
         // Header
         ExchangeHeader()
@@ -191,30 +209,37 @@ fun TukarBankScreen() {
             color = Color.Black,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
-        Box(
+        TextField(
+            value = selectedNominal.value,
+            onValueChange = { input ->
+                val cleanedInput = input.replace(Regex("[^\\d]"), "")
+                selectedNominal.value = cleanedInput
+            },
+            placeholder = { Text(text = "Minimal top up 15.000") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .background(Color(0xFFF5F5F5), RoundedCornerShape(8.dp))
-                .height(50.dp)
-                .padding(horizontal = 16.dp),
-            contentAlignment = Alignment.CenterStart
-        ) {
-            Text(
-                text = selectedNominal.value.ifEmpty { "Minimal top up Rp 15.000" },
-                fontSize = 14.sp,
-                color = Color.Black
+                .background(Color(0xFFF5F5F5), RoundedCornerShape(8.dp)),
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color(0xFFF5F5F5)
             )
-        }
+        )
 
         Spacer(modifier = Modifier.height(100.dp))
 
         // Exchange button
         Button(
             onClick = {
-                val intent = Intent(context, ProsesTukarActivity::class.java)
-                context.startActivity(intent)
-
+                val nominalValue = selectedNominal.value.replace(Regex("[^\\d]"), "").toLongOrNull() ?: 0
+                if (nominalValue < 15000) {
+                    errorMessage.value = "Nominal yang anda masukkan tidak sesuai minimal"
+                    showErrorDialog.value = true
+                } else {
+                    val intent = Intent(context, ProsesTukarActivity::class.java)
+                    context.startActivity(intent)
+                }
             },
             enabled = isFormComplete,
             colors = ButtonDefaults.buttonColors(
@@ -241,26 +266,65 @@ fun TukarBankScreen() {
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(16.dp)
+                        modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            text = "Daftar Bank",
+                            text = "Pilih Bank",
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(bottom = 16.dp)
+                            color = Color.Black
                         )
+                        Spacer(modifier = Modifier.height(16.dp))
+
                         bankList.forEach { bank ->
                             Text(
                                 text = bank,
                                 fontSize = 16.sp,
                                 modifier = Modifier
                                     .fillMaxWidth()
+                                    .padding(vertical = 8.dp)
                                     .clickable {
                                         selectedBank.value = bank
                                         showBankList.value = false
-                                    }
-                                    .padding(vertical = 12.dp)
+                                    },
+                                color = Color.Black
                             )
+                        }
+                    }
+                }
+            }
+        }
+
+        // Error Dialog
+        if (showErrorDialog.value) {
+            Dialog(onDismissRequest = { showErrorDialog.value = false }) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White, RoundedCornerShape(12.dp))
+                        .padding(16.dp)
+                        .wrapContentHeight()
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = errorMessage.value,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black,
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Button(
+                            onClick = { showErrorDialog.value = false },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFF55B3A4)
+                            ),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("OK", color = Color.White)
                         }
                     }
                 }
@@ -300,27 +364,34 @@ fun ExchangeHeader() {
 }
 
 @Composable
-fun AmountButton(text: String, modifier: Modifier = Modifier, selectedNominal: MutableState<String>) {
-    val isSelected = selectedNominal.value == text
+fun AmountButton(
+    amount: String,
+    modifier: Modifier = Modifier,
+    selectedNominal: MutableState<String>
+) {
+    val numericAmount = amount.replace(Regex("[^\\d]"), "")
 
-    Box(
-        contentAlignment = Alignment.Center,
+    Button(
+        onClick = { selectedNominal.value = numericAmount },
         modifier = modifier
-            .background(if (isSelected) Color(0xFF55B3A4) else Color(0xFFF5F5F5), RoundedCornerShape(8.dp))
-            .clickable { selectedNominal.value = text }
-            .padding(vertical = 8.dp)
-    ) {
-        Text(
-            text = text,
-            fontSize = 14.sp,
-            color = if (isSelected) Color.White else Color.Black
+            .background(Color(0xFFF5F5F5), RoundedCornerShape(8.dp)),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (selectedNominal.value == numericAmount) Color(0xFF55B3A4) else Color(0xFFF5F5F5)
         )
+    ) {
+        Text(text = amount, fontSize = 14.sp, color = Color.Black)
     }
+}
+
+fun formatRupiah(amount: String): String {
+    val number = amount.toLongOrNull() ?: 0
+    val formatted = NumberFormat.getNumberInstance(Locale("id", "ID")).format(number)
+    return "Rp $formatted"
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewTukarBankScreen() {
+fun DefaultPreview() {
     MobileAPPTheme {
         TukarBankScreen()
     }
