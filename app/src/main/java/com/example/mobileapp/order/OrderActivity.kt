@@ -60,7 +60,7 @@ fun OrderScreen() {
                 text = "Order",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.White
+                color = Color.Black
             )
         }
 

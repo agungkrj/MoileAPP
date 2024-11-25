@@ -55,6 +55,11 @@ dependencies {
     implementation ("androidx.compose.ui:ui-tooling-preview:1.5.0") // Untuk preview UI jika diperlukan
     implementation ("androidx.compose.material3:material3:1.0.0")
     implementation ("io.coil-kt:coil-compose:2.4.0")
+    implementation ("androidx.compose.ui:ui:1.x.x")
+    implementation ("androidx.compose.material:material:1.x.x")
+    implementation ("androidx.lifecycle:lifecycle-runtime-compose:2.x.x")
+    implementation ("androidx.compose.material3:material3:<latest_version>")
+
     implementation(libs.androidx.espresso.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
