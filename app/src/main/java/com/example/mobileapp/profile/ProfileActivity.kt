@@ -88,7 +88,11 @@ fun ProfileScreen() {
                 iconRes = R.drawable.wallet,
                 title = "E-Wallet",
                 subtitle = "Lihat saldo dan transaksi Anda",
-                onArrowClick = { println("E-Wallet Arrow clicked") }
+                onArrowClick = {
+                    // Intent untuk membuka EwalletActivity
+                    val intent = Intent(context, EwalletActivity::class.java)
+                    context.startActivity(intent)
+                }
             )
             ProfileMenuCard(
                 iconRes = R.drawable.exit,
@@ -119,8 +123,6 @@ fun ProfileScreen() {
         )
     }
 }
-
-
 
 @Composable
 fun ConfirmLogoutDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {

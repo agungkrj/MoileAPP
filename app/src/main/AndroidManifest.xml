@@ -23,6 +23,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <!-- Aktivitas utama aplikasi -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -34,140 +35,143 @@
             </intent-filter>
         </activity>
 
-        <!-- Tambahkan deklarasi MasukActivity di sini -->
+        <!-- Aktivitas Login dan Registrasi -->
         <activity
             android:name=".login.MasukActivity"
             android:exported="true"
             android:label="Masuk" />
-
         <activity
             android:name=".login.DaftarActivity"
             android:exported="true"
             android:label="Daftar" />
 
+        <!-- Aktivitas Dashboard -->
         <activity
             android:name=".beranda.DashboardActivity"
             android:exported="true"
             android:label="masuk" />
 
-        <activity
-            android:name=".kuypoint.TukarKuyPointActivity"
-            android:exported="true"
-            android:label="tukar" />
-
-        <activity
-            android:name=".yukangkut.AngkutActivity"
-            android:exported="true"
-            android:label="tukar" />
-
-        <activity
-            android:name=".sampah.JenisSampahActivity"
-            android:exported="true"
-            android:label="tukar" />
-
+        <!-- Aktivitas Profil -->
         <activity
             android:name=".profile.ProfileActivity"
             android:exported="true"
-            android:label="tukar" />
-
-        <activity
-            android:name=".order.OrderActivity"
-            android:exported="true"
-            android:label="tukar" />
-
-        <activity
-            android:name=".yukangkut.PembayaranActivity"
-            android:exported="true"
-            android:label="tukar" />
-
-        <activity
-            android:name=".kuypoint.TukarDanaActivity"
-            android:exported="true"
-            android:label="tukar" />
-        <activity
-            android:name=".kuypoint.TukarBankActivity"
-            android:exported="true"
-            android:label="tukar" />
-        <activity
-            android:name=".kuypoint.TukarOvoActivity"
-            android:exported="true"
-            android:label="tukar" />
-        <activity
-            android:name=".kuypoint.TukarShopeePayActivity"
-            android:exported="true"
-            android:label="tukar" />
-
-
-        <activity
-            android:name=".yukbuang.BuangActivity"
-            android:exported="true"
-            android:label="tukar" />
-
-        <activity
-            android:name=".sampah.PlastikActivity"
-            android:exported="true"
-            android:label="tukar" />
-
-        <activity
-            android:name=".sampah.BotolKacaActivity"
-            android:exported="true"
-            android:label="tukar" />
-
-        <activity
-            android:name=".sampah.ElektronikActivity"
-            android:exported="true"
-            android:label="tukar" />
-
-        <activity
-            android:name=".sampah.BesiActivity"
-            android:exported="true"
-            android:label="tukar" />
-
-        <activity
-            android:name=".sampah.AluminiumActivity"
-            android:exported="true"
-            android:label="tukar" />
-
+            android:label="Profil" />
         <activity
             android:name=".profile.EditProfileActivity"
             android:exported="true"
-            android:label="tukar" />
+            android:label="Edit Profil" />
 
+        <!-- Aktivitas E-Wallet -->
         <activity
-            android:name=".order.OrderYukAngkutActivity"
+            android:name=".profile.EwalletActivity"
             android:exported="true"
-            android:label="tukar" />
-
+            android:label="E-Wallet" />
         <activity
-            android:name=".order.OrderYukBuangActivity"
+            android:name=".profile.EwalletDanaActivity"
             android:exported="true"
-            android:label="tukar" />
-
+            android:label="DANA" />
         <activity
-            android:name=".yukbuang.PembayaranYukBuangActivity"
+            android:name=".profile.EwalletShopeeActivity"
             android:exported="true"
-            android:label="tukar" />
+            android:label="ShopeePay" />
+        <activity
+            android:name=".profile.EwalletOvoActivity"
+            android:exported="true"
+            android:label="OVO" />
 
+        <!-- Aktivitas KuyPoint -->
+        <activity
+            android:name=".kuypoint.TukarKuyPointActivity"
+            android:exported="true"
+            android:label="Tukar KuyPoint" />
+        <activity
+            android:name=".kuypoint.TukarDanaActivity"
+            android:exported="true"
+            android:label="Tukar ke Dana" />
+        <activity
+            android:name=".kuypoint.TukarBankActivity"
+            android:exported="true"
+            android:label="Tukar ke Bank" />
+        <activity
+            android:name=".kuypoint.TukarOvoActivity"
+            android:exported="true"
+            android:label="Tukar ke OVO" />
+        <activity
+            android:name=".kuypoint.TukarShopeePayActivity"
+            android:exported="true"
+            android:label="Tukar ke ShopeePay" />
         <activity
             android:name=".kuypoint.ProsesTukarActivity"
             android:exported="true"
-            android:label="tukar" />
+            android:label="Proses Tukar" />
 
+        <!-- Aktivitas Yuk Angkut -->
+        <activity
+            android:name=".yukangkut.AngkutActivity"
+            android:exported="true"
+            android:label="Yuk Angkut" />
+        <activity
+            android:name=".yukangkut.PembayaranActivity"
+            android:exported="true"
+            android:label="Pembayaran Yuk Angkut" />
 
+        <!-- Aktivitas Yuk Buang -->
+        <activity
+            android:name=".yukbuang.BuangActivity"
+            android:exported="true"
+            android:label="Yuk Buang" />
+        <activity
+            android:name=".yukbuang.PembayaranYukBuangActivity"
+            android:exported="true"
+            android:label="Pembayaran Yuk Buang" />
+
+        <!-- Aktivitas Sampah -->
+        <activity
+            android:name=".sampah.JenisSampahActivity"
+            android:exported="true"
+            android:label="Jenis Sampah" />
+        <activity
+            android:name=".sampah.PlastikActivity"
+            android:exported="true"
+            android:label="Plastik" />
+        <activity
+            android:name=".sampah.BotolKacaActivity"
+            android:exported="true"
+            android:label="Botol Kaca" />
+        <activity
+            android:name=".sampah.ElektronikActivity"
+            android:exported="true"
+            android:label="Elektronik" />
+        <activity
+            android:name=".sampah.BesiActivity"
+            android:exported="true"
+            android:label="Besi" />
+        <activity
+            android:name=".sampah.AluminiumActivity"
+            android:exported="true"
+            android:label="Aluminium" />
+
+        <!-- Aktivitas Order -->
+        <activity
+            android:name=".order.OrderActivity"
+            android:exported="true"
+            android:label="Order" />
+        <activity
+            android:name=".order.OrderYukAngkutActivity"
+            android:exported="true"
+            android:label="Order Yuk Angkut" />
+        <activity
+            android:name=".order.OrderYukBuangActivity"
+            android:exported="true"
+            android:label="Order Yuk Buang" />
         <activity
             android:name=".order.RiwayatActivity"
             android:exported="true"
-            android:label="tukar" />
-
+            android:label="Riwayat Order" />
         <activity
             android:name=".order.TransaksiBerhasilActivity"
             android:exported="true"
-            android:label="tukar" />
-
-
-
-
+            android:label="Transaksi Berhasil" />
 
     </application>
-
 </manifest>
