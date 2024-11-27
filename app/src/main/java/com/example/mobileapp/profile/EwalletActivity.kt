@@ -113,7 +113,7 @@ fun EWalletItem(walletName: String, walletIconRes: Int) {
             modifier = Modifier.weight(1f)
         )
         Button(
-            onClick = { /* ] */ },
+            onClick = { /* TODO: Tambahkan aksi untuk menghubungkan akun */ },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)), // Hijau untuk tombol
             shape = RoundedCornerShape(8.dp)
         ) {
