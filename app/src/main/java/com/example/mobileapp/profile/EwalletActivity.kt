@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mobileapp.R
-
+//Penambahan EwalletActivity
 class EwalletActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,10 +42,10 @@ class EwalletActivity : ComponentActivity() {
                     startActivity(intent)
                 },
                 onBackClick = {
-                    // Kembali ke ProfileActivity
+
                     val intent = Intent(this, ProfileActivity::class.java)
                     startActivity(intent)
-                    finish() // Menutup EwalletActivity agar tidak ada tumpukan di back stack
+                    finish()
                 }
             )
         }
@@ -57,7 +57,7 @@ fun EWalletScreen(
     onDanaClick: () -> Unit,
     onShopeePayClick: () -> Unit,
     onOvoClick: () -> Unit,
-    onBackClick: () -> Unit // Tambahkan parameter untuk aksi tombol kembali
+    onBackClick: () -> Unit
 ) {
     Column(
         modifier = Modifier

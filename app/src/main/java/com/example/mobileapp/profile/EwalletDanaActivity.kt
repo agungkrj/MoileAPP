@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mobileapp.R
 import androidx.compose.ui.platform.LocalContext
-
+//Penambahan EwalletDanaActivity
 class EwalletDanaActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -131,8 +131,8 @@ fun EWalletDanaScreen() {
                     .background(Color.White, shape = RoundedCornerShape(8.dp)),
                 colors = TextFieldDefaults.textFieldColors(
                     containerColor = Color.White,
-                    focusedIndicatorColor = Color(0xFF4CAF50), // Warna hijau
-                    unfocusedIndicatorColor = Color(0xFFBDBDBD) // Warna abu-abu
+                    focusedIndicatorColor = Color(0xFF4CAF50),
+                    unfocusedIndicatorColor = Color(0xFFBDBDBD)
                 )
             )
 
