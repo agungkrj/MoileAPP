@@ -10,7 +10,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mobileapp.R
 import androidx.compose.ui.platform.LocalContext
-        //Penambahan EwalletOvoActivity
+
 class EwalletOvoActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,19 +35,20 @@ class EwalletOvoActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EWalletOvoScreen() {
-    // Dapatkan konteks saat ini
     val context = LocalContext.current
+    var phoneNumber by remember { mutableStateOf("") } // State untuk nomor HP
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF5F5F5)) // Background putih terang
     ) {
-        // Header
+        // Header dengan warna hijau
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                .background(Color(0xFF4CAF50)) // Warna hijau
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             // Tombol kembali
@@ -69,7 +70,7 @@ fun EWalletOvoScreen() {
                 text = "E - Wallet",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black,
+                color = Color.White,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.weight(5f)
             )
@@ -84,7 +85,7 @@ fun EWalletOvoScreen() {
                 .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Logo DANA
+            // Logo OVO
             Image(
                 painter = painterResource(R.drawable.logoovo),
                 contentDescription = "Logo OVO",
@@ -115,10 +116,10 @@ fun EWalletOvoScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Input Nomor HP
-            TextField(
-                value = "",
-                onValueChange = { /* TODO: Tambahkan logika input */ },
+            // Input Nomor HP dengan border bulat
+            OutlinedTextField(
+                value = phoneNumber,
+                onValueChange = { phoneNumber = it }, // Memperbarui state saat teks berubah
                 placeholder = {
                     Text(
                         text = "Masukkan Nomor HP",
@@ -128,11 +129,14 @@ fun EWalletOvoScreen() {
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color.White, shape = RoundedCornerShape(8.dp)),
-                colors = TextFieldDefaults.textFieldColors(
+                    .background(Color.White, shape = RoundedCornerShape(50.dp)), // Desain bulat
+                shape = RoundedCornerShape(50.dp),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
                     containerColor = Color.White,
-                    focusedIndicatorColor = Color(0xFF4CAF50), // Warna hijau
-                    unfocusedIndicatorColor = Color(0xFFBDBDBD) // Warna abu-abu
+                    focusedBorderColor = Color(0xFF4CAF50), // Warna border saat fokus
+                    unfocusedBorderColor = Color(0xFFBDBDBD), // Warna border saat tidak fokus
+                    focusedTextColor = Color.Black, // Warna teks saat fokus
+                    unfocusedTextColor = Color.Black // Warna teks saat tidak fokus
                 )
             )
 

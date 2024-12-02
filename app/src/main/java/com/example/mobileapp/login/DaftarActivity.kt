@@ -178,7 +178,11 @@ fun DaftarScreen() {
 
                 // Daftar Button
                 Button(
-                    onClick = { /* Handle register click */ },
+                    onClick = {
+                        // Navigasi ke MasukActivity
+                        val intent = Intent(context, MasukActivity::class.java)
+                        context.startActivity(intent)
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp),
@@ -190,6 +194,7 @@ fun DaftarScreen() {
                 ) {
                     Text(text = "Daftar", fontSize = 16.sp)
                 }
+
 
                 Spacer(modifier = Modifier.height(16.dp))
 
