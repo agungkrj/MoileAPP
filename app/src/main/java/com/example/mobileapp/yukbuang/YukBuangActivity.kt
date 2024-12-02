@@ -62,6 +62,21 @@ fun BuangScreen() {
     // State untuk pesan tambahan
     val additionalMessageState = remember { mutableStateOf("") }
 
+    // State untuk validasi
+    val phoneState = remember { mutableStateOf("") }
+    val addressState = remember { mutableStateOf("") }
+
+    val dateState = remember { mutableStateOf("") }
+    val timeState = remember { mutableStateOf("") }
+    val deliveryAddressState = remember { mutableStateOf("") }
+
+    // State untuk error validasi
+    val phoneError = remember { mutableStateOf(false) }
+    val addressError = remember { mutableStateOf(false) }
+    val dateError = remember { mutableStateOf(false) }
+    val timeError = remember { mutableStateOf(false) }
+    val deliveryAddressError = remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -89,7 +104,7 @@ fun BuangScreen() {
             )
 
             Spacer(modifier = Modifier.height(8.dp))
-            BuangSampahOptions() // Mengganti dengan komponen untuk opsi sampah
+            BuangSampahOptions()
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -101,7 +116,7 @@ fun BuangScreen() {
                 color = Color.Black,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            BuangTempatTinggalForm() // Mengganti form tempat tinggal
+            BuangTempatTinggalForm(phoneState, addressState, phoneError, addressError)
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -113,7 +128,7 @@ fun BuangScreen() {
                 color = Color.Black,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            BuangPengantaranForm() // Mengganti form pengantaran
+            BuangPengantaranForm(dateState, timeState, deliveryAddressState, dateError, timeError, deliveryAddressError)
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -126,7 +141,7 @@ fun BuangScreen() {
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             BuangCustomTextField(
-                label = "Masukkan pesan tambahan di sini",
+                label = "Masukkan pesan tambahan di sini (opsional)",
                 textState = additionalMessageState,
                 isMultiline = true
             )
@@ -141,15 +156,34 @@ fun BuangScreen() {
                 color = Color.Black,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            BuangFotoSampahSection() // Mengganti dengan bagian foto sampah
+            BuangFotoSampahSection()
 
             Spacer(modifier = Modifier.height(24.dp))
 
             // Tombol Selanjutnya
             Button(
                 onClick = {
-                    val intent = Intent(context, PembayaranYukBuangActivity::class.java)
-                    context.startActivity(intent)
+                    // Validasi kolom wajib
+                    val isPhoneValid = phoneState.value.isNotEmpty()
+                    val isAddressValid = addressState.value.isNotEmpty()
+                    val isDateValid = dateState.value.isNotEmpty()
+                    val isTimeValid = timeState.value.isNotEmpty()
+                    val isDeliveryAddressValid = deliveryAddressState.value.isNotEmpty()
+
+                    // Update error state
+                    phoneError.value = !isPhoneValid
+                    addressError.value = !isAddressValid
+                    dateError.value = !isDateValid
+                    timeError.value = !isTimeValid
+                    deliveryAddressError.value = !isDeliveryAddressValid
+
+                    // Jika semua validasi lolos, pindah ke layar berikutnya
+                    if (isPhoneValid && isAddressValid && isDateValid && isTimeValid && isDeliveryAddressValid) {
+                        val intent = Intent(context, PembayaranYukBuangActivity::class.java)
+                        context.startActivity(intent)
+                    } else {
+                        Toast.makeText(context, "Harap isi semua kolom yang wajib diisi.", Toast.LENGTH_SHORT).show()
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -337,31 +371,61 @@ fun BuangSampahActionCard(name: String, iconRes: Int, color: Color, onClick: () 
 }
 
 @Composable
-fun BuangTempatTinggalForm() {
-    val phoneState = remember { mutableStateOf("") }
-    val addressState = remember { mutableStateOf("") }
-
+fun BuangTempatTinggalForm(
+    phoneState: MutableState<String>,
+    addressState: MutableState<String>,
+    phoneError: MutableState<Boolean>,
+    addressError: MutableState<Boolean>
+) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        BuangCustomTextField(label = "No. Ponsel :", textState = phoneState)
+        BuangCustomTextField(
+            label = if (phoneError.value) "No. Ponsel (wajib diisi)" else "No. Ponsel :",
+            textState = phoneState,
+            isError = phoneError.value
+        )
         Spacer(modifier = Modifier.height(8.dp))
-        BuangCustomTextField(label = "Alamat :", textState = addressState, isMultiline = true)
+        BuangCustomTextField(
+            label = if (addressError.value) "Alamat (wajib diisi)" else "Alamat :",
+            textState = addressState,
+            isMultiline = true,
+            isError = addressError.value
+        )
     }
 }
+
 
 @Composable
-fun BuangPengantaranForm() {
-    val dateState = remember { mutableStateOf("") }
-    val timeState = remember { mutableStateOf("") }
-    val deliveryAddressState = remember { mutableStateOf("") }
-
+fun BuangPengantaranForm(
+    dateState: MutableState<String>,
+    timeState: MutableState<String>,
+    deliveryAddressState: MutableState<String>,
+    dateError: MutableState<Boolean>,
+    timeError: MutableState<Boolean>,
+    deliveryAddressError: MutableState<Boolean>
+) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        BuangCustomTextField(label = "Tanggal :", textState = dateState)
+        BuangCustomTextField(
+            label = if (dateError.value) "Tanggal (wajib diisi)" else "Tanggal :",
+            textState = dateState,
+            isError = dateError.value
+        )
         Spacer(modifier = Modifier.height(8.dp))
-        BuangCustomTextField(label = "Waktu :", textState = timeState)
+        BuangCustomTextField(
+            label = if (timeError.value) "Waktu (wajib diisi)" else "Waktu :",
+            textState = timeState,
+            isError = timeError.value
+        )
         Spacer(modifier = Modifier.height(8.dp))
-        BuangCustomTextField(label = "Alamat Pengantaran :", textState = deliveryAddressState)
+        BuangCustomTextField(
+            label = if (deliveryAddressError.value) "Alamat Pengantaran (wajib diisi)" else "Alamat Pengantaran :",
+            textState = deliveryAddressState,
+            isError = deliveryAddressError.value
+        )
     }
 }
+
+
+
 
 @Composable
 fun BuangFotoSampahSection() {
@@ -510,22 +574,31 @@ fun BuangFotoSampahCard(label: String) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BuangCustomTextField(label: String, textState: MutableState<String>, isMultiline: Boolean = false) {
+fun BuangCustomTextField(
+    label: String,
+    textState: MutableState<String>,
+    isMultiline: Boolean = false,
+    isError: Boolean = false
+) {
     OutlinedTextField(
         value = textState.value,
         onValueChange = { textState.value = it },
-        label = { Text(text = label) },
+        label = {
+            Text(text = if (isError) "$label (wajib diisi)" else label, color = if (isError) Color.Red else Color.Gray)
+        },
         modifier = Modifier
             .fillMaxWidth()
             .height(if (isMultiline) 100.dp else 56.dp),
+        isError = isError, // Tampilkan outline merah jika error
         shape = RoundedCornerShape(8.dp),
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Color(0xFF55B3A4),
-            unfocusedBorderColor = Color.Gray
+            focusedBorderColor = if (isError) Color.Red else Color(0xFF55B3A4),
+            unfocusedBorderColor = if (isError) Color.Red else Color.Gray
         ),
         maxLines = if (isMultiline) Int.MAX_VALUE else 1
     )
 }
+
 
 @Preview(showBackground = true)
 @Composable

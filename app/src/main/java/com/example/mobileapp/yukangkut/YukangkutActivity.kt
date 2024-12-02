@@ -59,8 +59,13 @@ fun AngkutScreen() {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
-    // State untuk pesan tambahan
+    // State untuk formulir
+    val phoneState = remember { mutableStateOf("") }
+    val addressState = remember { mutableStateOf("") }
+    val dateState = remember { mutableStateOf("") }
+    val timeState = remember { mutableStateOf("") }
     val additionalMessageState = remember { mutableStateOf("") }
+    val errorMessageState = remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -100,7 +105,13 @@ fun AngkutScreen() {
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
-            PenjemputanForm()
+            PenjemputanForm(
+                phoneState = phoneState,
+                addressState = addressState,
+                dateState = dateState,
+                timeState = timeState,
+                errorMessageState = errorMessageState
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -111,7 +122,11 @@ fun AngkutScreen() {
                 color = Color.Black,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            CustomTextField(label = "Masukkan pesan tambahan di sini", textState = additionalMessageState, isMultiline = true)
+            CustomTextField(
+                label = "Masukkan pesan tambahan di sini (opsional)",
+                textState = additionalMessageState,
+                isMultiline = true
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -123,23 +138,29 @@ fun AngkutScreen() {
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
-            // Baris untuk menampilkan Foto Sampah secara horizontal
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly // Spasi rata antar elemen
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                FotoSampahSection() // Foto Sampah 1
-                FotoSampahSection() // Foto Sampah 2
+                FotoSampahSection()
+                FotoSampahSection()
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
                 onClick = {
-                    val intent = Intent(context, PembayaranActivity::class.java)
-                    context.startActivity(intent)
+                    if (phoneState.value.isEmpty() || addressState.value.isEmpty() ||
+                        dateState.value.isEmpty() || timeState.value.isEmpty()
+                    ) {
+                        errorMessageState.value = "Semua field wajib diisi"
+                    } else {
+                        errorMessageState.value = ""
+                        val intent = Intent(context, PembayaranActivity::class.java)
+                        context.startActivity(intent)
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -150,6 +171,15 @@ fun AngkutScreen() {
                 )
             ) {
                 Text(text = "Selanjutnya", color = Color.White)
+            }
+
+            if (errorMessageState.value.isNotEmpty()) {
+                Text(
+                    text = errorMessageState.value,
+                    color = Color.Red,
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
             }
         }
     }
@@ -349,20 +379,69 @@ fun SampahActionCard(name: String, iconRes: Int, color: Color, onClick: () -> Un
 }
 
 @Composable
-fun PenjemputanForm() {
-    val phoneState = remember { mutableStateOf("") }
-    val addressState = remember { mutableStateOf("") }
-    val dateState = remember { mutableStateOf("") }
-    val timeState = remember { mutableStateOf("") }
-
+fun PenjemputanForm(
+    phoneState: MutableState<String>,
+    addressState: MutableState<String>,
+    dateState: MutableState<String>,
+    timeState: MutableState<String>,
+    errorMessageState: MutableState<String>
+) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        CustomTextField(label = "No. Ponsel :", textState = phoneState)
+        CustomTextField(
+            label = "No. Ponsel :",
+            textState = phoneState
+        )
+        if (phoneState.value.isEmpty()) {
+            Text(
+                text = "Nomor ponsel wajib diisi!",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+            )
+        }
         Spacer(modifier = Modifier.height(8.dp))
-        CustomTextField(label = "Alamat :", textState = addressState, isMultiline = true)
+
+        CustomTextField(
+            label = "Alamat :",
+            textState = addressState,
+            isMultiline = true
+        )
+        if (addressState.value.isEmpty()) {
+            Text(
+                text = "Alamat wajib diisi!",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+            )
+        }
         Spacer(modifier = Modifier.height(8.dp))
-        CustomTextField(label = "Tanggal :", textState = dateState)
+
+        CustomTextField(
+            label = "Tanggal :",
+            textState = dateState
+        )
+        if (dateState.value.isEmpty()) {
+            Text(
+                text = "Tanggal wajib diisi!",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+            )
+        }
         Spacer(modifier = Modifier.height(8.dp))
-        CustomTextField(label = "Waktu :", textState = timeState)
+
+        CustomTextField(
+            label = "Waktu :",
+            textState = timeState
+        )
+        if (timeState.value.isEmpty()) {
+            Text(
+                text = "Waktu wajib diisi!",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+            )
+        }
     }
 }
 
