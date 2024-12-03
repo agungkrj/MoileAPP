@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mobileapp.R
-//Penambahan EwalletActivity
+
 class EwalletActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +42,6 @@ class EwalletActivity : ComponentActivity() {
                     startActivity(intent)
                 },
                 onBackClick = {
-
                     val intent = Intent(this, ProfileActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -101,27 +100,36 @@ fun EWalletScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Daftar E-Wallet
-        Column(
+        // Bagian putih dengan sudut melengkung
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .fillMaxSize()
+                .background(
+                    color = Color.White,
+                    shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
+                )
+                .padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
-            EWalletItem("DANA", R.drawable.logodana, onDanaClick)
-            Spacer(modifier = Modifier.height(16.dp))
-            EWalletItem("ShopeePay", R.drawable.logoshopie, onShopeePayClick)
-            Spacer(modifier = Modifier.height(16.dp))
-            EWalletItem("OVO", R.drawable.logoovo, onOvoClick)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                EWalletItem(walletIconRes = R.drawable.logodana, onClick = onDanaClick)
+                Spacer(modifier = Modifier.height(16.dp))
+                EWalletItem(walletIconRes = R.drawable.logoshopie, onClick = onShopeePayClick)
+                Spacer(modifier = Modifier.height(16.dp))
+                EWalletItem(walletIconRes = R.drawable.logoovo, onClick = onOvoClick)
+            }
         }
     }
 }
 
 @Composable
-fun CustomTopBar(onBackClick: () -> Unit) { // Tambahkan parameter untuk navigasi
+fun CustomTopBar(onBackClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFF99E7D1)) // Warna hijau muda dari gambar
+            .background(Color(0xFF55B3A4)) // Warna hijau muda dari gambar
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -148,7 +156,7 @@ fun CustomTopBar(onBackClick: () -> Unit) { // Tambahkan parameter untuk navigas
 }
 
 @Composable
-fun EWalletItem(walletName: String, walletIconRes: Int, onClick: () -> Unit) {
+fun EWalletItem(walletIconRes: Int, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -159,26 +167,29 @@ fun EWalletItem(walletName: String, walletIconRes: Int, onClick: () -> Unit) {
         // Ikon e-wallet
         Image(
             painter = painterResource(walletIconRes),
-            contentDescription = "$walletName Icon",
-            modifier = Modifier.size(40.dp)
+            contentDescription = null,
+            modifier = Modifier
+                .size(135.dp)
+                .padding(8.dp)
         )
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = walletName,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Medium,
-            color = Color.Black,
-            modifier = Modifier.weight(1f)
-        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        // Tombol "Hubungkan Akun"
         Button(
-            onClick = onClick, // Aksi saat tombol diklik
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)), // Hijau untuk tombol
+            onClick = onClick,
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF55B3A4)), // Warna tombol diubah ke #55B3A4
             shape = RoundedCornerShape(8.dp)
         ) {
-            Text(text = "Hubungkan Akun", color = Color.White)
+            Text(
+                text = "Hubungkan Akun",
+                color = Color.White,
+                fontSize = 14.sp
+            )
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
@@ -187,6 +198,6 @@ fun PreviewEWalletScreen() {
         onDanaClick = {},
         onShopeePayClick = {},
         onOvoClick = {},
-        onBackClick = {} // Tambahkan preview aksi tombol kembali
+        onBackClick = {}
     )
 }

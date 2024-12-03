@@ -44,31 +44,37 @@ fun EWalletDanaScreen() {
             .background(Color(0xFFF5F5F5))
     ) {
         // Top Bar dengan warna hijau
-        Row(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFF4CAF50)) // Warna hijau
+                .background(Color(0xFF55B3A4)) // Warna hijau
                 .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            contentAlignment = Alignment.Center // Konten berada di tengah
         ) {
-            Image(
-                painter = painterResource(R.drawable.panah),
-                contentDescription = "Back",
-                modifier = Modifier
-                    .size(24.dp)
-                    .clickable {
-                        val intent = Intent(context, EwalletActivity::class.java)
-                        context.startActivity(intent)
-                    }
-            )
-            Spacer(modifier = Modifier.weight(1f))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Tombol kembali
+                Image(
+                    painter = painterResource(R.drawable.panah),
+                    contentDescription = "Back",
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable {
+                            val intent = Intent(context, EwalletActivity::class.java)
+                            context.startActivity(intent)
+                        }
+                )
+                Spacer(modifier = Modifier.weight(1f))
+            }
+
+            // Header E-Wallet
             Text(
                 text = "E - Wallet",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.White, // Warna teks putih
-                textAlign = TextAlign.Center,
-                modifier = Modifier.weight(5f)
+                color = Color.Black // Warna teks putih
             )
         }
 
@@ -83,7 +89,7 @@ fun EWalletDanaScreen() {
             Image(
                 painter = painterResource(R.drawable.logodana),
                 contentDescription = "Logo DANA",
-                modifier = Modifier.size(80.dp)
+                modifier = Modifier.size(150.dp)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -92,7 +98,7 @@ fun EWalletDanaScreen() {
                 text = "Hubungkan Akun",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF4CAF50)
+                color = Color(0xFF55B3A4)
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -126,7 +132,7 @@ fun EWalletDanaScreen() {
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     containerColor = Color.White,
                     focusedBorderColor = Color(0xFF4CAF50), // Warna border saat fokus
-                    unfocusedBorderColor = Color(0xFFBDBDBD), // Warna border saat tidak fokus
+                    unfocusedBorderColor = Color(0xFF55B3A4), // Warna border saat tidak fokus
                     focusedTextColor = Color.Black, // Warna teks saat fokus
                     unfocusedTextColor = Color.Black // Warna teks saat tidak fokus
                 )
@@ -137,7 +143,7 @@ fun EWalletDanaScreen() {
 
             Button(
                 onClick = { /* TODO: Tambahkan aksi konfirmasi */ },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF55B3A4)),
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -153,6 +159,7 @@ fun EWalletDanaScreen() {
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

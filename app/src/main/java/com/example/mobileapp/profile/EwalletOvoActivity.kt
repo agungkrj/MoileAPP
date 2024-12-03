@@ -44,36 +44,44 @@ fun EWalletOvoScreen() {
             .background(Color(0xFFF5F5F5)) // Background putih terang
     ) {
         // Header dengan warna hijau
-        Row(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFF4CAF50)) // Warna hijau
+                .background(Color(0xFF55B3A4)) // Warna hijau
                 .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            contentAlignment = Alignment.Center // Menempatkan konten di tengah
         ) {
-            // Tombol kembali
-            Image(
-                painter = painterResource(R.drawable.panah), // Ikon panah
-                contentDescription = "Back",
-                modifier = Modifier
-                    .size(24.dp)
-                    .clickable {
-                        // Navigasi ke EwalletActivity saat ikon panah ditekan
-                        val intent = Intent(context, EwalletActivity::class.java)
-                        context.startActivity(intent)
-                    }
-            )
-            Spacer(modifier = Modifier.weight(1f))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Tombol kembali
+                Image(
+                    painter = painterResource(R.drawable.panah), // Ikon panah
+                    contentDescription = "Back",
+                    modifier = Modifier
+                        .size(24.dp)
+                        .align(Alignment.CenterVertically)
+                        .clickable {
+                            // Navigasi ke EwalletActivity saat ikon panah ditekan
+                            val intent = Intent(context, EwalletActivity::class.java)
+                            context.startActivity(intent)
+                        }
+                )
 
-            // Teks E-Wallet
-            Text(
-                text = "E - Wallet",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.weight(5f)
-            )
+                Spacer(modifier = Modifier.weight(1f))
+
+                // Teks header di tengah
+                Text(
+                    text = "E - Wallet",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black, // Warna teks putih
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.weight(1f)) // Ruang untuk memastikan header tetap di tengah
+            }
         }
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -89,7 +97,7 @@ fun EWalletOvoScreen() {
             Image(
                 painter = painterResource(R.drawable.logoovo),
                 contentDescription = "Logo OVO",
-                modifier = Modifier.size(80.dp)
+                modifier = Modifier.size(150.dp)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -99,7 +107,7 @@ fun EWalletOvoScreen() {
                 text = "Hubungkan Akun",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF4CAF50) // Warna hijau
+                color = Color(0xFF55B3A4) // Warna hijau
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -134,7 +142,7 @@ fun EWalletOvoScreen() {
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     containerColor = Color.White,
                     focusedBorderColor = Color(0xFF4CAF50), // Warna border saat fokus
-                    unfocusedBorderColor = Color(0xFFBDBDBD), // Warna border saat tidak fokus
+                    unfocusedBorderColor = Color(0xFF55B3A4), // Warna border saat tidak fokus
                     focusedTextColor = Color.Black, // Warna teks saat fokus
                     unfocusedTextColor = Color.Black // Warna teks saat tidak fokus
                 )
@@ -145,7 +153,7 @@ fun EWalletOvoScreen() {
             // Tombol Konfirmasi
             Button(
                 onClick = { /* TODO: Tambahkan aksi konfirmasi */ },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)), // Warna hijau
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF55B3A4)), // Warna hijau
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -167,3 +175,4 @@ fun EWalletOvoScreen() {
 fun PreviewEWalletOvoScreen() {
     EWalletOvoScreen()
 }
+
