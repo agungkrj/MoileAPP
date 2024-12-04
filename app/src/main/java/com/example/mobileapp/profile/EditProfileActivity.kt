@@ -5,9 +5,12 @@ package com.example.mobileapp.profile
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -17,6 +20,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -24,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.example.mobileapp.R
 import com.example.mobileapp.beranda.DashboardActivity
 import com.example.mobileapp.ui.theme.MobileAPPTheme
@@ -182,7 +187,7 @@ fun FullWidthHeader() {
         },
         navigationIcon = {
             IconButton(onClick = {
-                val intent = Intent(context, DashboardActivity::class.java)
+                val intent = Intent(context, ProfileActivity::class.java)
                 context.startActivity(intent)
             }) {
                 Icon(
@@ -199,22 +204,67 @@ fun FullWidthHeader() {
 
 @Composable
 fun ProfilePictureSection() {
+    val context = LocalContext.current
+
+    // State to hold the image URI
+    var imageUri by remember { mutableStateOf<android.net.Uri?>(null) }
+
+    // Launcher to pick an image
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri: android.net.Uri? ->
+            if (uri != null) {
+                imageUri = uri // Update state with the new image URI
+            }
+        }
+    )
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Image(
-                painter = painterResource(id = R.drawable.profile),
-                contentDescription = "Profile Picture",
-                modifier = Modifier
-                    .size(100.dp)
-                    .background(Color(0xFF55B3A4), CircleShape)
-                    .padding(8.dp)
-            )
+            // Profile Picture
+            Box(contentAlignment = Alignment.BottomEnd) {
+                if (imageUri != null) {
+                    Image(
+                        painter = rememberAsyncImagePainter(imageUri),
+                        contentDescription = "Profile Picture",
+                        modifier = Modifier
+                            .size(100.dp)
+                            .clip(CircleShape)
+                            .background(Color(0xFF55B3A4), CircleShape)
+                    )
+                } else {
+                    Image(
+                        painter = painterResource(id = R.drawable.profile), // Default image
+                        contentDescription = "Profile Picture",
+                        modifier = Modifier
+                            .size(100.dp)
+                            .clip(CircleShape)
+                            .background(Color(0xFF55B3A4), CircleShape)
+                    )
+                }
+
+                // Pencil Icon for editing
+                Icon(
+                    painter = painterResource(id = R.drawable.pensil), // Replace with your pencil icon
+                    contentDescription = "Edit Profile Picture",
+                    modifier = Modifier
+                        .size(26.dp)
+                        .background(Color.Transparent, CircleShape)
+                        .padding(4.dp)
+                        .clickable {
+                            launcher.launch("image/*") // Open gallery
+                        },
+                    tint = Color.Black
+                )
+            }
         }
     }
 }
+
+
 
 @Composable
 fun ProfileInfoField(

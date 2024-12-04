@@ -38,6 +38,7 @@ class ProfileActivity : ComponentActivity() {
     }
 }
 
+// Di dalam fungsi ProfileScreen
 @Composable
 fun ProfileScreen() {
     val context = LocalContext.current
@@ -85,16 +86,6 @@ fun ProfileScreen() {
                 }
             )
             ProfileMenuCard(
-                iconRes = R.drawable.wallet,
-                title = "E-Wallet",
-                subtitle = "Lihat saldo dan transaksi Anda",
-                onArrowClick = {
-                    // Intent untuk membuka EwalletActivity
-                    val intent = Intent(context, EwalletActivity::class.java)
-                    context.startActivity(intent)
-                }
-            )
-            ProfileMenuCard(
                 iconRes = R.drawable.exit,
                 title = "Keluar",
                 onArrowClick = { showLogoutDialog = true } // Memunculkan dialog keluar
@@ -123,6 +114,7 @@ fun ProfileScreen() {
         )
     }
 }
+
 
 @Composable
 fun ConfirmLogoutDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
