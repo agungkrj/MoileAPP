@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import com.example.mobileapp.R
 import com.example.mobileapp.ui.theme.MobileAPPTheme
 import androidx.compose.ui.text.input.KeyboardType
+import com.example.mobileapp.order.OrderActivity
 
 @OptIn(ExperimentalMaterial3Api::class)
 class TukarDanaActivity : ComponentActivity() {
@@ -44,6 +45,7 @@ fun TukarDanaMainScreen() {
     val selectedNominal = remember { mutableStateOf("15.000") } // Default minimal amount
     val customNominal = remember { mutableStateOf(TextFieldValue("")) } // For custom nominal input
     val showErrorDialog = remember { mutableStateOf(false) } // State to control the error dialog visibility
+    val showSuccessDialog = remember { mutableStateOf(false) } // State for success dialog visibility
 
     // Validasi jika semua input sudah diisi
     val isFormComplete = remember(rekeningDANA.value.text, selectedNominal.value) {
@@ -178,7 +180,8 @@ fun TukarDanaMainScreen() {
                     // Show error dialog if the nominal is invalid
                     showErrorDialog.value = true
                 } else {
-                    // Proceed with the exchange process (e.g., navigate to another screen)
+                    // Show success dialog if the nominal is valid
+                    showSuccessDialog.value = true
                 }
             },
             enabled = isFormComplete,
@@ -213,9 +216,33 @@ fun TukarDanaMainScreen() {
                 }
             )
         }
+
+        // Success Dialog
+        if (showSuccessDialog.value) {
+            val context = LocalContext.current
+
+            AlertDialog(
+                onDismissRequest = { showSuccessDialog.value = false },
+                title = {
+                    Text(text = "Success", fontWeight = FontWeight.Bold, color = Color.Black)
+                },
+                text = {
+                    Text(text = "Top-up berhasil, lanjut ke halaman selanjutnya.", color = Color.Black)
+                },
+                confirmButton = {
+                    TextButton(onClick = {
+                        showSuccessDialog.value = false
+                        // Navigate to the next screen (OrderActivity)
+                        val intent = Intent(context, OrderActivity::class.java)
+                        context.startActivity(intent)
+                    }) {
+                        Text(text = "OK", color = Color.Black)
+                    }
+                }
+            )
+        }
     }
 }
-
 
 @Composable
 fun TukarDanaHeader() {
@@ -274,7 +301,6 @@ fun TukarDanaNominalButton(
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun PreviewTukarDanaMainScreen() {
@@ -282,4 +308,3 @@ fun PreviewTukarDanaMainScreen() {
         TukarDanaMainScreen()
     }
 }
-

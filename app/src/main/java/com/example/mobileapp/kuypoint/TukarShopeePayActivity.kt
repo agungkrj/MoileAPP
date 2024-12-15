@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mobileapp.R
 import com.example.mobileapp.ui.theme.MobileAPPTheme
+import com.example.mobileapp.order.OrderActivity
 
 @OptIn(ExperimentalMaterial3Api::class)
 class TukarShopeePayActivity : ComponentActivity() {
@@ -40,10 +41,12 @@ class TukarShopeePayActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TukarShopeePayMainScreen() {
+    val context = LocalContext.current
     val shopeePayNumber = remember { mutableStateOf(TextFieldValue("")) }
     val selectedNominal = remember { mutableStateOf("") }
     val customNominal = remember { mutableStateOf(TextFieldValue("")) }
-    val showErrorDialog = remember { mutableStateOf(false) } // State for error dialog visibility
+    val showErrorDialog = remember { mutableStateOf(false) }
+    val showSuccessDialog = remember { mutableStateOf(false) }
 
     // Validasi jika semua input sudah diisi
     val isFormComplete = remember(shopeePayNumber.value.text, selectedNominal.value, customNominal.value.text) {
@@ -172,7 +175,8 @@ fun TukarShopeePayMainScreen() {
                     // Show error dialog if the nominal is invalid
                     showErrorDialog.value = true
                 } else {
-                    // Proceed with the exchange process (e.g., navigate to another screen)
+                    // Show success dialog if the nominal is valid
+                    showSuccessDialog.value = true
                 }
             },
             enabled = isFormComplete,
@@ -207,9 +211,33 @@ fun TukarShopeePayMainScreen() {
                 }
             )
         }
+
+        // Success Dialog
+        if (showSuccessDialog.value) {
+            AlertDialog(
+                onDismissRequest = { showSuccessDialog.value = false },
+                title = {
+                    Text(text = "Success", fontWeight = FontWeight.Bold, color = Color.Black)
+                },
+                text = {
+                    Text(text = "Top up berhasil! Melanjutkan ke halaman Order.", color = Color.Black)
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            showSuccessDialog.value = false
+                            // Navigate to OrderActivity
+                            val intent = Intent(context, OrderActivity::class.java)
+                            context.startActivity(intent)
+                        }
+                    ) {
+                        Text(text = "OK", color = Color.Black)
+                    }
+                }
+            )
+        }
     }
 }
-
 
 @Composable
 fun TukarShopeePayHeader() {

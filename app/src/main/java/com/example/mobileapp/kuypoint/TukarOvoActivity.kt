@@ -1,5 +1,6 @@
 package com.example.mobileapp.kuypoint
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mobileapp.R
 import com.example.mobileapp.ui.theme.MobileAPPTheme
+import com.example.mobileapp.order.OrderActivity
 
 @OptIn(ExperimentalMaterial3Api::class)
 class TukarOvoActivity : ComponentActivity() {
@@ -209,7 +211,10 @@ fun TukarOvoMainScreen() {
         }
 
         // Success Dialog (for proceeding to the next screen)
+        // Success Dialog (for proceeding to the next screen)
         if (showSuccessDialog.value) {
+            val context = LocalContext.current
+
             AlertDialog(
                 onDismissRequest = { showSuccessDialog.value = false },
                 title = {
@@ -219,12 +224,18 @@ fun TukarOvoMainScreen() {
                     Text(text = "Top-up berhasil, lanjut ke halaman selanjutnya.", color = Color.Black)
                 },
                 confirmButton = {
-                    TextButton(onClick = { showSuccessDialog.value = false }) {
+                    TextButton(onClick = {
+                        showSuccessDialog.value = false
+                        // Navigate to OrderActivity
+                        val intent = Intent(context, OrderActivity::class.java)
+                        context.startActivity(intent)
+                    }) {
                         Text(text = "OK", color = Color.Black)
                     }
                 }
             )
         }
+
     }
 }
 
