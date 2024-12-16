@@ -176,6 +176,15 @@
             android:name=".order.TransaksiBerhasilDanaActivity"
             android:exported="true"
             android:label="Transaksi Berhasil Dana" />
+        <activity
+            android:name=".order.RiwayatBankActivity"
+            android:exported="true"
+            android:label="Riwayat Bank" />
+        <activity
+            android:name=".order.RiwayatDanaActivity"
+            android:exported="true"
+            android:label="Riwayat Dana" />
+
 
 
     </application>

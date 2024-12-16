@@ -1,5 +1,6 @@
 package com.example.mobileapp.order
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -45,18 +46,15 @@ fun RiwayatScreen() {
 
     Scaffold(
         topBar = {
-            // TopBar with gradient background and centered title
             TopAppBar(
-                modifier = Modifier
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(Color(0xFF79D7C7), Color(0xFF52AC9D))
-                        )
-                    ),
+                modifier = Modifier.background(
+                    Brush.verticalGradient(
+                        colors = listOf(Color(0xFF79D7C7), Color(0xFF52AC9D))
+                    )
+                ),
                 title = {
                     Box(
-                        modifier = Modifier
-                            .fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -76,9 +74,7 @@ fun RiwayatScreen() {
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Transparent
-                )
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
             )
         }
     ) { paddingValues ->
@@ -92,15 +88,17 @@ fun RiwayatScreen() {
         ) {
             items(getTransactions()) { transaction ->
                 RiwayatCard(transaction) {
-                    // Handle card click
-                    // You can add any action you want to perform on click here, for example:
-                    // Toast or navigate to another screen
-                    // Example: Toast.makeText(context, "Clicked: ${transaction.status}", Toast.LENGTH_SHORT).show()
+                    if (transaction.status == "Penukaran Kuy Point!") {
+                        // Navigasi ke halaman RiwayatBankActivity
+                        val intent = Intent(context, RiwayatBankActivity::class.java)
+                        context.startActivity(intent)
+                    }
                 }
             }
         }
     }
 }
+
 
 
 @Composable
@@ -183,7 +181,7 @@ fun getTransactions(): List<TransactionData> {
             iconResId = R.drawable.yukangkut
         ),
         TransactionData(
-            status = "Penukaran Kuy Point!",
+            status = "Penukaran Kuy Point! Bank",
             description = "Penukaran Kuy Point ke saldo Bank Rp 15.000",
             time = "28 Maret 13:40",
             color = Color.Black,
@@ -198,7 +196,7 @@ fun getTransactions(): List<TransactionData> {
             isSuccessful = true
         ),
         TransactionData(
-            status = "Penukaran Kuy Point!",
+            status = "Penukaran Kuy Point! Ewallet",
             description = "Penukaran Kuy Point ke saldo E-Wallet Rp 15.000",
             time = "01 Maret 12:30",
             color = Color.Black,
