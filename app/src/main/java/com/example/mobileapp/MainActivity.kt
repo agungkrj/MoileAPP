@@ -64,7 +64,7 @@ fun MainScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFE6F3F3)),
+            .background(Color.White),
         contentAlignment = Alignment.Center
     ) {
         Column(
