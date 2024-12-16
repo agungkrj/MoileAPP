@@ -23,15 +23,13 @@ class RiwayatDanaActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            RiwayatDanaScreen(
-                onBackClick = { finish() } // Fungsi tombol kembali
-            )
+            RiwayatDanaScreen()
         }
     }
 }
 
 @Composable
-fun RiwayatDanaScreen(onBackClick: () -> Unit = {}) {
+fun RiwayatDanaScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -44,20 +42,19 @@ fun RiwayatDanaScreen(onBackClick: () -> Unit = {}) {
                 .fillMaxWidth()
                 .background(Color(0xFF55B3A4)) // Warna hijau
                 .padding(16.dp),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center // Konten berada di tengah
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Tombol kembali
-                IconButton(onClick = { onBackClick() }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.keluar),
-                        contentDescription = "Back",
-                        tint = Color.Black
-                    )
-                }
+                Image(
+                    painter = painterResource(R.drawable.keluar),
+                    contentDescription = "Back",
+                    modifier = Modifier
+                        .size(24.dp)
+                )
                 Spacer(modifier = Modifier.weight(1f)) // Spacer agar teks ke tengah
             }
 
@@ -90,7 +87,7 @@ fun RiwayatDanaScreen(onBackClick: () -> Unit = {}) {
         )
 
         Text(
-            text = "Tukar Kuy Point ke saldo E-Wallet\nBerikut adalah bukti transfer:",
+            text = "Tukar Kuy Point ke saldo Bank\nBerikut adalah bukti transfer:",
             fontSize = 14.sp,
             color = Color.Black,
             textAlign = TextAlign.Center
@@ -103,9 +100,7 @@ fun RiwayatDanaScreen(onBackClick: () -> Unit = {}) {
             painter = painterResource(id = R.drawable.riwayatdana), // Gambar bukti transfer
             contentDescription = "Bukti Transfer",
             modifier = Modifier
-                .fillMaxWidth() // Mengisi lebar layar
-                .aspectRatio(1f) // Proporsi gambar agar tidak terlalu besar
-                .padding(horizontal = 16.dp)
+                .size(600.dp, 780.dp) // Lebar 600dp, tinggi 780dp
         )
     }
 }
@@ -113,7 +108,5 @@ fun RiwayatDanaScreen(onBackClick: () -> Unit = {}) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewRiwayatDanaScreen() {
-    MaterialTheme {
-        RiwayatDanaScreen() // Preview tanpa fungsi kembali
-    }
+    RiwayatDanaScreen()
 }

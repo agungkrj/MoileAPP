@@ -88,16 +88,24 @@ fun RiwayatScreen() {
         ) {
             items(getTransactions()) { transaction ->
                 RiwayatCard(transaction) {
-                    if (transaction.status == "Penukaran Kuy Point!") {
-                        // Navigasi ke halaman RiwayatBankActivity
-                        val intent = Intent(context, RiwayatBankActivity::class.java)
-                        context.startActivity(intent)
+                    // Periksa status transaksi
+                    when (transaction.status) {
+                        "Penukaran Kuy Point! Bank" -> {
+                            val intent = Intent(context, RiwayatBankActivity::class.java)
+                            context.startActivity(intent)
+                        }
+                        "Penukaran Kuy Point! Ewallet" -> {
+                            val intent = Intent(context, RiwayatDanaActivity::class.java)
+                            context.startActivity(intent)
+                        }
+                        // Tambahkan logika lain jika diperlukan
                     }
                 }
             }
         }
     }
 }
+
 
 
 
@@ -208,14 +216,6 @@ fun getTransactions(): List<TransactionData> {
             time = "17 Maret 13:40",
             color = Color.Black,
             iconResId = R.drawable.yukbuang,
-            isSuccessful = true
-        ),
-        TransactionData(
-            status = "Yuk Angkut!",
-            description = "Bukit Senyum Blok B3. No. 24 Batam",
-            time = "14 Maret 09:40",
-            color = Color.Black,
-            iconResId = R.drawable.yukangkut,
             isSuccessful = true
         ),
         TransactionData(
