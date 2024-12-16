@@ -172,6 +172,11 @@
             android:name=".order.TransaksiBerhasilActivity"
             android:exported="true"
             android:label="Transaksi Berhasil" />
+        <activity
+            android:name=".order.TransaksiBerhasilDanaActivity"
+            android:exported="true"
+            android:label="Transaksi Berhasil Dana" />
+
 
     </application>
 </manifest>

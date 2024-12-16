@@ -22,13 +22,13 @@ import androidx.core.view.WindowCompat
 import com.example.mobileapp.R
 import com.example.mobileapp.ui.theme.MobileAPPTheme
 
-class TransaksiBerhasilActivity : ComponentActivity() {
+class TransaksiBerhasilDanaActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             MobileAPPTheme {
-                TransaksiDiprosesScreen()
+                TransaksiBerhasilScreen()
             }
         }
     }
@@ -36,7 +36,7 @@ class TransaksiBerhasilActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TransaksiDiprosesHeader() {
+fun TransaksiBerhasilHeader() {
     val context = LocalContext.current
     TopAppBar(
         modifier = Modifier.fillMaxWidth(),
@@ -71,9 +71,9 @@ fun TransaksiDiprosesHeader() {
 }
 
 @Composable
-fun TransaksiDiprosesScreen() {
+fun TransaksiBerhasilScreen() {
     Scaffold(
-        topBar = { TransaksiDiprosesHeader() },
+        topBar = { TransaksiBerhasilHeader() },
         content = { innerPadding ->
             Column(
                 modifier = Modifier
@@ -83,8 +83,8 @@ fun TransaksiDiprosesScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.time_ismoney),
-                    contentDescription = "Ilustrasi Proses",
+                    painter = painterResource(id = R.drawable.time_ismoney), // Gambar ikon sukses
+                    contentDescription = "Ilustrasi Berhasil",
                     modifier = Modifier
                         .fillMaxWidth() // Menjaga gambar memenuhi lebar layar
                         .height(250.dp) // Tinggi gambar disesuaikan
@@ -95,7 +95,7 @@ fun TransaksiDiprosesScreen() {
 
                 // Judul
                 Text(
-                    text = "Tukar Kuy Point ke saldo Bank",
+                    text = "Tukar Kuy Point ke saldo Dana",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black,
@@ -127,8 +127,8 @@ fun TransaksiDiprosesScreen() {
 
 @Preview(showBackground = true, showSystemUi = false)
 @Composable
-fun PreviewTransaksiDiprosesScreen() {
+fun PreviewTransaksiBerhasilScreen() {
     MobileAPPTheme {
-        TransaksiDiprosesScreen()
+        TransaksiBerhasilScreen()
     }
 }

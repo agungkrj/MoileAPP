@@ -119,7 +119,10 @@ fun OrderScreen() {
                         description = "Sedang meninjau penukaran Kuy Point Kamu. Silahkan menunggu maksimal 1x24 jam untuk proses selanjutnya",
                         time = "12:30 WIB",
                         iconResId = R.drawable.dompet,
-                        onClick = { /* Aksi untuk 'Tukar Kuy Point!' (dompet) */ }
+                        onClick = {
+                            val intent = Intent(context, TransaksiBerhasilDanaActivity::class.java)
+                            context.startActivity(intent)
+                        }
                     )
                 }
             }
