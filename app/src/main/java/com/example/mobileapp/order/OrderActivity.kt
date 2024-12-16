@@ -79,7 +79,7 @@ fun OrderScreen() {
             ) {
                 item {
                     OrderCard(
-                        title = "Yuk Buang!",
+                        title = "Sedang Diproses",
                         description = "Sedang meninjau permintaan Yuk Buang! Kamu. Silahkan menunggu maksimal 1x24 jam untuk proses selanjutnya",
                         time = "10:40 WIB",
                         iconResId = R.drawable.yukbuang,
@@ -91,7 +91,7 @@ fun OrderScreen() {
                 }
                 item {
                     OrderCard(
-                        title = "Yuk Angkut!",
+                        title = "Sedang Diproses",
                         description = "Sedang meninjau permintaan Yuk Angkut! Kamu. Silahkan menunggu maksimal 1x24 jam untuk proses selanjutnya",
                         time = "14:40 WIB",
                         iconResId = R.drawable.yukangkut,
@@ -103,7 +103,7 @@ fun OrderScreen() {
                 }
                 item {
                     OrderCard(
-                        title = "Tukar Kuy Point!",
+                        title = "Sedang Diproses",
                         description = "Sedang meninjau penukaran Kuy Point Kamu. Silahkan menunggu maksimal 1x24 jam untuk proses selanjutnya",
                         time = "13:40 WIB",
                         iconResId = R.drawable.transfer,
@@ -115,7 +115,7 @@ fun OrderScreen() {
                 }
                 item {
                     OrderCard(
-                        title = "Tukar Kuy Point!",
+                        title = "Sedang Diproses",
                         description = "Sedang meninjau penukaran Kuy Point Kamu. Silahkan menunggu maksimal 1x24 jam untuk proses selanjutnya",
                         time = "12:30 WIB",
                         iconResId = R.drawable.dompet,
@@ -167,7 +167,7 @@ fun OrderCard(title: String, description: String, time: String, iconResId: Int, 
             Icon(
                 painter = painterResource(id = iconResId),
                 contentDescription = null,
-                modifier = Modifier.size(48.dp),
+                modifier = Modifier.size(65.dp),
                 tint = Color.Unspecified
             )
 
@@ -177,13 +177,13 @@ fun OrderCard(title: String, description: String, time: String, iconResId: Int, 
                 Text(
                     text = title,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp,
-                    color = Color(0xFF00796B)
+                    fontSize = 17.sp,
+                    color = Color(0xFF55B3A4)
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = description,
-                    fontSize = 10.sp,
+                    fontSize = 12.sp,
                     color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(8.dp))
