@@ -1,10 +1,10 @@
 package com.example.mobileapp.order
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,15 +14,18 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.mobileapp.R
 import com.example.mobileapp.ui.theme.MobileAPPTheme
+import androidx.compose.foundation.lazy.items
+
 
 class RiwayatActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,103 +42,83 @@ class RiwayatActivity : ComponentActivity() {
 @Composable
 fun RiwayatScreen() {
     val context = LocalContext.current
+
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
+            // TopBar with gradient background and centered title
+            TopAppBar(
+                modifier = Modifier
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(Color(0xFF79D7C7), Color(0xFF52AC9D))
+                        )
+                    ),
                 title = {
-                    Text(
-                        text = "Riwayat",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = {
-                        (context as? ComponentActivity)?.finish()
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back",
-                            tint = Color.White
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Riwayat",
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black
                         )
                     }
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(0xFF55B3A4) // Warna gradasi atas
+                navigationIcon = {
+                    IconButton(onClick = { (context as? ComponentActivity)?.finish() }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back",
+                            tint = Color.Black
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent
                 )
             )
         }
     ) { paddingValues ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
                 .background(Color.White)
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Konten di bawah AppBar
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                // Example Data
-                items(8) { index ->
-                    val transaction = when (index % 4) {
-                        0 -> TransactionData(
-                            status = "Gagal",
-                            description = "Kamu telah membatalkan transaksi just sampahmu",
-                            time = "23 April 14:40",
-                            color = Color.Red,
-                            iconResId = R.drawable.yukangkut
-                        )
-                        1 -> TransactionData(
-                            status = "Penukaran Kuy Point!",
-                            description = "Penukaran Kuy Point ke saldo Bank Rp 15.000",
-                            time = "28 Maret 13:40",
-                            color = Color.Green,
-                            iconResId = R.drawable.yukbuang
-                        )
-                        2 -> TransactionData(
-                            status = "Yuk Angkut! Berhasil",
-                            description = "Bukit Cangkok Blok D2. No. 09 Batam",
-                            time = "19 April 09:40",
-                            color = Color.Green,
-                            iconResId = R.drawable.yukbuang
-                        )
-                        else -> TransactionData(
-                            status = "Yuk Buang! Berhasil",
-                            description = "Jln. Anggrek Blok A2 No. 14 Batam",
-                            time = "1 Maret 13:40",
-                            color = Color.Green,
-                            iconResId = R.drawable.yukangkut
-                        )
-                    }
-                    RiwayatCard(transaction)
+            items(getTransactions()) { transaction ->
+                RiwayatCard(transaction) {
+                    // Handle card click
+                    // You can add any action you want to perform on click here, for example:
+                    // Toast or navigate to another screen
+                    // Example: Toast.makeText(context, "Clicked: ${transaction.status}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 }
 
+
 @Composable
-fun RiwayatCard(transaction: TransactionData) {
+fun RiwayatCard(transaction: TransactionData, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight(),
+            .clickable(onClick = onClick), // Add the clickable modifier
         shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(4.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Row(
             modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Transaction Icon
+            // Icon on the left side
             Icon(
                 painter = painterResource(id = transaction.iconResId),
                 contentDescription = null,
@@ -145,20 +128,31 @@ fun RiwayatCard(transaction: TransactionData) {
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Transaction Details
+            // Transaction details
             Column {
-                Text(
-                    text = transaction.status,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp,
-                    color = Color(0xFF00796B)
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = transaction.status,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = transaction.color
+                    )
+                    if (transaction.isSuccessful) {
+                        Text(
+                            text = " Berhasil",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF00796B)
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = transaction.description,
                     fontSize = 12.sp,
                     color = Color.Gray
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = transaction.time,
                     fontSize = 12.sp,
@@ -169,13 +163,72 @@ fun RiwayatCard(transaction: TransactionData) {
     }
 }
 
+
 data class TransactionData(
     val status: String,
     val description: String,
     val time: String,
     val color: Color,
-    val iconResId: Int
+    val iconResId: Int,
+    val isSuccessful: Boolean = false
 )
+
+fun getTransactions(): List<TransactionData> {
+    return listOf(
+        TransactionData(
+            status = "Gagal",
+            description = "Kamu telah membatalkan transaksi jual sampahmu",
+            time = "23 April 14:40",
+            color = Color.Red,
+            iconResId = R.drawable.yukangkut
+        ),
+        TransactionData(
+            status = "Penukaran Kuy Point!",
+            description = "Penukaran Kuy Point ke saldo Bank Rp 15.000",
+            time = "28 Maret 13:40",
+            color = Color.Black,
+            iconResId = R.drawable.dompet
+        ),
+        TransactionData(
+            status = "Yuk Angkut!",
+            description = "Bukit Cengkeh Blok D2. No. 09 Batam",
+            time = "19 April 09:40",
+            color = Color.Black,
+            iconResId = R.drawable.yukangkut,
+            isSuccessful = true
+        ),
+        TransactionData(
+            status = "Penukaran Kuy Point!",
+            description = "Penukaran Kuy Point ke saldo E-Wallet Rp 15.000",
+            time = "01 Maret 12:30",
+            color = Color.Black,
+            iconResId = R.drawable.transfer
+        ),
+        TransactionData(
+            status = "Yuk Buang!",
+            description = "Jln.Anggrek Blok A2 No. 14 Batam",
+            time = "17 Maret 13:40",
+            color = Color.Black,
+            iconResId = R.drawable.yukbuang,
+            isSuccessful = true
+        ),
+        TransactionData(
+            status = "Yuk Angkut!",
+            description = "Bukit Senyum Blok B3. No. 24 Batam",
+            time = "14 Maret 09:40",
+            color = Color.Black,
+            iconResId = R.drawable.yukangkut,
+            isSuccessful = true
+        ),
+        TransactionData(
+            status = "Gagal",
+            description = "Kamu telah membatalkan transaksi jual sampahmu",
+            time = "29 Maret 10:40",
+            color = Color.Red,
+            iconResId = R.drawable.yukbuang
+        )
+    )
+}
 
 @Preview(showBackground = true)
 @Composable
@@ -183,4 +236,9 @@ fun PreviewRiwayatScreen() {
     MobileAPPTheme {
         RiwayatScreen()
     }
+}
+
+// Helper function to convert Brush to Color
+fun Brush.toColor(): Color {
+    return Color.Transparent
 }
