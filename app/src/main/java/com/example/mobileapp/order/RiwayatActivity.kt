@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.example.mobileapp.R
 import com.example.mobileapp.ui.theme.MobileAPPTheme
 import androidx.compose.foundation.lazy.items
+import com.example.mobileapp.cancellation.PembatalanYukAngkutActivity
 
 
 class RiwayatActivity : ComponentActivity() {
@@ -104,6 +105,14 @@ fun RiwayatScreen() {
                         }
                         transaction.status == "Penukaran Kuy Point! Ewallet" -> {
                             val intent = Intent(context, RiwayatDanaActivity::class.java)
+                            context.startActivity(intent)
+                        }
+                        transaction.status == "Yuk Angkut! Gagal" -> {
+                            val intent = Intent(context, PembatalanYukAngkutActivity::class.java)
+                            context.startActivity(intent)
+                        }
+                        transaction.status == "Yuk Buang! Gagal" -> {
+                            val intent = Intent(context, PembatalanYukBuangActivity::class.java)
                             context.startActivity(intent)
                         }
                     }

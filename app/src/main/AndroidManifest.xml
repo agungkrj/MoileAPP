@@ -192,6 +192,14 @@
             android:name=".order.RiwayatYukBuangBerhasilActivity"
             android:exported="true"
             android:label="Riwayat Yuk Buang Berhasil" />
+        <activity
+            android:name=".cancellation.PembatalanYukAngkutActivity"
+            android:exported="true"
+            android:label="Pembatalan Yuk Angkut" />
+        <activity
+            android:name=".order.PembatalanYukBuangActivity"
+            android:exported="true"
+            android:label="Pembatalan Yuk Buang" />
 
 
 

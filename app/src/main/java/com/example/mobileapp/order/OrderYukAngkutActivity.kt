@@ -177,7 +177,7 @@ fun BatalOrderYukAngkutScreen() {
 }
 
 @Composable
-fun StatusItem(title: String, color: Color, iconId: Int) {
+fun StatusItem2(title: String, color: Color, iconId: Int) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.width(80.dp)
@@ -199,7 +199,7 @@ fun StatusItem(title: String, color: Color, iconId: Int) {
 }
 
 @Composable
-fun DottedLine() {
+fun DottedLine2() {
     Row(
         modifier = Modifier
             .width(40.dp)
@@ -232,9 +232,11 @@ fun OrderStatusSection() {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            StatusItem("Sedang Diproses", Color(0xFF4CAF50), R.drawable.proses)
-            DottedLine()
-            StatusItem("Telah Dibatalkan", Color.Red, R.drawable.cancel)
+            StatusItem2("Sedang Diproses", Color(0xFF4CAF50), R.drawable.proses)
+            DottedLine2()
+            StatusItem2("Sedang Diantar", Color.Gray, R.drawable.terima)
+            DottedLine2()
+            StatusItem2("Telah Dibatalkan", Color.Gray, R.drawable.cancel)
         }
     }
 }

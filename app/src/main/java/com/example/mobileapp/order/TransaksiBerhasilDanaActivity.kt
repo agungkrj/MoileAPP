@@ -125,7 +125,7 @@ fun TransaksiBerhasilScreen() {
     )
 }
 
-@Preview(showBackground = true, showSystemUi = false)
+@Preview(showBackground = true)
 @Composable
 fun PreviewTransaksiBerhasilScreen() {
     MobileAPPTheme {
