@@ -184,6 +184,17 @@
             android:name=".order.RiwayatDanaActivity"
             android:exported="true"
             android:label="Riwayat Dana" />
+        <activity
+            android:name=".order.RiwayatYukAngkutBerhasilActivity"
+            android:exported="true"
+            android:label="Riwayat Yuk Angkut Berhasil" />
+        <activity
+            android:name=".order.RiwayatYukBuangBerhasilActivity"
+            android:exported="true"
+            android:label="Riwayat Yuk Buang Berhasil" />
+
+
+
 
 
 

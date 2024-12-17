@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -23,13 +24,14 @@ class RiwayatDanaActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            RiwayatDanaScreen()
+            // Menyediakan fungsi kembali
+            RiwayatDanaScreen(onBackPressed = { onBackPressedDispatcher.onBackPressed() })
         }
     }
 }
 
 @Composable
-fun RiwayatDanaScreen() {
+fun RiwayatDanaScreen(onBackPressed: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -54,6 +56,7 @@ fun RiwayatDanaScreen() {
                     contentDescription = "Back",
                     modifier = Modifier
                         .size(24.dp)
+                        .clickable { onBackPressed() } // Tambahkan aksi kembali
                 )
                 Spacer(modifier = Modifier.weight(1f)) // Spacer agar teks ke tengah
             }
@@ -108,5 +111,5 @@ fun RiwayatDanaScreen() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewRiwayatDanaScreen() {
-    RiwayatDanaScreen()
+    RiwayatDanaScreen(onBackPressed = {})
 }

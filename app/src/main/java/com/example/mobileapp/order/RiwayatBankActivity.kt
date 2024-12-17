@@ -3,6 +3,7 @@ package com.example.mobileapp.order
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -18,18 +19,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mobileapp.R
+import androidx.compose.foundation.clickable
+
 
 class RiwayatBankActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            RiwayatBankScreen()
+            RiwayatBankScreen(
+                onBackPressed = { onBackPressedDispatcher.onBackPressed() } // Fungsi kembali
+            )
         }
     }
 }
 
 @Composable
-fun RiwayatBankScreen() {
+fun RiwayatBankScreen(onBackPressed: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -54,6 +59,7 @@ fun RiwayatBankScreen() {
                     contentDescription = "Back",
                     modifier = Modifier
                         .size(24.dp)
+                        .clickable { onBackPressed() } // Aksi kembali
                 )
                 Spacer(modifier = Modifier.weight(1f)) // Spacer agar teks ke tengah
             }
@@ -108,5 +114,5 @@ fun RiwayatBankScreen() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewRiwayatBankScreen() {
-    RiwayatBankScreen()
+    RiwayatBankScreen(onBackPressed = {})
 }

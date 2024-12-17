@@ -197,7 +197,7 @@ fun YukBuangStatusSection() {
             YukBuangDottedLine()
             YukBuangStatusItem("Telah Diterima", Color.Gray, R.drawable.terima)
             YukBuangDottedLine()
-  YukBuangStatusItem("Transaksi Berhasil", Color.Gray, R.drawable.berhasil)
+            YukBuangStatusItem("Transaksi Berhasil", Color.Gray, R.drawable.berhasil)
         }
     }
 }

@@ -89,17 +89,26 @@ fun RiwayatScreen() {
             items(getTransactions()) { transaction ->
                 RiwayatCard(transaction) {
                     // Periksa status transaksi
-                    when (transaction.status) {
-                        "Penukaran Kuy Point! Bank" -> {
+                    when {
+                        transaction.status == "Yuk Angkut!" && transaction.isSuccessful -> {
+                            val intent = Intent(context, RiwayatYukAngkutBerhasilActivity::class.java)
+                            context.startActivity(intent)
+                        }
+                        transaction.status == "Yuk Buang!" && transaction.isSuccessful -> {
+                            val intent = Intent(context, RiwayatYukBuangBerhasilActivity::class.java)
+                            context.startActivity(intent)
+                        }
+                        transaction.status == "Penukaran Kuy Point! Bank" -> {
                             val intent = Intent(context, RiwayatBankActivity::class.java)
                             context.startActivity(intent)
                         }
-                        "Penukaran Kuy Point! Ewallet" -> {
+                        transaction.status == "Penukaran Kuy Point! Ewallet" -> {
                             val intent = Intent(context, RiwayatDanaActivity::class.java)
                             context.startActivity(intent)
                         }
-                        // Tambahkan logika lain jika diperlukan
                     }
+
+
                 }
             }
         }
@@ -182,7 +191,7 @@ data class TransactionData(
 fun getTransactions(): List<TransactionData> {
     return listOf(
         TransactionData(
-            status = "Gagal",
+            status = "Yuk Angkut! Gagal",
             description = "Kamu telah membatalkan transaksi jual sampahmu",
             time = "23 April 14:40",
             color = Color.Red,
@@ -219,7 +228,7 @@ fun getTransactions(): List<TransactionData> {
             isSuccessful = true
         ),
         TransactionData(
-            status = "Gagal",
+            status = "Yuk Buang! Gagal",
             description = "Kamu telah membatalkan transaksi jual sampahmu",
             time = "29 Maret 10:40",
             color = Color.Red,
