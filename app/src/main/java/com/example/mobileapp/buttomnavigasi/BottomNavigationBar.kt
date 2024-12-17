@@ -50,8 +50,7 @@ fun BottomNavigationBar(
                 onClick = {
                     selectedItem.value = "Beranda" // Set item terpilih
                     val intent = Intent(context, DashboardActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP // Menambahkan flag
-                    context.startActivity(intent)
+                    context.startActivity(intent) // Navigasi ke DashboardActivity
                 }
             )
             BottomNavigationItem(
@@ -61,8 +60,7 @@ fun BottomNavigationBar(
                 onClick = {
                     selectedItem.value = "Order" // Set item terpilih
                     val intent = Intent(context, OrderActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP // Menambahkan flag
-                    context.startActivity(intent)
+                    context.startActivity(intent) // Navigasi ke OrderActivity
                 }
             )
             BottomNavigationItem(
@@ -72,8 +70,7 @@ fun BottomNavigationBar(
                 onClick = {
                     selectedItem.value = "Profil" // Set item terpilih
                     val intent = Intent(context, ProfileActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP // Menambahkan flag
-                    context.startActivity(intent)
+                    context.startActivity(intent) // Navigasi ke ProfileActivity
                 }
             )
         }

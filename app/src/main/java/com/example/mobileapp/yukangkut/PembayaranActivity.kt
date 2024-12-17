@@ -28,7 +28,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.foundation.clickable
 import com.example.mobileapp.R
-import com.example.mobileapp.order.OrderActivity
 import com.example.mobileapp.yukbuang.BuangActivity
 
 class PembayaranActivity : ComponentActivity() {
@@ -79,9 +78,7 @@ fun PembayaranScreen() {
 
             Button(
                 onClick = {
-                    // Navigasi ke OrderActivity
-                    val intent = Intent(context, OrderActivity::class.java)
-                    context.startActivity(intent)
+
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -91,7 +88,6 @@ fun PembayaranScreen() {
             ) {
                 Text(text = "Kirim", color = Color.White)
             }
-
         }
     }
 }

@@ -65,7 +65,7 @@ fun TukarKuyPointScreen() {
                     .padding(horizontal = 16.dp, vertical = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Header Row with Icon and Title
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
@@ -92,7 +92,6 @@ fun TukarKuyPointScreen() {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Kuy Point Section Inside Header with White Background
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()

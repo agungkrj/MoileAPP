@@ -1,5 +1,6 @@
 package com.example.mobileapp.beranda
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -7,12 +8,28 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -30,10 +47,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mobileapp.profile.ProfileActivity
+import coil.compose.rememberAsyncImagePainter
 import com.example.mobileapp.R
 import com.example.mobileapp.kuypoint.TukarKuyPointActivity
 import com.example.mobileapp.order.OrderActivity
+import com.example.mobileapp.profile.ProfileActivity
 import com.example.mobileapp.ui.theme.MobileAPPTheme
 import com.example.mobileapp.yukangkut.AngkutActivity
 import com.example.mobileapp.yukbuang.BuangActivity
@@ -52,9 +70,14 @@ class DashboardActivity : ComponentActivity() {
 @Composable
 fun DashboardScreen() {
     val context = LocalContext.current
+    val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+
+    // Ambil data pengguna dari SharedPreferences
+    val name = sharedPreferences.getString("name", "Pengguna") ?: "Pengguna"
+    val profileImageUri = sharedPreferences.getString("profile_image", null)
+
     val scrollState = rememberScrollState()
     val selectedItem = remember { mutableStateOf("Beranda") }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -79,7 +102,7 @@ fun DashboardScreen() {
                 modifier = Modifier.padding(top = 64.dp, bottom = 16.dp)
             )
 
-            GreetingCard()
+            GreetingCard(name, profileImageUri)
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -141,7 +164,7 @@ fun DashboardScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .padding(horizontal = 20.dp, vertical = 24.dp) // Adjusted padding for elevation
+                .padding(horizontal = 20.dp, vertical = 24.dp)
         )
     }
 }
@@ -164,7 +187,8 @@ fun BackgroundOverlay() {
     }
 }
 @Composable
-fun GreetingCard() {
+fun GreetingCard(name: String, profileImageUri: String?) {
+    val context = LocalContext.current
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -173,39 +197,41 @@ fun GreetingCard() {
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        val context = LocalContext.current
-        Column(modifier = Modifier.padding(16.dp)) {
-            // Bagian Atas: Profil
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                // Icon Profile
-                IconButton(
-                    onClick = {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            // Bagian atas: Halo, Pengguna!
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        // Navigasi ke halaman profil
                         val intent = Intent(context, ProfileActivity::class.java)
                         context.startActivity(intent)
-                    },
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clip(CircleShape)
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.profile),
-                        contentDescription = "Profile Picture",
-                        modifier = Modifier.size(48.dp),
-                        tint = Color.Unspecified
-                    )
+                    }
+            ) {
+                val painter = if (profileImageUri != null) {
+                    rememberAsyncImagePainter(profileImageUri)
+                } else {
+                    painterResource(id = R.drawable.profile)
                 }
-                Spacer(modifier = Modifier.width(8.dp))
-                // Teks Profil
+
+                Image(
+                    painter = painter,
+                    contentDescription = "Foto Profil",
+                    modifier = Modifier
+                        .size(50.dp)
+                        .clip(CircleShape)
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
                 Column {
                     Text(
-                        text = "Halo, Agro!",
-                        fontWeight = FontWeight.Bold,
+                        text = "Halo, $name!",
                         fontSize = 16.sp,
-                        color = Color.Black,
-                        modifier = Modifier.clickable {
-                            val intent = Intent(context, ProfileActivity::class.java)
-                            context.startActivity(intent)
-                        }
+                        fontWeight = FontWeight.Bold
                     )
                     Text(
                         text = "Sudah buang sampah hari ini?",
@@ -215,18 +241,16 @@ fun GreetingCard() {
                 }
             }
 
-            // Garis Pemisah
             Spacer(modifier = Modifier.height(16.dp))
             Divider(color = Color(0xFFCCCCCC), thickness = 1.dp)
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Bagian Bawah: Kuy Point
+            // Bagian bawah: Kuy Point
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Kuy Point Label dan Ikon
                 Column {
                     Text(
                         text = "Kuy Point",
@@ -252,7 +276,7 @@ fun GreetingCard() {
                     }
                 }
 
-                // Tombol Tukar di Sebelah Kanan Bawah
+                // Tombol Tukar
                 Button(
                     onClick = {
                         val intent = Intent(context, TukarKuyPointActivity::class.java)
@@ -277,6 +301,8 @@ fun GreetingCard() {
         }
     }
 }
+
+
 
 @Composable
 fun ActionCard(
@@ -401,8 +427,7 @@ fun BottomNavigationBar(
                 selected = selectedItem.value == "Beranda",
                 onClick = {
                     selectedItem.value = "Beranda"
-                    val intent = Intent(context, DashboardActivity::class.java)
-                    context.startActivity(intent)
+
                 }
             )
             BottomNavigationItem(

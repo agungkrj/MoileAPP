@@ -1,5 +1,6 @@
 package com.example.mobileapp.login
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -7,13 +8,28 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,8 +46,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mobileapp.beranda.DashboardActivity
+import com.example.mobileapp.network.RetrofitInstance
 import com.example.mobileapp.ui.theme.MobileAPPTheme
 import kotlinx.coroutines.delay
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MasukActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,11 +70,11 @@ fun MasukScreen() {
     var isVisible by remember { mutableStateOf(false) }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var showForgotPasswordDialog by remember { mutableStateOf(false) }
-    var forgotPasswordEmail by remember { mutableStateOf("") }
+    var isLoading by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
-        delay(100)
+        delay(100) // Delay untuk animasi
         isVisible = true
     }
 
@@ -67,6 +87,7 @@ fun MasukScreen() {
     ) {
         Spacer(modifier = Modifier.height(60.dp))
 
+        // Header
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -91,6 +112,7 @@ fun MasukScreen() {
 
         Spacer(modifier = Modifier.height(40.dp))
 
+        // Form Login
         AnimatedVisibility(
             visible = isVisible,
             enter = slideInVertically(initialOffsetY = { it })
@@ -126,37 +148,51 @@ fun MasukScreen() {
                     visualTransformation = PasswordVisualTransformation()
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Text(
-                    text = "Lupa Password?",
-                    fontSize = 14.sp,
-                    color = Color(0xFF57B5A8),
-                    modifier = Modifier
-                        .align(Alignment.End)
-                        .clickable { showForgotPasswordDialog = true }
-                )
-
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Button(
                     onClick = {
-                        val intent = Intent(context, DashboardActivity::class.java)
-                        context.startActivity(intent)
+                        isLoading = true
+                        performLogin(context, email, password) { success, message ->
+                            isLoading = false
+                            if (success) {
+                                val intent = Intent(context, DashboardActivity::class.java)
+                                context.startActivity(intent)
+                            } else {
+                                errorMessage = message
+                            }
+                        }
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp),
                     shape = RoundedCornerShape(16.dp),
+                    enabled = !isLoading,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF55B3A4),
                         contentColor = Color.White
                     )
                 ) {
-                    Text(text = "Masuk", fontSize = 16.sp)
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            color = Color.White,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    } else {
+                        Text(text = "Masuk", fontSize = 16.sp)
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
+
+                if (errorMessage != null) {
+                    Text(
+                        text = errorMessage!!,
+                        color = Color.Red,
+                        fontSize = 14.sp,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+                }
 
                 val annotatedText = buildAnnotatedString {
                     append("Belum punya akun? ")
@@ -188,119 +224,34 @@ fun MasukScreen() {
             }
         }
     }
-
-    if (showForgotPasswordDialog) {
-        DialogLupaPassword(
-            email = forgotPasswordEmail,
-            onEmailChange = { forgotPasswordEmail = it },
-            onDismiss = { showForgotPasswordDialog = false },
-            onSend = {
-                showForgotPasswordDialog = false
-                val intent = Intent(context, GantiPasswordActivity::class.java)
-                context.startActivity(intent)
-            }
-        )
-    }
 }
 
-@Composable
-fun DialogLupaPassword(
-    email: String,
-    onEmailChange: (String) -> Unit,
-    onDismiss: () -> Unit,
-    onSend: () -> Unit
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                // Circular icon container
-                Box(
-                    modifier = Modifier
-                        .size(72.dp)
-                        .background(Color(0xFF55B3A4), shape = CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "?",
-                        fontSize = 36.sp,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+fun performLogin(context: Context, email: String, password: String, onResult: (Boolean, String?) -> Unit) {
+    val credentials = mapOf("email" to email, "password" to password)
+    RetrofitInstance.api.login(credentials).enqueue(object : Callback<LoginResponse> {
+        override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+            if (response.isSuccessful && response.body() != null) {
+                val loginResponse = response.body()
+                saveAuthToken(context, loginResponse!!.token) // Simpan token
+                onResult(true, null) // Login berhasil
+            } else {
+                onResult(false, "Email atau password salah")
             }
-        },
-        text = {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Spacer(modifier = Modifier.height(16.dp))
+        }
 
-                // Title text
-                Text(
-                    text = "Lupa Password",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    color = Color(0xFF004D40)
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // Subtitle text
-                Text(
-                    text = "Kami akan mengirimkan password ke email yang telah kamu daftarkan.",
-                    fontSize = 14.sp,
-                    color = Color.Gray,
-                    textAlign = TextAlign.Center
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Email input field
-                OutlinedTextField(
-                    value = email,
-                    onValueChange = onEmailChange,
-                    label = { Text("Email") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    shape = RoundedCornerShape(8.dp)
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Action buttons
-                Row(
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Button(
-                        onClick = onSend,
-                        modifier = Modifier.weight(1f).padding(end = 4.dp),
-                        shape = RoundedCornerShape(16.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF55B3A4))
-                    ) {
-                        Text("Kirim", color = Color.White)
-                    }
-                    OutlinedButton(
-                        onClick = onDismiss,
-                        modifier = Modifier.weight(1f).padding(start = 4.dp),
-                        shape = RoundedCornerShape(16.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red)
-                    ) {
-                        Text("Batal", color = Color.Red)
-                    }
-                }
-            }
-        },
-        confirmButton = {}, // Remove default confirm button
-        dismissButton = {}  // Remove default dismiss button
-    )
+        override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+            t.printStackTrace()
+            onResult(false, "Gagal terhubung ke server. Coba lagi.")
+        }
+    })
 }
 
+fun saveAuthToken(context: Context, token: String) {
+    val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+    val editor = sharedPreferences.edit()
+    editor.putString("auth_token", token)
+    editor.apply()
+}
 
 @Preview(showBackground = true)
 @Composable

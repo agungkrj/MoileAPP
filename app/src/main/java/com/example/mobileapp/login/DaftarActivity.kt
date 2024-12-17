@@ -2,6 +2,7 @@ package com.example.mobileapp.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
@@ -30,8 +31,14 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mobileapp.network.RetrofitInstance
+import com.example.mobileapp.network.com.example.mobileapp.login.ApiResponse
+import com.example.mobileapp.network.com.example.mobileapp.login.RegisterRequest
 import com.example.mobileapp.ui.theme.MobileAPPTheme
 import kotlinx.coroutines.delay
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class DaftarActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +62,7 @@ fun DaftarScreen() {
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
 
-    // Menunda animasi agar dimulai setelah komponen selesai diload
+    // Animasi muncul dari bawah
     LaunchedEffect(Unit) {
         delay(100)
         isVisible = true
@@ -64,18 +71,18 @@ fun DaftarScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFB2DFDB)), // Latar belakang hijau lembut di bagian atas
+            .background(Color(0xFFB2DFDB)),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
-        Spacer(modifier = Modifier.height(60.dp)) // Spacer untuk memberi jarak dari atas
+        Spacer(modifier = Modifier.height(60.dp))
 
-        // Teks "Selamat Datang!" di bagian atas
+        // Judul dan Deskripsi
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp),
-            horizontalAlignment = Alignment.Start // Rata kiri untuk teks
+            horizontalAlignment = Alignment.Start
         ) {
             Text(
                 text = "Selamat Datang!",
@@ -93,22 +100,22 @@ fun DaftarScreen() {
             )
         }
 
-        Spacer(modifier = Modifier.height(40.dp)) // Spacer untuk memberi jarak antara teks dan bagian putih
+        Spacer(modifier = Modifier.height(40.dp))
 
-        // Bagian Putih dengan Animasi Muncul dari Bawah
+        // Form Pendaftaran dengan animasi
         AnimatedVisibility(
             visible = isVisible,
-            enter = slideInVertically(initialOffsetY = { it }) // Muncul dari bawah layar
+            enter = slideInVertically(initialOffsetY = { it })
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
-                    .background(Color.White, shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)) // Bagian putih di bawah dengan sudut atas melengkung
+                    .background(Color.White, shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
                     .padding(horizontal = 24.dp, vertical = 32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Nama Lengkap TextField
+                // Input Nama Lengkap
                 OutlinedTextField(
                     value = namaLengkap,
                     onValueChange = { namaLengkap = it },
@@ -120,7 +127,7 @@ fun DaftarScreen() {
                     singleLine = true
                 )
 
-                // Email TextField
+                // Input Email
                 OutlinedTextField(
                     value = email,
                     onValueChange = { email = it },
@@ -132,7 +139,7 @@ fun DaftarScreen() {
                     singleLine = true
                 )
 
-                // Password TextField
+                // Input Password
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
@@ -153,7 +160,7 @@ fun DaftarScreen() {
                     singleLine = true
                 )
 
-                // Konfirmasi Password TextField
+                // Input Konfirmasi Password
                 OutlinedTextField(
                     value = confirmPassword,
                     onValueChange = { confirmPassword = it },
@@ -176,12 +183,38 @@ fun DaftarScreen() {
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Daftar Button
+                // Tombol Daftar
                 Button(
                     onClick = {
-                        // Navigasi ke MasukActivity
-                        val intent = Intent(context, MasukActivity::class.java)
-                        context.startActivity(intent)
+                        if (namaLengkap.isBlank() || email.isBlank() || password.isBlank()) {
+                            Toast.makeText(context, "Semua field harus diisi!", Toast.LENGTH_SHORT).show()
+                        } else if (password == confirmPassword) {
+                            val request = RegisterRequest(
+                                name = namaLengkap,
+                                email = email,
+                                password = password,
+                                confirmPassword = confirmPassword
+                            )
+
+                            val apiService = RetrofitInstance.api
+                            apiService.registerUser(request).enqueue(object : Callback<ApiResponse> {
+                                override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+                                    if (response.isSuccessful) {
+                                        Toast.makeText(context, "Registrasi berhasil: ${response.body()?.message}", Toast.LENGTH_SHORT).show()
+                                        // Navigasi ke halaman login
+                                        context.startActivity(Intent(context, MasukActivity::class.java))
+                                    } else {
+                                        Toast.makeText(context, "Registrasi gagal: ${response.errorBody()?.string()}", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+
+                                override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                                    Toast.makeText(context, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                                }
+                            })
+                        } else {
+                            Toast.makeText(context, "Password dan Konfirmasi Password tidak cocok", Toast.LENGTH_SHORT).show()
+                        }
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -195,19 +228,16 @@ fun DaftarScreen() {
                     Text(text = "Daftar", fontSize = 16.sp)
                 }
 
-
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Sudah punya akun? Masuk dengan teks "Masuk" yang bisa diklik
+                // Teks "Masuk" dengan Klik
                 val annotatedText = buildAnnotatedString {
                     append("Sudah punya akun? ")
-
-                    // Bagian "Masuk" diberi warna hijau dan bisa diklik
                     pushStringAnnotation(tag = "login", annotation = "login")
                     withStyle(
                         style = SpanStyle(
-                            color = Color(0xFF55B3A4), // Warna hijau
-                            textDecoration = TextDecoration.Underline // Menambahkan garis bawah
+                            color = Color(0xFF55B3A4),
+                            textDecoration = TextDecoration.Underline
                         )
                     ) {
                         append("Masuk di sini")
@@ -218,11 +248,9 @@ fun DaftarScreen() {
                 ClickableText(
                     text = annotatedText,
                     style = LocalTextStyle.current.copy(fontSize = 14.sp, color = Color.Gray),
-                    modifier = Modifier.padding(vertical = 8.dp),
                     onClick = { offset ->
                         annotatedText.getStringAnnotations(tag = "login", start = offset, end = offset)
                             .firstOrNull()?.let {
-                                // Tindakan saat "Masuk" diklik
                                 val intent = Intent(context, MasukActivity::class.java)
                                 context.startActivity(intent)
                             }

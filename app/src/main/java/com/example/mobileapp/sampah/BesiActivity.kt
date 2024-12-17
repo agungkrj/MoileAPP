@@ -211,7 +211,6 @@ fun BesiIconCard(onWeightChange: (Int) -> Unit) {
 
 @Composable
 fun BesiFooter(totalWeight: Int) {
-    val context = LocalContext.current
     val pricePerKgMin = 2000
     val pricePerKgMax = 5000
 
@@ -241,8 +240,7 @@ fun BesiFooter(totalWeight: Int) {
             )
         }
         Button(
-            onClick = {
-                (context as? ComponentActivity)?.finish() },
+            onClick = { /* Lanjutkan ke aktivitas berikutnya */ },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF55B3A4))
         ) {
             Text(text = "Lanjut", color = Color.White)

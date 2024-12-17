@@ -1,6 +1,5 @@
 package com.example.mobileapp.order
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -26,7 +25,6 @@ import androidx.compose.ui.unit.sp
 import com.example.mobileapp.R
 import com.example.mobileapp.ui.theme.MobileAPPTheme
 import androidx.compose.foundation.lazy.items
-import com.example.mobileapp.cancellation.PembatalanYukAngkutActivity
 
 
 class RiwayatActivity : ComponentActivity() {
@@ -47,15 +45,18 @@ fun RiwayatScreen() {
 
     Scaffold(
         topBar = {
+            // TopBar with gradient background and centered title
             TopAppBar(
-                modifier = Modifier.background(
-                    Brush.verticalGradient(
-                        colors = listOf(Color(0xFF79D7C7), Color(0xFF52AC9D))
-                    )
-                ),
+                modifier = Modifier
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(Color(0xFF79D7C7), Color(0xFF52AC9D))
+                        )
+                    ),
                 title = {
                     Box(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -75,7 +76,9 @@ fun RiwayatScreen() {
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent
+                )
             )
         }
     ) { paddingValues ->
@@ -89,42 +92,15 @@ fun RiwayatScreen() {
         ) {
             items(getTransactions()) { transaction ->
                 RiwayatCard(transaction) {
-                    // Periksa status transaksi
-                    when {
-                        transaction.status == "Yuk Angkut!" && transaction.isSuccessful -> {
-                            val intent = Intent(context, RiwayatYukAngkutBerhasilActivity::class.java)
-                            context.startActivity(intent)
-                        }
-                        transaction.status == "Yuk Buang!" && transaction.isSuccessful -> {
-                            val intent = Intent(context, RiwayatYukBuangBerhasilActivity::class.java)
-                            context.startActivity(intent)
-                        }
-                        transaction.status == "Penukaran Kuy Point! Bank" -> {
-                            val intent = Intent(context, RiwayatBankActivity::class.java)
-                            context.startActivity(intent)
-                        }
-                        transaction.status == "Penukaran Kuy Point! Ewallet" -> {
-                            val intent = Intent(context, RiwayatDanaActivity::class.java)
-                            context.startActivity(intent)
-                        }
-                        transaction.status == "Yuk Angkut! Gagal" -> {
-                            val intent = Intent(context, PembatalanYukAngkutActivity::class.java)
-                            context.startActivity(intent)
-                        }
-                        transaction.status == "Yuk Buang! Gagal" -> {
-                            val intent = Intent(context, PembatalanYukBuangActivity::class.java)
-                            context.startActivity(intent)
-                        }
-                    }
-
-
+                    // Handle card click
+                    // You can add any action you want to perform on click here, for example:
+                    // Toast or navigate to another screen
+                    // Example: Toast.makeText(context, "Clicked: ${transaction.status}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 }
-
-
 
 
 @Composable
@@ -200,14 +176,14 @@ data class TransactionData(
 fun getTransactions(): List<TransactionData> {
     return listOf(
         TransactionData(
-            status = "Yuk Angkut! Gagal",
+            status = "Gagal",
             description = "Kamu telah membatalkan transaksi jual sampahmu",
             time = "23 April 14:40",
             color = Color.Red,
             iconResId = R.drawable.yukangkut
         ),
         TransactionData(
-            status = "Penukaran Kuy Point! Bank",
+            status = "Penukaran Kuy Point!",
             description = "Penukaran Kuy Point ke saldo Bank Rp 15.000",
             time = "28 Maret 13:40",
             color = Color.Black,
@@ -215,14 +191,14 @@ fun getTransactions(): List<TransactionData> {
         ),
         TransactionData(
             status = "Yuk Angkut!",
-            description = "Jln. Melati Blok C3 No. 28 Batam",
+            description = "Bukit Cengkeh Blok D2. No. 09 Batam",
             time = "19 April 09:40",
             color = Color.Black,
             iconResId = R.drawable.yukangkut,
             isSuccessful = true
         ),
         TransactionData(
-            status = "Penukaran Kuy Point! Ewallet",
+            status = "Penukaran Kuy Point!",
             description = "Penukaran Kuy Point ke saldo E-Wallet Rp 15.000",
             time = "01 Maret 12:30",
             color = Color.Black,
@@ -230,14 +206,22 @@ fun getTransactions(): List<TransactionData> {
         ),
         TransactionData(
             status = "Yuk Buang!",
-            description = "Jln. Melati Blok C3 No. 28 Batam",
+            description = "Jln.Anggrek Blok A2 No. 14 Batam",
             time = "17 Maret 13:40",
             color = Color.Black,
             iconResId = R.drawable.yukbuang,
             isSuccessful = true
         ),
         TransactionData(
-            status = "Yuk Buang! Gagal",
+            status = "Yuk Angkut!",
+            description = "Bukit Senyum Blok B3. No. 24 Batam",
+            time = "14 Maret 09:40",
+            color = Color.Black,
+            iconResId = R.drawable.yukangkut,
+            isSuccessful = true
+        ),
+        TransactionData(
+            status = "Gagal",
             description = "Kamu telah membatalkan transaksi jual sampahmu",
             time = "29 Maret 10:40",
             color = Color.Red,

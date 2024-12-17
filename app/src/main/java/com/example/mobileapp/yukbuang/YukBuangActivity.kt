@@ -59,10 +59,8 @@ fun BuangScreen() {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
-    // State untuk pesan tambahan
     val additionalMessageState = remember { mutableStateOf("") }
 
-    // State untuk validasi
     val phoneState = remember { mutableStateOf("") }
     val addressState = remember { mutableStateOf("") }
 
@@ -70,7 +68,7 @@ fun BuangScreen() {
     val timeState = remember { mutableStateOf("") }
     val deliveryAddressState = remember { mutableStateOf("") }
 
-    // State untuk error validasi
+
     val phoneError = remember { mutableStateOf(false) }
     val addressError = remember { mutableStateOf(false) }
     val dateError = remember { mutableStateOf(false) }
@@ -83,13 +81,13 @@ fun BuangScreen() {
             .background(Color.White)
             .verticalScroll(scrollState)
     ) {
-        // Header Section
+
         BuangHeaderSection()
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-            // Jenis Sampah Section
+
             Text(
                 text = "Jenis Sampah",
                 fontSize = 18.sp,
@@ -108,7 +106,6 @@ fun BuangScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Informasi Tempat Tinggal Section
             Text(
                 text = "Informasi Tempat Tinggal",
                 fontSize = 18.sp,
@@ -120,7 +117,6 @@ fun BuangScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Informasi Pengantaran Section
             Text(
                 text = "Informasi Pengantaran",
                 fontSize = 18.sp,
@@ -132,7 +128,7 @@ fun BuangScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Pesan Tambahan Section
+
             Text(
                 text = "Pesan Tambahan",
                 fontSize = 18.sp,
@@ -148,7 +144,6 @@ fun BuangScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Foto Sampah Section
             Text(
                 text = "Foto Sampah",
                 fontSize = 18.sp,
@@ -160,10 +155,8 @@ fun BuangScreen() {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Tombol Selanjutnya
             Button(
                 onClick = {
-                    // Validasi kolom wajib
                     val isPhoneValid = phoneState.value.isNotEmpty()
                     val isAddressValid = addressState.value.isNotEmpty()
                     val isDateValid = dateState.value.isNotEmpty()

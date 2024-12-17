@@ -12,8 +12,7 @@ android {
     defaultConfig {
         applicationId = "com.example.mobileapp"
         minSdk = 24
-        //noinspection EditedTargetSdkVersion
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -60,7 +59,15 @@ dependencies {
     implementation ("androidx.compose.material:material:1.x.x")
     implementation ("androidx.lifecycle:lifecycle-runtime-compose:2.x.x")
     implementation ("androidx.compose.material3:material3:<latest_version>")
+    implementation ("androidx.navigation:navigation-compose:2.6.0")
+    implementation ("androidx.compose.material3:material3:1.1.0")
+    implementation (  "androidx.compose.material3:material3:1.2.0") // Pastikan versinya terbaru
 
+    implementation ("androidx.compose.ui:ui:1.5.0")
+    // Retrofit untuk HTTP requests
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.3")
     implementation(libs.androidx.espresso.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -72,7 +79,5 @@ dependencies {
     implementation ("io.coil-kt:coil-compose:2.4.0")
     implementation ("androidx.compose.foundation:foundation:1.7.5")
     implementation ("androidx.compose.runtime:runtime:1.7.5")
-    implementation ("androidx.compose.material:material:1.7.5")
-
 
 }
