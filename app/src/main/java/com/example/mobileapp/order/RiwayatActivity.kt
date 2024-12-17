@@ -215,7 +215,7 @@ fun getTransactions(): List<TransactionData> {
         ),
         TransactionData(
             status = "Yuk Angkut!",
-            description = "Bukit Cengkeh Blok D2. No. 09 Batam",
+            description = "Jln. Melati Blok C3 No. 28 Batam",
             time = "19 April 09:40",
             color = Color.Black,
             iconResId = R.drawable.yukangkut,
@@ -230,7 +230,7 @@ fun getTransactions(): List<TransactionData> {
         ),
         TransactionData(
             status = "Yuk Buang!",
-            description = "Jln.Anggrek Blok A2 No. 14 Batam",
+            description = "Jln. Melati Blok C3 No. 28 Batam",
             time = "17 Maret 13:40",
             color = Color.Black,
             iconResId = R.drawable.yukbuang,
