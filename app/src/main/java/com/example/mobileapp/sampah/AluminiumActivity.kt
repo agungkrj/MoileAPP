@@ -211,6 +211,7 @@ fun AluminiumIconCard(onWeightChange: (Int) -> Unit) {
 
 @Composable
 fun AluminiumFooter(totalWeight: Int) {
+    val context = LocalContext.current
     val pricePerKgMin = 10000
     val pricePerKgMax = 20000
 
@@ -240,7 +241,9 @@ fun AluminiumFooter(totalWeight: Int) {
             )
         }
         Button(
-            onClick = { /* Lanjutkan ke aktivitas berikutnya */ },
+            onClick = {
+                (context as? ComponentActivity)?.finish()
+            },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF55B3A4))
         ) {
             Text(text = "Lanjut", color = Color.White)

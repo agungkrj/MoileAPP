@@ -211,6 +211,7 @@ fun ElektronikIconCard(onWeightChange: (Int) -> Unit) {
 
 @Composable
 fun ElektronikFooter(totalWeight: Int) {
+    val context = LocalContext.current
     val pricePerKgMin = 5000
     val pricePerKgMax = 50000
 
@@ -240,7 +241,8 @@ fun ElektronikFooter(totalWeight: Int) {
             )
         }
         Button(
-            onClick = { /* Lanjutkan ke aktivitas berikutnya */ },
+            onClick = {
+                (context as? ComponentActivity)?.finish() },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF55B3A4))
         ) {
             Text(text = "Lanjut", color = Color.White)

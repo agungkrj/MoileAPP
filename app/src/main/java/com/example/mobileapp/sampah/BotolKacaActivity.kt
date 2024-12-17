@@ -211,6 +211,7 @@ fun BotolKacaIconCard(onWeightChange: (Int) -> Unit) {
 
 @Composable
 fun BotolKacaFooter(totalWeight: Int) {
+    val context = LocalContext.current
     val pricePerKgMin = 500
     val pricePerKgMax = 2000
 
@@ -240,7 +241,9 @@ fun BotolKacaFooter(totalWeight: Int) {
             )
         }
         Button(
-            onClick = { /* Lanjutkan ke aktivitas berikutnya */ },
+            onClick = {
+                (context as? ComponentActivity)?.finish()
+            },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF55B3A4))
         ) {
             Text(text = "Lanjut", color = Color.White)

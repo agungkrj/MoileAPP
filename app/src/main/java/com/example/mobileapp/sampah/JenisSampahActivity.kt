@@ -210,6 +210,7 @@ fun JenisSampahIconCard(onWeightChange: (Int) -> Unit) {
 
 @Composable
 fun FooterSection(totalWeight: Int) {
+    val context = LocalContext.current
     val pricePerKgMin = 1000
     val pricePerKgMax = 2500
 
@@ -239,7 +240,9 @@ fun FooterSection(totalWeight: Int) {
             )
         }
         Button(
-            onClick = { /* Lanjutkan ke aktivitas berikutnya */ },
+            onClick = {
+                (context as? ComponentActivity)?.finish()
+            },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF55B3A4))
         ) {
             Text(text = "Lanjut", color = Color.White)

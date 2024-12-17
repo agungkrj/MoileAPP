@@ -140,6 +140,7 @@ fun PlastikHeader() {
 
 @Composable
 fun PlastikIconCard(onWeightChange: (Int) -> Unit) {
+    val context = LocalContext.current
     var weight by remember { mutableIntStateOf(0) }
     val pricePerKgMin = 3000 // Harga minimum per kg
     val pricePerKgMax = 8000 // Harga maksimum per kg
@@ -211,6 +212,7 @@ fun PlastikIconCard(onWeightChange: (Int) -> Unit) {
 
 @Composable
 fun PlastikFooter(totalWeight: Int) {
+    val context = LocalContext.current
     val pricePerKgMin = 3000
     val pricePerKgMax = 8000
 
@@ -240,7 +242,9 @@ fun PlastikFooter(totalWeight: Int) {
             )
         }
         Button(
-            onClick = { /* Lanjutkan ke aktivitas berikutnya */ },
+            onClick = {
+                (context as? ComponentActivity)?.finish()
+            },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF55B3A4))
         ) {
             Text(text = "Lanjut", color = Color.White)
